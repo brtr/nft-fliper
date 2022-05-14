@@ -36,6 +36,8 @@ zh-CN:
       date_notice: 买入日期 - 卖出日期
       average_price: 平均交易成交价
       average_gap: 平均交易间隔
+      more: 加载更多
+      load_new: 加载新的数据
   date:
     abbr_day_names:
     - 周日

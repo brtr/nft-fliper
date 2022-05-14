@@ -1,33 +1,17 @@
 <div class="sidebar-enabled sidebar-end">
   <div class="container py-4 mb-2 mb-sm-0 pb-sm-5 row mx-xl-auto">
+    <div>
+      <%= link_to "#", class: "btn btn-secondary mb-3 hide", id: "loadNewBtn", remote: true do %>
+        <%= t("views.labels.load_new") %>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up-circle align-middle me-2"><circle cx="12" cy="12" r="10"></circle><polyline points="16 12 12 8 8 12"></polyline><line x1="12" y1="16" x2="12" y2="8"></line></svg>
+      <% end %>
+    </div>
     <div class="col-5 mb-5">
       <div class="row" id="flip_records" data-last-id="<%= @records.maximum(:id) %>">
-        <% @records.each do |record| %>
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="mb-0">
-                  <% icon = record.is_eth_payment? ? 'eth.png' : 'solana.png' %>
-                  <%= image_tag icon, size: "20x20" %>
-                  <%= record.slug %>
-                </h3>
-              </div>
-              <div class="card-body">
-                <p class="card-text" data-bs-toggle="tooltip" title="<%= t("views.labels.price_notice") %>">
-                  <%= "#{decimal_format record.bought} #{record.bought_coin} ($#{decimal_format record.bought_usd}) / #{decimal_format record.sold} #{record.sold_coin} ($#{decimal_format record.sold_usd}) / #{decimal_format record.crypto_revenue} #{record.sold_coin} ($#{decimal_format record.revenue})" %>
-                </p>
-                <p class="card-text" data-bs-toggle="tooltip" title="<%= t("views.labels.date_notice") %>">
-                  <%= "#{date_format record.bought_time} - #{date_format record.sold_time}" %>
-                </p>
-                <p class="card-text"><%= "#{t("views.labels.gap")}: #{ActiveSupport::Duration.build(record.gap).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence}" %></p>
-                <%= link_to t("views.labels.detail"), record.permalink, class: "card-link", target: "_blank" %>
-              </div>
-            </div>
-          </div>
-        <% end %>
+        <%= render "records" %>
       </div>
       <div class="p-4">
-        <%= paginate @records %>
+        <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block", id: "loadMoreBtn", remote: true %>
       </div>
     </div>
     <div class="col-6 ms-3">
@@ -177,3 +161,5 @@
     </div>
   </div>
 </div>
+
+<%= hidden_field_tag :current_page, @records.current_page %>

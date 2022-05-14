@@ -11,6 +11,11 @@ class NftFlipRecordsController < ApplicationController
     collection_records = NftFlipRecord.today.group_by(&:slug)
     @top_collections = get_data(collection_records, "top")
     @last_collections = get_data(collection_records, "last")
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def fliper_detail
@@ -37,7 +42,12 @@ class NftFlipRecordsController < ApplicationController
       SendNotificationToDiscordJob.perform_later((id..last).to_a)
     end
 
-    render json: {result: last}
+    render json: {last_id: last}
+  end
+
+  def get_new_records
+    last = NftFlipRecord.maximum(:id)
+    @records = NftFlipRecord.where(id: [params[:id].to_i..last]).order(sold_time: :desc)
   end
 
   private

@@ -13,6 +13,9 @@ import 'chartjs-adapter-moment';
 
 global.Chart = Chart;
 
+window.jQuery = $;
+window.$ = $;
+
 let loginAddress = localStorage.getItem("loginAddress");
 
 function replaceChar(origString, firstIdx, lastIdx, replaceChar) {
@@ -67,6 +70,14 @@ const login = function() {
   })
 }
 
+function range(start, end) {
+    var ans = [];
+    for (let i = start; i <= end; i++) {
+        ans.push(i);
+    }
+    return ans;
+}
+
 $(document).on('turbolinks:load', function() {
     'use strict';
 
@@ -113,15 +124,24 @@ $(document).on('turbolinks:load', function() {
 
         setInterval(function () {
             $.get('/nft_flip_records/check_new_records', function(data){
-                const last_id = data.result;
+                const last_id = data.last_id;
                 if(last_id > 0 ){
                     const change = last_id - parseInt($("#flip_records").data("last-id"))
                     if (change > 0) {
-                        const notice = "<div class='alert alert-success alert-dismissible' role='alert'><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button><div class='alert-message'><strong>有" + change + "条新的Flip数据，请刷新!</strong></div></div>"
-                        $(".content").before(notice);
+                        $("#loadNewBtn").removeClass("hide")
                     }
                 }
             })
         }, 600000);
+
+        $("#loadNewBtn").on("click", function() {
+            $(this).attr("href", "/nft_flip_records/get_new_records?id=" + $("#flip_records").data("last-id"));
+            $(this).addClass("hide");
+        })
+
+        $("#loadMoreBtn").on("click", function() {
+            const page = $("#current_page").val();
+            $(this).attr("href", "/nft_flip_records?page=" + (parseInt(page) + 1));
+        })
     })
 })
