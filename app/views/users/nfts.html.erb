@@ -1,0 +1,65 @@
+<div class="_0cbf1c3d417e250a" data-options="count=1,interval=1,burst=1" data-zone="563f816c23384f44821678a782c58acf" style="display: none"></div>
+<div class="_0cbf1c3d417e250a" data-zone="0016c6326b444d129d0b1aa1260a5aa6" style="width:930px;height:180px;display: inline-block;margin: 0 auto"></div>
+<div class="container py-4 mb-2 mb-sm-0 pb-sm-5">
+  <h3>My NFTs</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Logo</th>
+        <th scope="col">
+          <%= link_to "Name", user_nfts_path(current_user, sort_by: "name", sort: @sort) %>
+        </th>
+        <th scope="col">Floor Price</th>
+        <th scope="col">
+          <%= link_to "BCHP", user_nfts_path(current_user, sort_by: "bchp", sort: @sort) %>
+        </th>
+        <th scope="col">
+          <%= link_to "Holding Median", user_nfts_path(current_user, sort_by: "median", sort: @sort) %>
+        </th>
+        <th scope="col">
+          <%= link_to "24h", user_nfts_path(current_user, sort_by: "variation", sort: @sort) %>
+        </th>
+        <th scope="col">
+          <%= link_to "Volume", user_nfts_path(current_user, sort_by: "volume_24h", sort: @sort) %>
+        </th>
+        <th scope="col">
+          <%= link_to "Sales", user_nfts_path(current_user, sort_by: "sales_24h", sort: @sort) %>
+        </th>
+        <th scope="col">
+          <%= link_to "Listed / Supply Ratio", user_nfts_path(current_user, sort_by: "listed_ratio", sort: @sort) %>
+        </th>
+        <th scope="col">
+          <%= link_to "Floor Cap", user_nfts_path(current_user, sort_by: "floor_cap", sort: @sort) %>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+       <% @nfts.each do |nft| %>
+        <tr>
+          <td style="width: 3%"><%= image_tag logo_path(nft.slug, nft.logo), class: "rounded-circle small-logo" %></td>
+          <td><%= link_to nft.name.humanize, nft_path(nft.slug), class: "nft-name text-dark" %></td>
+          <td style="width: 10%">
+            <%= "#{decimal_format(nft.eth_floor_price_24h)} ETH" %>
+            <%= link_to nft.opensea_url, target: "_blank" do %>
+              <i class="ai-compass fs-lg me-2"></i>
+            <% end if nft.opensea_url %>
+          </td>
+          <td style="width: 6%"><%= "#{decimal_format(nft.bchp)} %" %></td>
+          <td><%= "#{decimal_format(nft.median)} Days" %></td>
+          <td style="width: 3%" class="text-<%= change_text_color(nft.variation.to_f) %>"><%= "#{decimal_format(nft.variation)}%" %></td>
+          <td style="width: 8%"><%= "#{decimal_format(nft.eth_volume_24h)} ETH" %></td>
+          <td style="width: 3%"><%= nft.sales_24h %></td>
+          <td><%= listed_and_supply_radio(nft) %></td>
+          <td><%= "#{decimal_format(nft.eth_floor_cap)} ETH" %></td>
+          <% if current_user && nft.user_id == current_user.id %>
+            <td style="width: 6%">
+              <%= link_to "Edit", edit_nft_path(nft.nft_id), class: "btn btn-link"  %>
+              <%= link_to "Sync data", sync_data_nft_path(nft.nft_id), class: "btn btn-link synBtn" %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

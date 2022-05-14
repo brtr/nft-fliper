@@ -1,0 +1,67 @@
+<div class="mt-3">
+  <canvas id="flipChart" style="height: 300px; width: 100%" data-data="<%= @chart_data.to_json %>" ></canvas>
+</div>
+
+<script>
+document.addEventListener('turbolinks:load', () => {
+  var canvas = document.getElementById('flipChart');
+  if(canvas){
+    var ctx = canvas.getContext('2d');
+    var chart_data = JSON.parse(ctx.canvas.dataset.data)
+    const price_data = Object.values(chart_data)
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Object.keys(chart_data),
+        datasets: [
+          {
+            label: "Floor Price",
+            data: price_data.map(i => {
+              return i[0].floor_price
+            }),
+            tension: 0.4,
+            borderColor: ['#129CFF'],
+            backgroundColor: ['#129CFF'],
+            yAxisID: 'y'
+          }
+        ],
+      },
+      options: {
+        scales: {
+          x: {
+            grid: {
+              display: false,
+            }
+          },
+          y: {
+            position: 'left',
+            ticks: {
+              maxTicksLimit: 5
+            },
+          }
+        },
+        responsive: false,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return ''
+              },
+              footer: function(context) {
+                data = price_data.filter(function(x) { return x[0]["date"] == context[0].label})
+                if(data.length > 0){
+                  i = data[0]
+                  flip_count = "Volume: " + i[0].volume
+                  return [price, volume, sales]
+                } else {
+                  return context.label
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+})
+</script>

@@ -1,0 +1,42 @@
+<div class="container py-4 mb-2 mb-sm-0 pb-sm-5">
+  <h2 class="text-center">Holding Top 10</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Rank</th>
+        <th scope="col">Logo</th>
+        <th scope="col">Name</th>
+        <th scope="col">Tokens Count</th>
+        <th scope="col">Owners Count</th>
+        <th scope="col">Floor Price</th>
+        <th scope="col">24h</th>
+        <th scope="col">Volume</th>
+        <th scope="col">Total Sales</th>
+        <th scope="col">Listed / Supply Ratio</th>
+        <th scope="col">Floor Cap</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @nfts.each_with_index do |nft, idx| %>
+        <tr>
+          <td><%= idx + 1 %></td>
+          <td style="width: 3%"><%= image_tag logo_path(nft.slug, nft.logo), class: "rounded-circle small-logo" %></td>
+          <td><%= link_to nft.name.humanize, nft_path(nft.slug), class: "nft-name text-dark" %></td>
+          <td><%= get_count_ratio(nft) %></td>
+          <td><%= nft.owners_count %></td>
+          <td>
+            <%= "#{decimal_format(nft.eth_floor_price_24h)} ETH" %>
+            <%= link_to nft.opensea_url, target: "_blank" do %>
+              <i class="ai-compass fs-lg me-2"></i>
+            <% end if nft.opensea_url %>
+          </td>
+          <td class="text-<%= change_text_color(nft.variation.to_f) %>"><%= "#{decimal_format(nft.variation)}%" %></td>
+          <td><%= "#{decimal_format(nft.eth_volume_24h)} ETH" %></td>
+          <td><%= nft.sales_24h %></td>
+          <td><%= listed_and_supply_radio(nft) %></td>
+          <td><%= "#{decimal_format(nft.eth_floor_cap)} ETH" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

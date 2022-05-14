@@ -1,0 +1,2 @@
+class AnalysisTokenHolder < ApplicationRecord
+end

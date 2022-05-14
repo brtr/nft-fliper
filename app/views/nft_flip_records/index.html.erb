@@ -1,0 +1,179 @@
+<div class="sidebar-enabled sidebar-end">
+  <div class="container py-4 mb-2 mb-sm-0 pb-sm-5 row mx-xl-auto">
+    <div class="col-5 mb-5">
+      <div class="row" id="flip_records" data-last-id="<%= @records.maximum(:id) %>">
+        <% @records.each do |record| %>
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="mb-0">
+                  <% icon = record.is_eth_payment? ? 'eth.png' : 'solana.png' %>
+                  <%= image_tag icon, size: "20x20" %>
+                  <%= record.slug %>
+                </h3>
+              </div>
+              <div class="card-body">
+                <p class="card-text" data-bs-toggle="tooltip" title="<%= t("views.labels.price_notice") %>">
+                  <%= "#{decimal_format record.bought} #{record.bought_coin} ($#{decimal_format record.bought_usd}) / #{decimal_format record.sold} #{record.sold_coin} ($#{decimal_format record.sold_usd}) / #{decimal_format record.crypto_revenue} #{record.sold_coin} ($#{decimal_format record.revenue})" %>
+                </p>
+                <p class="card-text" data-bs-toggle="tooltip" title="<%= t("views.labels.date_notice") %>">
+                  <%= "#{date_format record.bought_time} - #{date_format record.sold_time}" %>
+                </p>
+                <p class="card-text"><%= "#{t("views.labels.gap")}: #{ActiveSupport::Duration.build(record.gap).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence}" %></p>
+                <%= link_to t("views.labels.detail"), record.permalink, class: "card-link", target: "_blank" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="p-4">
+        <%= paginate @records %>
+      </div>
+    </div>
+    <div class="col-6 ms-3">
+      <div class="row">
+        <h3><%= t("views.labels.top_today") %>Fliper</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th><%= t("views.labels.rank") %></th>
+              <th>Fliper</th>
+              <th><%= t("views.labels.count") %></th>
+              <th><%= t("views.labels.revenue") %></th>
+              <th><%= t("views.labels.average_price") %></th>
+              <th><%= t("views.labels.average_gap") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @top_flipers.each_with_index do |fliper, idx| %>
+              <tr>
+                <td><%= idx + 1 %></td>
+                <td><%= link_to address_format(fliper[0]), fliper_detail_nft_flip_records_path(fliper_address: fliper[0]) %></td>
+                <td><%= fliper[1] %></td>
+                <td><%= "$#{decimal_format fliper[2]}" %></td>
+                <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
+                <td><%= ActiveSupport::Duration.build(fliper[5]).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <h3 class="mt-4"><%= t("views.labels.last_today") %>Fliper</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th><%= t("views.labels.rank") %></th>
+              <th>Fliper</th>
+              <th><%= t("views.labels.count") %></th>
+              <th><%= t("views.labels.loss") %></th>
+              <th><%= t("views.labels.average_price") %></th>
+              <th><%= t("views.labels.average_gap") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @last_flipers.each_with_index do |fliper, idx| %>
+              <tr>
+                <td><%= idx + 1 %></td>
+                <td><%= link_to address_format(fliper[0]), fliper_detail_nft_flip_records_path(fliper_address: fliper[0]) %></td>
+                <td><%= fliper[1] %></td>
+                <td><%= "$#{decimal_format fliper[2]}" %></td>
+                <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
+                <td><%= ActiveSupport::Duration.build(fliper[5]).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <h3 class="mt-4"><%= t("views.labels.top_today") %>Collection</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th><%= t("views.labels.rank") %></th>
+              <th>Collection</th>
+              <th><%= t("views.labels.count") %></th>
+              <th><%= t("views.labels.revenue") %></th>
+              <th><%= t("views.labels.average_price") %></th>
+              <th><%= t("views.labels.average_gap") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @top_collections.each_with_index do |collection, idx| %>
+              <tr>
+                <td><%= idx + 1 %></td>
+                <td style="width:5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
+                <td><%= collection[1] %></td>
+                <td><%= "$#{decimal_format collection[2]}" %></td>
+                <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
+                <td><%= ActiveSupport::Duration.build(collection[5]).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <h3 class="mt-4"><%= t("views.labels.last_today") %>Collection</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th><%= t("views.labels.rank") %></th>
+              <th>Collection</th>
+              <th><%= t("views.labels.count") %></th>
+              <th><%= t("views.labels.loss") %></th>
+              <th><%= t("views.labels.average_price") %></th>
+              <th><%= t("views.labels.average_gap") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @last_collections.each_with_index do |collection, idx| %>
+              <tr>
+                <td><%= idx + 1 %></td>
+                <td style="width: 5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
+                <td><%= collection[1] %></td>
+                <td><%= "$#{decimal_format collection[2]}" %></td>
+                <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
+                <td><%= ActiveSupport::Duration.build(collection[5]).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="settings js-settings">
+  <div class="settings-toggle">
+    <div class="settings-toggle-option settings-toggle-option-text js-settings-toggle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders align-middle"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+      Filters
+    </div>
+  </div>
+  <div class="settings-panel">
+    <div class="settings-content">
+      <!-- Search-->
+      <div class="settings-title d-flex align-items-center">
+        <button type="button" class="btn-close float-right js-settings-toggle" aria-label="Close"></button>
+        <h4 class="mb-0 ms-2 d-inline-block">Filter</h4>
+      </div>
+      <div class="settings-body">
+        <%= search_form_for @q, url: nft_flip_records_path, method: :get do |f| %>
+          <div class="mb-3 pb-1 col-12">
+            <%= f.label :slug, "NFT", class: "form-label d-block px-0" %>
+            <%= f.text_field :slug_eq, class: "form-control inline-form" %>
+          </div>
+          <div class="mb-3 pb-1 col-12">
+            <%= f.label :bought_time, t("views.labels.bought_time"), class: "form-label d-block px-0" %>
+            <%= f.date_field :bought_time_gteq, class: "form-control inline-form" %>
+            To
+            <%= f.date_field :bought_time_lteq, class: "form-control inline-form" %>
+          </div>
+          <div class="mb-3 pb-1 col-12">
+            <%= f.label :sold_time, t("views.labels.sold_time"), class: "form-label d-block px-0" %>
+            <%= f.date_field :sold_time_gteq, class: "form-control inline-form" %>
+            To
+            <%= f.date_field :sold_time_lteq, class: "form-control inline-form" %>
+          </div>
+          <div class="mb-3 pb-1">
+            <%= f.submit "Apply", class: 'btn btn-primary mt-3 mt-sm-0' %>
+            <%= link_to "Reset", nft_flip_records_path, class: 'btn btn-default' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

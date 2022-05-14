@@ -1,0 +1,64 @@
+<div class="mt-3">
+  <canvas id="flipDataChart" style="height: 300px; width: 100%" data-data="<%= @flip_data_chart.to_json %>" ></canvas>
+</div>
+
+<script>
+document.addEventListener('turbolinks:load', () => {
+  var canvas = document.getElementById('flipDataChart');
+  if(canvas){
+    const ctx = canvas.getContext('2d');
+    const chart_data = JSON.parse(ctx.canvas.dataset.data)
+    const flip_data = Object.values(chart_data)
+    const profitDataArray = flip_data.flat().map(i => {
+                              if (i[0] > 0){
+                                return {x: new Date(i[1]), y: i[0]}
+                              }
+                            })
+    const lossDataArray = flip_data.flat().map(i => {
+                            if (i[0] < 0){
+                              return {x: new Date(i[1]), y: i[0]}
+                            }
+                          })
+    console.log("loss: ", lossDataArray)
+
+    new Chart(ctx, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: "盈利",
+            data: profitDataArray.filter(Boolean),
+            borderColor: "rgb(75, 192, 192)",
+            backgroundColor: "rgba(75, 192, 192, 0.5)"
+          },
+          {
+            label: "亏损",
+            data: lossDataArray.filter(Boolean),
+            borderColor: "rgb(255, 99, 132)",
+            backgroundColor: "rgba(255, 99, 132, 0.5)"
+          }
+        ],
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            display: true,
+            offset: true,
+            time: {
+              unit: 'day'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Flip 收益'
+            }
+          }
+        },
+        responsive: false
+      }
+    });
+  }
+})
+</script>
