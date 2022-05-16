@@ -142,9 +142,9 @@
           </div>
           <div class="mb-3 pb-1 col-12">
             <%= f.label :bought, t("views.labels.bought_price"), class: "form-label d-block px-0" %>
-            <%= f.number_field :bought_gteq, class: "form-control inline-form" %>
+            <%= f.number_field :bought_gteq, step: 0.1, class: "form-control inline-form" %>
             To
-            <%= f.number_field :bought_lteq, class: "form-control inline-form" %>
+            <%= f.number_field :bought_lteq, step: 0.1, class: "form-control inline-form" %>
           </div>
           <div class="mb-3 pb-1 col-12">
             <%= f.label :bought_time, t("views.labels.bought_time"), class: "form-label d-block px-0" %>
