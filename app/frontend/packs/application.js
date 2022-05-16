@@ -135,13 +135,21 @@ $(document).on('turbolinks:load', function() {
         }, 600000);
 
         $("#loadNewBtn").on("click", function() {
-            $(this).attr("href", "/nft_flip_records/get_new_records?id=" + $("#flip_records").data("last-id"));
+            var url = new URL(window.location.href);
+            var search_params = url.searchParams;
+            search_params.set('id', $("#flip_records").data("last-id"));
+            var new_url = "/nft_flip_records/get_new_records" + search_params.toString();
+            $(this).attr("href", new_url);
             $(this).addClass("hide");
         })
 
         $("#loadMoreBtn").on("click", function() {
             const page = $("#current_page").val();
-            $(this).attr("href", "/nft_flip_records?page=" + (parseInt(page) + 1));
+            var url = new URL(window.location.href);
+            var search_params = url.searchParams;
+            search_params.set('page', (parseInt(page) + 1));
+            var new_url = "/nft_flip_records" + search_params.toString();
+            $(this).attr("href", new_url);
         })
     })
 })

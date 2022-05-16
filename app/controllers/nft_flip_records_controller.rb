@@ -47,7 +47,8 @@ class NftFlipRecordsController < ApplicationController
 
   def get_new_records
     last = NftFlipRecord.maximum(:id)
-    @records = NftFlipRecord.where(id: [params[:id].to_i..last]).order(sold_time: :desc)
+    @q = NftFlipRecord.includes(:nft).ransack(params[:q])
+    @records = @q.result.where(id: [params[:id].to_i..last]).order(sold_time: :desc)
   end
 
   private

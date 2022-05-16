@@ -132,13 +132,19 @@
       <!-- Search-->
       <div class="settings-title d-flex align-items-center">
         <button type="button" class="btn-close float-right js-settings-toggle" aria-label="Close"></button>
-        <h4 class="mb-0 ms-2 d-inline-block">Filter</h4>
+        <h4 class="mb-0 ms-2 d-inline-block"><%= t("views.actions.filter") %></h4>
       </div>
       <div class="settings-body">
         <%= search_form_for @q, url: nft_flip_records_path, method: :get do |f| %>
           <div class="mb-3 pb-1 col-12">
             <%= f.label :slug, "NFT", class: "form-label d-block px-0" %>
             <%= f.text_field :slug_eq, class: "form-control inline-form" %>
+          </div>
+          <div class="mb-3 pb-1 col-12">
+            <%= f.label :bought, t("views.labels.bought_price"), class: "form-label d-block px-0" %>
+            <%= f.number_field :bought_gteq, class: "form-control inline-form" %>
+            To
+            <%= f.number_field :bought_lteq, class: "form-control inline-form" %>
           </div>
           <div class="mb-3 pb-1 col-12">
             <%= f.label :bought_time, t("views.labels.bought_time"), class: "form-label d-block px-0" %>
@@ -153,8 +159,8 @@
             <%= f.date_field :sold_time_lteq, class: "form-control inline-form" %>
           </div>
           <div class="mb-3 pb-1">
-            <%= f.submit "Apply", class: 'btn btn-primary mt-3 mt-sm-0' %>
-            <%= link_to "Reset", nft_flip_records_path, class: 'btn btn-default' %>
+            <%= f.submit t("views.actions.submit"), class: 'btn btn-primary mt-3 mt-sm-0' %>
+            <%= link_to t("views.actions.reset"), nft_flip_records_path, class: 'btn btn-default' %>
           </div>
         <% end %>
       </div>

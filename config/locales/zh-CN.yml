@@ -14,6 +14,7 @@ zh-CN:
       search: 搜索
       filter: 过滤
       connect_metamask: 用MetaMask登录
+      reset: 还原
     labels:
       rank: 排名
       count: 次数
@@ -38,6 +39,7 @@ zh-CN:
       average_gap: 平均交易间隔
       more: 加载更多
       load_new: 加载新的数据
+      bought_price: 买入价
   date:
     abbr_day_names:
     - 周日
@@ -114,6 +116,7 @@ zh-CN:
       month: 月
       year: 年
   duration:
+    years: "%{count} 年"
     months: "%{count} 个月"
     weeks: "%{count} 周"
     days: "%{count} 天"
