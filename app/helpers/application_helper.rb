@@ -36,4 +36,16 @@ module ApplicationHelper
   def date_format(datetime)
     datetime.strftime("%Y-%m-%d") rescue ''
   end
+
+  def humanize_gap(gap)
+    gap = gap.to_f
+    if gap < 86400
+      hours = gap / 3600
+      "#{hours.round(2)} 小时"
+    else
+      days = (gap / 86400).to_i
+      hours = (gap - days * 86400) / 3600
+      "#{days} 天 #{hours.round(2)} 小时"
+    end
+  end
 end

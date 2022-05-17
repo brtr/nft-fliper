@@ -35,14 +35,9 @@ class NftFlipRecordsController < ApplicationController
   end
 
   def check_new_records
-    id = $redis.get("last_nft_flip_record_id").to_i
-    last = NftFlipRecord.maximum(:id)
-    if id < last
-      $redis.set("last_nft_flip_record_id", last)
-      SendNotificationToDiscordJob.perform_later((id..last).to_a)
-    end
+    last_id = NftFlipRecord.maximum(:id)
 
-    render json: {last_id: last}
+    render json: {last_id: last_id}
   end
 
   def get_new_records

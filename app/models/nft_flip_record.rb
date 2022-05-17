@@ -25,11 +25,11 @@ class NftFlipRecord < ApplicationRecord
 
   def display_message
     "
-    #{decimal_format bought} #{bought_coin} ($#{decimal_format bought_usd}) / #{decimal_format sold} #{sold_coin} ($#{decimal_format sold_usd}) / #{decimal_format crypto_revenue} #{sold_coin} ($#{decimal_format revenue})
+    #{decimal_format bought} #{bought_coin} / #{decimal_format sold} #{sold_coin} / #{decimal_format crypto_revenue} #{sold_coin} ($#{decimal_format revenue})
 
-    #{date_format bought_time} - #{date_format sold_time}
+    #{date_format bought_time} - #{date_format sold_time} #{I18n.t("views.labels.gap")}: #{humanize_gap(gap)}
 
-    #{I18n.t("views.labels.gap")}: #{ActiveSupport::Duration.build(gap).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence}
+    [More](#{permalink})
     "
   end
 
@@ -78,6 +78,30 @@ class NftFlipRecord < ApplicationRecord
       results.each do |_res|
         puts "#{_res.bought_time.to_s}以$#{_res.bought_usd.to_i}买入， 在#{_res.sold_time.to_s}以#{_res.sold_usd.to_i}卖出（roi:#{_res.roi}/gap:#{(_res.gap/60.0/60).round(2)}h）   https://opensea.io/assets/#{_res.token_address}/#{_res.token_id}"
       end;puts"------------------------"
+    end
+
+    def get_successful_flips_gap(nft: nil, from_date: nil, to_date: nil)
+      records = get_data(nft: nft, from_date: from_date, to_date: to_date)
+      records.successful.map do |r|
+        gap_hour = r.gap / 3600
+        gap_day = gap_hour / 24
+        [r.id, r.slug, gap_day.to_i, gap_hour.to_i]
+      end
+    end
+
+    def get_flips_revenue_rate(nft: nil, from_date: nil, to_date: nil)
+      records = get_data(nft: nft, from_date: from_date, to_date: to_date)
+      records.group_by(&:crypto_roi).map do |revenue_rate, data|
+        [revenue_rate.round(2), data.select{|d| d.crypto_revenue > 0}.count, data.select{|d| d.crypto_revenue < 0}.count]
+      end
+    end
+
+    def get_data(nft: nil, from_date: nil, to_date: nil)
+      records = NftFlipRecord.where("bought_coin in (?) and sold_coin in (?)", ETH_PAYMENT, ETH_PAYMENT)
+      records = records.where(nft: nft) if nft.present?
+      records = records.where("sold_time >= ?", from_date) if from_date.present?
+      records = records.where("sold_time <= ?", to_date) if to_date.present?
+      records
     end
   end
 end
