@@ -10,12 +10,12 @@
       </div>
       <div class="card-body">
         <p class="card-text" data-bs-toggle="tooltip" title="<%= t("views.labels.price_notice") %>">
-          <%= "#{decimal_format record.bought} #{record.bought_coin} ($#{decimal_format record.bought_usd}) / #{decimal_format record.sold} #{record.sold_coin} ($#{decimal_format record.sold_usd}) / #{decimal_format record.crypto_revenue} #{record.sold_coin} ($#{decimal_format record.revenue})" %>
+          <%= display_price(record) %>
         </p>
         <p class="card-text" data-bs-toggle="tooltip" title="<%= t("views.labels.date_notice") %>">
           <%= "#{date_format record.bought_time} - #{date_format record.sold_time}" %>
         </p>
-        <p class="card-text"><%= "#{t("views.labels.gap")}: #{ActiveSupport::Duration.build(record.gap).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence}" %></p>
+        <p class="card-text"><%= "#{t("views.labels.gap")}: #{humanize_gap(record.gap)}" %></p>
         <%= link_to t("views.labels.detail"), record.permalink, class: "card-link", target: "_blank" %>
       </div>
     </div>

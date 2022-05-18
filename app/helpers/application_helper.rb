@@ -48,4 +48,12 @@ module ApplicationHelper
       "#{days} 天 #{hours.round(2)} 小时"
     end
   end
+
+  def display_price(record)
+    if record.is_sol_payment?
+      "#{decimal_format record.bought} #{record.bought_coin} / #{decimal_format record.sold} #{record.sold_coin} / #{decimal_format record.crypto_revenue} #{record.sold_coin}"
+    else
+      "#{decimal_format record.bought} #{record.bought_coin} ($#{decimal_format record.bought_usd}) / #{decimal_format record.sold} #{record.sold_coin} ($#{decimal_format record.sold_usd}) / #{decimal_format record.crypto_revenue} #{record.sold_coin} ($#{decimal_format record.revenue})"
+    end
+  end
 end

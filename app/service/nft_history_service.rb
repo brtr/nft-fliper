@@ -164,7 +164,7 @@ class NftHistoryService
           if e
             asset = e["asset"]
             if asset["asset_contract"]["schema_name"] == "METAPLEX"
-              cost = e["total_price"].to_f / 10 ** 6
+              cost = e["total_price"].to_f / 10 ** 9
               result = {bought_coin: "SOL", cost: cost, cost_usd: 0, from_address: e["seller"]["address"], trade_time: e["created_date"]}
             else
               payment = e["payment_token"]
@@ -217,7 +217,7 @@ class NftHistoryService
     private
     def update_flip_record(nft, last_trade, event, asset)
       if last_trade[:bought_coin] == "SOL"
-        price = event["total_price"].to_f / 10 ** 6
+        price = event["total_price"].to_f / 10 ** 9
         price_usd = 0
         sold_coin = last_trade[:bought_coin]
       else

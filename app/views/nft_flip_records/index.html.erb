@@ -36,7 +36,7 @@
                 <td><%= fliper[1] %></td>
                 <td><%= "$#{decimal_format fliper[2]}" %></td>
                 <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
-                <td><%= ActiveSupport::Duration.build(fliper[5]).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence %></td>
+                <td><%= humanize_gap(fliper[5]) %></td>
               </tr>
             <% end %>
           </tbody>
@@ -61,7 +61,7 @@
                 <td><%= fliper[1] %></td>
                 <td><%= "$#{decimal_format fliper[2]}" %></td>
                 <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
-                <td><%= ActiveSupport::Duration.build(fliper[5]).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence %></td>
+                <td><%= humanize_gap(fliper[5]) %></td>
               </tr>
             <% end %>
           </tbody>
@@ -86,7 +86,7 @@
                 <td><%= collection[1] %></td>
                 <td><%= "$#{decimal_format collection[2]}" %></td>
                 <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
-                <td><%= ActiveSupport::Duration.build(collection[5]).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence %></td>
+                <td><%= humanize_gap(collection[5]) %></td>
               </tr>
             <% end %>
           </tbody>
@@ -111,7 +111,7 @@
                 <td><%= collection[1] %></td>
                 <td><%= "$#{decimal_format collection[2]}" %></td>
                 <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
-                <td><%= ActiveSupport::Duration.build(collection[5]).parts.except(:minutes, :seconds).map { |unit, n| I18n.t unit, count: n, scope: 'duration' }.to_sentence %></td>
+                <td><%= humanize_gap(collection[5]) %></td>
               </tr>
             <% end %>
           </tbody>

@@ -11,6 +11,10 @@ class NftFlipRecord < ApplicationRecord
     bought_coin.in?(ETH_PAYMENT) && sold_coin.in?(ETH_PAYMENT)
   end
 
+  def is_sol_payment?
+    bought_coin == "SOL" && sold_coin == "SOL"
+  end
+
   def same_coin?
     bought_coin == sold_coin || is_eth_payment?
   end
@@ -24,8 +28,9 @@ class NftFlipRecord < ApplicationRecord
   end
 
   def display_message
+    usd_value = is_sol_payment? ? "" : "($#{decimal_format revenue})"
     "
-    #{decimal_format bought} #{bought_coin} / #{decimal_format sold} #{sold_coin} / #{decimal_format crypto_revenue} #{sold_coin} ($#{decimal_format revenue})
+    #{decimal_format bought} #{bought_coin} / #{decimal_format sold} #{sold_coin} / #{decimal_format crypto_revenue} #{sold_coin} #{usd_value}
 
     #{date_format bought_time} - #{date_format sold_time} #{I18n.t("views.labels.gap")}: #{humanize_gap(gap)}
 
