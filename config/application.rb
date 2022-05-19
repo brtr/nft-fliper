@@ -16,6 +16,7 @@ module NftFliper
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
+    config.time_zone = "Beijing"
     config.i18n.default_locale = :"zh-CN"
     # config.eager_load_paths << Rails.root.join("extras")
   end

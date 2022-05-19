@@ -2,8 +2,9 @@ class FetchNftTradesJob < ApplicationJob
   queue_as :daily_job
 
   def perform
-    Nft.order(is_marked: :desc).each do |nft|
-      FetchSingleNftTradesJob.perform_later(nft.id)
+    slugs = ENV["NFT_SLUGS"].split(",")
+    Nft.where(opensea_slug: slugs).each do |nft|
+      FetchSingleNftTradesJob.perform_later(nft)
     end
   end
 end

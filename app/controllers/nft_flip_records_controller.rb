@@ -32,6 +32,7 @@ class NftFlipRecordsController < ApplicationController
     @top_flipers = @collection_data.group_by(&:fliper_address).map{|k,v| [k, v.sum(&:revenue), v.sum(&:crypto_revenue), v.first.sold_coin]}.sort_by{|r| r[1]}.reverse.first(3)
     @flip_data_chart = PriceChartService.new(start_date: 7.days.ago.to_date, slug: params[:slug]).get_flip_data
     @flip_count_chart = PriceChartService.new(start_date: 7.days.ago.to_date, slug: params[:slug]).get_flip_count
+    @trade_data = PriceChartService.new(start_date: period_date(params[:trade_period]), slug: params[:slug]).get_trade_data
   end
 
   def check_new_records
@@ -71,5 +72,13 @@ class NftFlipRecordsController < ApplicationController
   def get_average_gap(records)
     gaps = records.map(&:gap)
     gaps.sum.to_f / gaps.size.to_f
+  end
+
+  def period_date(period)
+    case period
+    when "month" then Date.today.last_month.to_date
+    when "week" then 7.days.ago.to_date
+    else Date.today
+    end
   end
 end

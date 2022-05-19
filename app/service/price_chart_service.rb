@@ -36,7 +36,9 @@ class PriceChartService
   end
 
   def get_trade_data
-    data = NftTrade.where(trade_time: [start_date.at_beginning_of_day..end_date.at_end_of_day], nft_id: nft_id).order(trade_time: :asc).map{|trade| [trade.trade_price, trade.trade_time.strftime("%Y-%m-%d %H:%M")]}.uniq
+    records = NftTrade.where(trade_time: [start_date.at_beginning_of_day..end_date.at_end_of_day]).order(trade_time: :asc)
+    records = records.joins(:nft).where(nft: {opensea_slug: slug}) if slug
+    data = records.map{|trade| [trade.trade_price, trade.trade_time.strftime("%Y-%m-%d %H:%M")]}.uniq
     {
       data: data
     }

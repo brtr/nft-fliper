@@ -10,8 +10,10 @@ import 'bootstrap/dist/css/bootstrap';
 import 'bootstrap/dist/js/bootstrap';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-moment';
+import moment from 'moment';
 
 global.Chart = Chart;
+global.moment = moment
 
 window.jQuery = $;
 window.$ = $;
@@ -68,14 +70,6 @@ const login = function() {
           location.reload();
       }
   })
-}
-
-function range(start, end) {
-    var ans = [];
-    for (let i = start; i <= end; i++) {
-        ans.push(i);
-    }
-    return ans;
 }
 
 $(document).on('turbolinks:load', function() {

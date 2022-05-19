@@ -129,8 +129,9 @@ class NftHistoryService
           events = data["asset_events"]
           events.each do |event|
             asset = event["asset"]
+            next if asset.nil?
             schema_name = asset["asset_contract"]["schema_name"]
-            next if asset.nil? || asset["num_sales"] < 2 || !["ERC721", "METAPLEX"].include?(schema_name)
+            next if asset["num_sales"] < 2 || !["ERC721", "METAPLEX"].include?(schema_name)
             slug = asset["collection"]["slug"]
             token_id = schema_name == "ERC721" ? asset["token_id"] : asset["name"].split("#").last
             last_trade = fetch_last_trade(nft.address, event["seller"]["address"], slug, mode, token_id, schema_name)

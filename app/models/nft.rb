@@ -159,4 +159,41 @@ class Nft < ApplicationRecord
       owner_nft.update(amount: token_ids.count, token_ids: token_ids)
     end
   end
+
+  def sync_opensea_trades(cursor: nil, mode: "manual", start_at: nil, end_at: nil)
+    end_at ||= Time.now
+    start_at ||= end_at.at_beginning_of_day
+
+    url = "https://api.opensea.io/api/v1/events?collection_slug=#{opensea_slug}&event_type=successful&occurred_after=#{start_at.to_i}&occurred_before=#{end_at.to_i}"
+    url += "&cursor=#{cursor}" if cursor
+    begin
+      response = URI.open(url, {"X-API-KEY" => ENV["OPENSEA_API_KEY"]}).read
+      if response
+        data = JSON.parse(response)
+        data["asset_events"].each do |event|
+          asset = event["asset"]
+          next if asset.nil?
+          schema_name = asset["asset_contract"]["schema_name"]
+          next if !["ERC721", "METAPLEX"].include?(schema_name)
+          slug = asset["collection"]["slug"]
+          if schema_name == "ERC721"
+            token_id = asset["token_id"]
+            price = event["total_price"].to_f / 10 ** event["payment_token"]["decimals"].to_i
+          else
+            token_id = asset["name"].split("#").last
+            price = event["total_price"].to_f / 10 ** 9
+          end
+
+          trade = nft_trades.where(token_id: token_id, trade_time: event["created_date"]).first_or_create
+          trade.update(seller: event["seller"]["address"], buyer: event["winner_account"]["address"], trade_price: price)
+        end
+
+        sleep 1
+        sync_opensea_trades(cursor: data["next"]) if data["next"].present?
+      end
+    rescue => e
+      FetchDataLog.create(fetch_type: mode, source: "Fetch flip data", url: url, error_msgs: e, event_time: Time.now)
+      puts "Fetch opensea Error: #{e}"
+    end
+  end
 end
