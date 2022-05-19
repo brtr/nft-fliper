@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_12_083123) do
+ActiveRecord::Schema.define(version: 2022_05_19_082843) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "analysis_nft_holders", force: :cascade do |t|
@@ -214,6 +213,7 @@ ActiveRecord::Schema.define(version: 2022_05_12_083123) do
     t.datetime "trade_time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "permalink"
     t.index ["nft_id"], name: "index_nft_trades_on_nft_id"
   end
 
@@ -229,7 +229,6 @@ ActiveRecord::Schema.define(version: 2022_05_12_083123) do
     t.datetime "block_timestamp"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["nft_id"], name: "index_nft_transfers_on_nft_id"
   end
 
   create_table "nfts", force: :cascade do |t|

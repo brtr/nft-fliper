@@ -118,9 +118,9 @@ class NftHistoryService
     end
 
     def fetch_flip_data_by_nft(nft: nil, start_at: nil, end_at: nil, mode: "manual", cursor: nil)
-      start_at ||= Time.now.at_beginning_of_day.to_i
-      end_at ||= Time.now.to_i
-      url = "https://api.opensea.io/api/v1/events?collection_slug=#{nft.opensea_slug}&event_type=successful&occurred_after=#{start_at}&occurred_before=#{end_at}"
+      end_at ||= Time.now
+      start_at ||= end_at - 1.hour
+      url = "https://api.opensea.io/api/v1/events?collection_slug=#{nft.opensea_slug}&event_type=successful&occurred_after=#{start_at.to_i}&occurred_before=#{end_at.to_i}"
       url += "&cursor=#{cursor}" if cursor
       begin
         response = URI.open(url, {"X-API-KEY" => ENV["OPENSEA_API_KEY"]}).read
@@ -183,7 +183,7 @@ class NftHistoryService
     end
 
     def fetch_flip_data(start_at: nil, end_at: nil, mode: "manual", cursor: nil)
-      start_at ||= (Time.now - 10.hour).to_i
+      start_at ||= (Time.now - 1.hour).to_i
       end_at ||= Time.now.to_i
       url = "https://api.opensea.io/api/v1/events?only_opensea=true&event_type=successful&occurred_after=#{start_at}&occurred_before=#{end_at}"
       url += "&cursor=#{cursor}" if cursor

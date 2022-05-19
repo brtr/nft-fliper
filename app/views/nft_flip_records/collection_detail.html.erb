@@ -45,22 +45,35 @@
   <div class="chart">
     <%= render "flip_data_chart" %>
     <%= render "flip_count_chart" %>
-    <div class="text-right mt-5">
-      <%= form_tag collection_detail_nft_flip_records_path, class: "period_targets", method: "GET" do %>
-        <div class="col-12">
-          <%= hidden_field_tag "slug", params[:slug] %>
-          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-            <%= radio_button_tag :trade_period, "day", params[:trade_period] == "day", class: "btn-check", id: "btnradio1trade" %>
-            <label class="btn btn-outline-primary day" for="btnradio1trade">日</label>
-            <%= radio_button_tag :trade_period, "week", params[:trade_period] == "week", class: "btn-check", id: "btnradio2trade" %>
-            <label class="btn btn-outline-primary week" for="btnradio2trade">周</label>
-            <%= radio_button_tag :trade_period, "month", params[:trade_period] == "month", class: "btn-check", id: "btnradio3trade" %>
-            <label class="btn btn-outline-primary month" for="btnradio3trade">月</label>
-          </div>
+    <div class="row mt-5">
+      <div class="col-4">
+        <h3><%= t("views.labels.trade_records") %></h3>
+        <div id="trade_list">
+          <%= render "trade_records" %>
         </div>
-      <% end %>
-    </div>
+        <div class="p-4">
+          <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block", id: "loadMoreBtn", remote: true %>
+        </div>
+      </div>
+      <div class="col-8">
+        <%= form_tag collection_detail_nft_flip_records_path, class: "period_targets", method: "GET" do %>
+          <div class="col-12">
+            <%= hidden_field_tag "slug", params[:slug] %>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <%= radio_button_tag :trade_period, "day", params[:trade_period] == "day", class: "btn-check", id: "btnradio1trade" %>
+              <label class="btn btn-outline-primary day" for="btnradio1trade">日</label>
+              <%= radio_button_tag :trade_period, "week", params[:trade_period] == "week", class: "btn-check", id: "btnradio2trade" %>
+              <label class="btn btn-outline-primary week" for="btnradio2trade">周</label>
+              <%= radio_button_tag :trade_period, "month", params[:trade_period] == "month", class: "btn-check", id: "btnradio3trade" %>
+              <label class="btn btn-outline-primary month" for="btnradio3trade">月</label>
+            </div>
+          </div>
+        <% end %>
 
-    <%= render "trade_chart" %>
+        <%= render "trade_chart" %>
+      </div>
+    </div>
   </div>
 </div>
+
+<%= hidden_field_tag :current_page, @trade_records.current_page %>

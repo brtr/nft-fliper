@@ -5,6 +5,7 @@ class FetchNftTradesJob < ApplicationJob
     slugs = ENV["NFT_SLUGS"].split(",")
     Nft.where(opensea_slug: slugs).each do |nft|
       FetchSingleNftTradesJob.perform_later(nft)
+      sleep 1
     end
   end
 end
