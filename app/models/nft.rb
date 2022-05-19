@@ -189,7 +189,7 @@ class Nft < ApplicationRecord
         end
 
         sleep 1
-        sync_opensea_trades(cursor: data["next"]) if data["next"].present?
+        sync_opensea_trades(cursor: data["next"], mode: mode, start_at: start_at, end_at: end_at) if data["next"].present?
       end
     rescue => e
       FetchDataLog.create(fetch_type: mode, source: "Fetch flip data", url: url, error_msgs: e, event_time: Time.now)
