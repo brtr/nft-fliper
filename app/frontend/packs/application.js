@@ -137,11 +137,12 @@ $(document).on('turbolinks:load', function() {
             $(this).addClass("hide");
         })
 
-        $("#loadMoreBtn").on("click", function() {
-            const page = $("#current_page").val();
+        $(".loadMoreBtn").on("click", function() {
+            const source = $(this).data("source");
+            const page = $(`#${source}_current_page`).val();
             var url = new URL(window.location.href);
             var search_params = url.searchParams;
-            search_params.set('page', (parseInt(page) + 1));
+            search_params.set(`${source}_page`, (parseInt(page) + 1));
             var new_url = window.location.pathname + "?" + search_params.toString();
             $(this).attr("href", new_url);
         })

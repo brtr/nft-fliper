@@ -41,6 +41,7 @@ zh-CN:
       load_new: 加载新的数据
       bought_price: 买入价
       trade_records: 交易记录
+      listing_items: 挂单记录
   date:
     abbr_day_names:
     - 周日

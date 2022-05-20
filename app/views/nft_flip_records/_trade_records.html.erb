@@ -3,7 +3,7 @@
     <div class="card-body row">
       <div class="logo col-6">
         <%= image_tag chain_logo_path(trade.nft), size: "30x30" %>
-        <%= "##{trade.token_id}" %>
+        <%= "##{trade.token_id.truncate(10)}" %>
       </div>
       <div class="text-end col-6">
         <p>
