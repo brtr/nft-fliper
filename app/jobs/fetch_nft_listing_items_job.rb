@@ -3,16 +3,22 @@ class FetchNftListingItemsJob < ApplicationJob
 
   def perform
     50.times.each do
-      item = $redis.rpop "nft_listing_items"
-      next unless item
-      item = JSON.parse item
-      payload = item["payload"]
+      data = $redis.rpop "nft_listing_items"
+      next unless data
+      data = JSON.parse data
+      payload = data["payload"]
       nft = Nft.find_by opensea_slug: payload["collection"]["slug"]
       next unless nft
       item = payload["item"]
-      decimal = item["chain"]["name"] == "ethereum" ? 18 : 9
+      if item["chain"]["name"] == "ethereum"
+        decimal = 18
+        name = item["permalink"].split("/").last
+      else
+        decimal = 9
+        name = item["metadata"]["name"].split("#").last
+      end
       price = payload["base_price"].to_f / 10 ** decimal
-      nft.nft_listing_items.where(token_id: item["permalink"].split("/").last, permalink: item["permalink"], base_price: price,
+      nft.nft_listing_items.where(token_id: name, permalink: item["permalink"], base_price: price,
                                   listing_date: DateTime.parse(payload["listing_date"])).first_or_create
     end
   end
