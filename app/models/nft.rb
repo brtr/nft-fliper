@@ -9,6 +9,7 @@ class Nft < ApplicationRecord
   has_many :nft_trades, autosave: true
   has_many :nft_transfers, autosave: true
   has_many :nft_flip_records, autosave: true
+  has_many :nft_listing_items, autosave: true
 
   validates :slug, uniqueness: true, allow_nil: true
 
