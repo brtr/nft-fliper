@@ -184,8 +184,8 @@ class Nft < ApplicationRecord
             price = event["total_price"].to_f / 10 ** 9
           end
 
-          trade = nft_trades.where(token_id: token_id, trade_time: event["created_date"]).first_or_create
-          trade.update(seller: event["seller"]["address"], buyer: event["winner_account"]["address"], trade_price: price, permalink: asset["permalink"])
+          nft_trades.where(token_id: token_id, trade_time: DateTime.parse(event["created_date"]), seller: event["seller"]["address"],
+                          buyer: event["winner_account"]["address"], trade_price: price, permalink: asset["permalink"]).first_or_create
         end
 
         sleep 1
