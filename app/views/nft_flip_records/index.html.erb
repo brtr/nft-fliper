@@ -34,7 +34,7 @@
                 <td><%= idx + 1 %></td>
                 <td><%= link_to address_format(fliper[0]), fliper_detail_nft_flip_records_path(fliper_address: fliper[0]) %></td>
                 <td><%= fliper[1] %></td>
-                <td><%= "$#{decimal_format fliper[2]}" %></td>
+                <td><%= fliper[2] %></td>
                 <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
                 <td><%= humanize_gap(fliper[5]) %></td>
               </tr>
@@ -59,7 +59,7 @@
                 <td><%= idx + 1 %></td>
                 <td><%= link_to address_format(fliper[0]), fliper_detail_nft_flip_records_path(fliper_address: fliper[0]) %></td>
                 <td><%= fliper[1] %></td>
-                <td><%= "$#{decimal_format fliper[2]}" %></td>
+                <td><%= fliper[2] %></td>
                 <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
                 <td><%= humanize_gap(fliper[5]) %></td>
               </tr>
@@ -84,7 +84,7 @@
                 <td><%= idx + 1 %></td>
                 <td style="width:5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
                 <td><%= collection[1] %></td>
-                <td><%= "$#{decimal_format collection[2]}" %></td>
+                <td><%= collection[2] %></td>
                 <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
                 <td><%= humanize_gap(collection[5]) %></td>
               </tr>
@@ -109,7 +109,7 @@
                 <td><%= idx + 1 %></td>
                 <td style="width: 5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
                 <td><%= collection[1] %></td>
-                <td><%= "$#{decimal_format collection[2]}" %></td>
+                <td><%= collection[2] %></td>
                 <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
                 <td><%= humanize_gap(collection[5]) %></td>
               </tr>

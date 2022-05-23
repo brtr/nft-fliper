@@ -5,12 +5,12 @@ class NftFlipRecordsController < ApplicationController
     @records = @q.result.order(sold_time: :desc).page(params[:page]).per(10)
 
     fliper_records = NftFlipRecord.today.group_by(&:fliper_address)
-    @top_flipers = get_data(fliper_records, "top")
-    @last_flipers = get_data(fliper_records, "last")
+    @top_flipers = helpers.get_data(fliper_records, "top")
+    @last_flipers = helpers.get_data(fliper_records, "last")
 
     collection_records = NftFlipRecord.today.group_by(&:slug)
-    @top_collections = get_data(collection_records, "top")
-    @last_collections = get_data(collection_records, "last")
+    @top_collections = helpers.get_data(collection_records, "top")
+    @last_collections = helpers.get_data(collection_records, "last")
 
     respond_to do |format|
       format.html
@@ -62,32 +62,6 @@ class NftFlipRecordsController < ApplicationController
   end
 
   private
-  def get_data(data, type)
-    if type == "top"
-      data.map do |k,v|
-        records = v.select{|n| n.roi > 0 || n.same_coin? && n.crypto_roi > 0}
-        next if records.blank?
-        [k, records.count, records.sum(&:revenue), get_average_price(records), records.first.sold_coin, get_average_gap(records)]
-      end.compact.sort_by{|r| r[1]}.reverse.first(10)
-    else
-      data.map do |k,v|
-        records = v.select{|n| n.roi < 0 || n.same_coin? && n.crypto_roi < 0}
-        next if records.blank?
-        [k, records.count, records.sum(&:revenue), get_average_price(records), records.first.sold_coin, get_average_gap(records)]
-      end.compact.sort_by{|r| r[1]}.reverse.first(10)
-    end
-  end
-
-  def get_average_price(records)
-    price_list = records.map{|r| [r.bought, r.sold]}.flatten
-    price_list.sum.to_f / price_list.size.to_f
-  end
-
-  def get_average_gap(records)
-    gaps = records.map(&:gap)
-    gaps.sum.to_f / gaps.size.to_f
-  end
-
   def period_date(period)
     case period
     when "month" then Date.today.last_month.to_date
