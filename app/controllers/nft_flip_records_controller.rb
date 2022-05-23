@@ -34,7 +34,7 @@ class NftFlipRecordsController < ApplicationController
     @flip_count_chart = PriceChartService.new(start_date: 7.days.ago.to_date, slug: params[:slug]).get_flip_count
     @trade_data = PriceChartService.new(start_date: period_date(params[:trade_period]), slug: params[:slug]).get_trade_data
     @trade_records = NftTrade.joins(:nft).where(nft: {opensea_slug: params[:slug]}).order(trade_time: :desc).page(params[:trade_page]).per(10)
-    @listing_items = NftListingItem.joins(:nft).where(nft: {opensea_slug: params[:slug]}).order(base_price: :asc).page(params[:listing_page]).per(10)
+    @listing_items = NftListingItem.joins(:nft).where("nfts.opensea_slug = ? and listing_date > ?", params[:slug], Time.now - 2.hours).order(base_price: :asc).page(params[:listing_page]).per(10)
 
     respond_to do |format|
       format.html
@@ -52,6 +52,13 @@ class NftFlipRecordsController < ApplicationController
     last = NftFlipRecord.maximum(:id)
     @q = NftFlipRecord.includes(:nft).ransack(params[:q])
     @records = @q.result.where(id: [params[:id].to_i..last]).order(sold_time: :desc)
+  end
+
+  def refresh_listings
+    @listing_items = NftListingItem.joins(:nft).where("nfts.opensea_slug = ? and listing_date > ?", params[:slug], Time.now - 2.hours).order(base_price: :asc).page(params[:listing_page]).per(10)
+    respond_to do |format|
+      format.js
+    end
   end
 
   private

@@ -146,5 +146,14 @@ $(document).on('turbolinks:load', function() {
             var new_url = window.location.pathname + "?" + search_params.toString();
             $(this).attr("href", new_url);
         })
+
+        setInterval(function () {
+            const url = "/nft_flip_records/refresh_listings?slug=" + $("#slug").val();
+            $.ajax({
+                type: "GET",
+                dataType: "script",
+                url: url
+            })
+        }, 60000);
     })
 })

@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       get :collection_detail
       get :check_new_records
       get :get_new_records
+      get :refresh_listings
     end
   end
 
