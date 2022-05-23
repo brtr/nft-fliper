@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_20_013356) do
+ActiveRecord::Schema.define(version: 2022_05_23_093842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -266,6 +266,8 @@ ActiveRecord::Schema.define(version: 2022_05_20_013356) do
     t.integer "user_id"
     t.decimal "listed"
     t.decimal "total_volume"
+    t.boolean "sync_trades", default: false
+    t.index ["sync_trades"], name: "index_nfts_on_sync_trades"
   end
 
   create_table "owner_nfts", force: :cascade do |t|

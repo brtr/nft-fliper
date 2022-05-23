@@ -197,4 +197,10 @@ class Nft < ApplicationRecord
       puts "Fetch opensea Error: #{e}"
     end
   end
+
+  class << self
+    def add_new(slug, address)
+      Nft.create(slug: slug, opensea_slug: slug, address: address, sync_trades: true)
+    end
+  end
 end
