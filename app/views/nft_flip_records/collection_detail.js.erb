@@ -1,10 +1,10 @@
-trade_current_page = <%= @trade_records.current_page %>
+trade_current_page = <%= params[:trade_page].to_i %>
 if ($("#trade_current_page").val() < trade_current_page) {
   $("#trade_list").append("<%= j render partial:'trade_records' %>");
   $("#trade_current_page").val(trade_current_page);
 }
 
-listing_current_page = <%= @listing_items.current_page %>
+listing_current_page = <%= params[:listing_page].to_i %>
 if ($("#listing_current_page").val() < listing_current_page) {
   $("#listing_items").append("<%= j render partial:'listing_items' %>");
   $("#listing_current_page").val(listing_current_page);

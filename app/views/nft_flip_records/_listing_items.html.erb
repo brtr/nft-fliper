@@ -2,17 +2,17 @@
   <div class="card" style="height: 90px">
     <div class="card-body row">
       <div class="logo col-6">
-        <%= image_tag chain_logo_path(item.nft), size: "30x30" %>
-        <%= "##{item.token_id.truncate(10)}" %>
+        <%= image_tag chain_logo_path(item["nft_id"]), size: "30x30" %>
+        <%= "##{item["token_id"].truncate(10)}" %>
       </div>
       <div class="text-end col-6">
         <p>
-          <%= decimal_format item.base_price %>
-          <%= link_to item.permalink, class: "card-link", target: "_blank" do %>
-            <%= image_tag "opensea_blue.svg" %>
+          <%= decimal_format item["base_price"] %>
+          <%= link_to item["permalink"], class: "card-link", target: "_blank" do %>
+            <%= image_tag platform_logo_path(item["permalink"]), size: "22x22" %>
           <% end %>
         </p>
-        <h5><%= "#{time_ago_in_words item.listing_date} 之前" %></h5>
+        <h5><%= "#{time_ago_in_words item["listing_date"]} 之前" if item["listing_date"] %></h5>
       </div>
     </div>
   </div>

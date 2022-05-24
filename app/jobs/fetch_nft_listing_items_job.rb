@@ -13,13 +13,10 @@ class FetchNftListingItemsJob < ApplicationJob
       if item["chain"]["name"] == "ethereum"
         decimal = 18
         name = item["permalink"].split("/").last
-      else
-        decimal = 9
-        name = item["metadata"]["name"].split("#").last
+        price = payload["base_price"].to_f / 10 ** decimal
+        nft.nft_listing_items.where(token_id: name, permalink: item["permalink"], base_price: price,
+                                    listing_date: DateTime.parse(payload["listing_date"])).first_or_create
       end
-      price = payload["base_price"].to_f / 10 ** decimal
-      nft.nft_listing_items.where(token_id: name, permalink: item["permalink"], base_price: price,
-                                  listing_date: DateTime.parse(payload["listing_date"])).first_or_create
     end
   end
 end

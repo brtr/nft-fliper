@@ -1,6 +1,19 @@
 module NftFlipRecordsHelper
-  def chain_logo_path(nft)
-    nft.chain_id == 1 ? 'eth.png' : 'solana.png'
+  def chain_logo_path(nft_id)
+    nft = Nft.find_by id: nft_id
+    if nft
+      nft.chain_id == 1 ? 'eth.png' : 'solana.png'
+    else
+      ''
+    end
+  end
+
+  def platform_logo_path(link)
+    if link.match(/opensea/)
+      "opensea_blue.svg"
+    else
+      "solanart.svg"
+    end
   end
 
   def get_data(data, type)
