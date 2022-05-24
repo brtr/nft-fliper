@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_23_093842) do
+ActiveRecord::Schema.define(version: 2022_05_24_062825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -303,6 +303,28 @@ ActiveRecord::Schema.define(version: 2022_05_23_093842) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["nft_id", "event_date", "n_type"], name: "index_target_nft_owner_histories_on_nft_id_event_date_and_type", unique: true
     t.index ["nft_id"], name: "index_target_nft_owner_histories_on_nft_id"
+  end
+
+  create_table "user_addresses", force: :cascade do |t|
+    t.string "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_trades", force: :cascade do |t|
+    t.integer "user_address_id"
+    t.string "collection"
+    t.string "token_address"
+    t.string "from_address"
+    t.string "to_address"
+    t.string "txid"
+    t.decimal "price"
+    t.datetime "trade_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["collection"], name: "index_user_trades_on_collection"
+    t.index ["token_address"], name: "index_user_trades_on_token_address"
+    t.index ["user_address_id"], name: "index_user_trades_on_user_address_id"
   end
 
   create_table "users", force: :cascade do |t|
