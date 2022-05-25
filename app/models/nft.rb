@@ -215,6 +215,7 @@ class Nft < ApplicationRecord
       slug = solanart_slug || opensea_slug
       nft = Nft.create(chain_id: chain_id, slug: solanart_slug, opensea_slug: opensea_slug, address: address, sync_trades: true)
       FetchNftFlipDataByNftJob.perform_later(nft.opensea_slug)
+      puts "#{opensea_slug} 添加成功，开始抓取 flip data"
     end
   end
 end
