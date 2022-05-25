@@ -199,8 +199,22 @@ class Nft < ApplicationRecord
   end
 
   class << self
-    def add_new(slug, address)
-      Nft.create(slug: slug, opensea_slug: slug, address: address, sync_trades: true)
+    def add_new(opensea_slug, solanart_slug: nil, address: nil, chain: "solana")
+      chain_id = chain == "solana" ? 101 : 1
+
+      if chain == "solana" && solanart_slug.nil?
+        puts "You need to pass solanart slug!"
+        return false
+      end
+
+      if chain == "eth" && address.nil?
+        puts "You need to pass collection address!"
+        return false
+      end
+
+      slug = solanart_slug || opensea_slug
+      nft = Nft.create(chain_id: chain_id, slug: solanart_slug, opensea_slug: opensea_slug, address: address, sync_trades: true)
+      FetchNftFlipDataByNftJob.perform_later(nft.opensea_slug)
     end
   end
 end
