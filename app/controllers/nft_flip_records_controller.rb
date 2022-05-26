@@ -76,7 +76,7 @@ class NftFlipRecordsController < ApplicationController
   def flip_flow
     @page_index = 3
     @q = NftFlipRecord.includes(:nft).ransack(params[:q])
-    @records = @q.result.order(sold_time: :desc).page(params[:fliper_page]).per(10)
+    @records = @q.result.order(sold_time: :desc).page(params[:fliper_page]).per(50)
   end
 
   private
