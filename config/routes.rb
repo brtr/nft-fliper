@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       get :check_new_records
       get :get_new_records
       get :refresh_listings
+      get :search_collection
+      get :trending
+      get :flip_flow
     end
   end
 

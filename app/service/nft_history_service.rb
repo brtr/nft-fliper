@@ -136,6 +136,7 @@ class NftHistoryService
             token_id = schema_name == "ERC721" ? asset["token_id"] : asset["name"].split("#").last
             last_trade = fetch_last_trade(nft.address, event["seller"]["address"], slug, mode, token_id, schema_name)
             next unless last_trade.present?
+            nft.update(logo: asset["collection"]["banner_image_url"])
             update_flip_record(nft, last_trade, event, asset)
           end
 
@@ -203,6 +204,7 @@ class NftHistoryService
             next unless last_trade.present?
             puts "last trade: #{last_trade}"
             nft = Nft.where(address: token_address, opensea_slug: slug).first_or_create
+            nft.update(logo: asset["collection"]["banner_image_url"])
             update_flip_record(nft, last_trade, event, asset)
           end
 

@@ -1,0 +1,102 @@
+<div class="row">
+  <h3><%= t("views.labels.top_today") %>Fliper</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= t("views.labels.rank") %></th>
+        <th>Fliper</th>
+        <th><%= t("views.labels.count") %></th>
+        <th><%= t("views.labels.revenue") %></th>
+        <th><%= t("views.labels.average_price") %></th>
+        <th><%= t("views.labels.average_gap") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @top_flipers.each_with_index do |fliper, idx| %>
+        <tr>
+          <td><%= idx + 1 %></td>
+          <td><%= link_to address_format(fliper[0]), fliper_detail_nft_flip_records_path(fliper_address: fliper[0]) %></td>
+          <td><%= fliper[1] %></td>
+          <td><%= fliper[2] %></td>
+          <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
+          <td><%= humanize_gap(fliper[5]) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <h3 class="mt-4"><%= t("views.labels.last_today") %>Fliper</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= t("views.labels.rank") %></th>
+        <th>Fliper</th>
+        <th><%= t("views.labels.count") %></th>
+        <th><%= t("views.labels.loss") %></th>
+        <th><%= t("views.labels.average_price") %></th>
+        <th><%= t("views.labels.average_gap") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @last_flipers.each_with_index do |fliper, idx| %>
+        <tr>
+          <td><%= idx + 1 %></td>
+          <td><%= link_to address_format(fliper[0]), fliper_detail_nft_flip_records_path(fliper_address: fliper[0]) %></td>
+          <td><%= fliper[1] %></td>
+          <td><%= fliper[2] %></td>
+          <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
+          <td><%= humanize_gap(fliper[5]) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <h3 class="mt-4"><%= t("views.labels.top_today") %>Collection</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= t("views.labels.rank") %></th>
+        <th>Collection</th>
+        <th><%= t("views.labels.count") %></th>
+        <th><%= t("views.labels.revenue") %></th>
+        <th><%= t("views.labels.average_price") %></th>
+        <th><%= t("views.labels.average_gap") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @top_collections.each_with_index do |collection, idx| %>
+        <tr>
+          <td><%= idx + 1 %></td>
+          <td style="width:5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
+          <td><%= collection[1] %></td>
+          <td><%= collection[2] %></td>
+          <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
+          <td><%= humanize_gap(collection[5]) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <h3 class="mt-4"><%= t("views.labels.last_today") %>Collection</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= t("views.labels.rank") %></th>
+        <th>Collection</th>
+        <th><%= t("views.labels.count") %></th>
+        <th><%= t("views.labels.loss") %></th>
+        <th><%= t("views.labels.average_price") %></th>
+        <th><%= t("views.labels.average_gap") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @last_collections.each_with_index do |collection, idx| %>
+        <tr>
+          <td><%= idx + 1 %></td>
+          <td style="width: 5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
+          <td><%= collection[1] %></td>
+          <td><%= collection[2] %></td>
+          <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
+          <td><%= humanize_gap(collection[5]) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,171 +1,68 @@
-<div class="sidebar-enabled sidebar-end">
-  <div class="container py-4 mb-2 mb-sm-0 pb-sm-5 row mx-xl-auto">
-    <div>
-      <%= link_to "#", class: "btn btn-success mb-3 hide", id: "loadNewBtn", remote: true do %>
-        <%= t("views.labels.load_new") %>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up-circle align-middle me-2"><circle cx="12" cy="12" r="10"></circle><polyline points="16 12 12 8 8 12"></polyline><line x1="12" y1="16" x2="12" y2="8"></line></svg>
-      <% end %>
+<div class="mx-5">
+  <section class="row mb-5">
+    <div class="col-6">
+      <h1>Trade Solana NFTs In One Place</h1>
+      <div>
+        <h3>NftFliper is the #1 Solana NFT aggregator marketplace. The fastest NFT marketplace is developed by some of the top OG engineers and product managers from Facebook and Uber.</h3>
+        <h3>Explore the market to get started.</h3>
+      </div>
     </div>
-    <div class="col-5 mb-5">
-      <div class="row" id="flip_records" data-last-id="<%= @records.maximum(:id) %>">
+    <div class="col-6">
+      <a href="/nft_flip_records/collection_detail?slug=<%= @top_collection[0] %>">
+        <div>
+          <div>
+            <div>
+              <%= image_tag @top_collection[6], width: "100%" %>
+            </div>
+          </div>
+        </div>
+      </a>
+      <div class="text-black ms-3 text-end">
+        <h3 class="pt-3 mb-3 fw-bolder"><%= @top_collection[0] %></h3>
+        <p>
+          Average price: <span><span>◎</span><%= "#{decimal_format @top_collection[3]} #{@top_collection[4]}" %></span>
+        </p>
+        <p>
+          Volume: <span><span>◎</span><%= "#{decimal_format @top_collection[7]} #{@top_collection[4]}" %></span>
+        </p>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h2 class="text-center">Latest 10 Fliper Data</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Collection</th>
+          <th><%= t("views.labels.price_notice") %></th>
+          <th><%= t("views.labels.date_notice") %></th>
+          <th><%= t("views.labels.gap") %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
         <%= render "records" %>
+      </tbody>
+    </table>
+  </section>
+  <section class="mt-5 row justify-content-between">
+    <h2 class="text-center mb-3">Top 15 collections by flip count</h2>
+    <% @top_collections.each_with_index do |collection, idx| %>
+      <div class="card col-3 me-3" style="width:350px">
+        <div class="card-body">
+          <div class="logo">
+            <span class="badge"><%= idx + 1 %></span>
+            <%= image_tag collection[8], size: "60x60", class: "rounded-circle" %>
+            <%= collection[0] %>
+          </div>
+          <div class="mt-3">
+            Average price: <span><span>◎</span><%= "#{decimal_format collection[3]} #{collection[4]}" %></span>
+          </div>
+          <div class="mt-3">
+            Volume: <span><span>◎</span><%= "#{decimal_format collection[7]} #{collection[4]}" %></span>
+          </div>
+        </div>
       </div>
-      <div class="p-4">
-        <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block", id: "loadMoreBtn", remote: true %>
-      </div>
-    </div>
-    <div class="col-6 ms-3">
-      <div class="row">
-        <h3><%= t("views.labels.top_today") %>Fliper</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th><%= t("views.labels.rank") %></th>
-              <th>Fliper</th>
-              <th><%= t("views.labels.count") %></th>
-              <th><%= t("views.labels.revenue") %></th>
-              <th><%= t("views.labels.average_price") %></th>
-              <th><%= t("views.labels.average_gap") %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @top_flipers.each_with_index do |fliper, idx| %>
-              <tr>
-                <td><%= idx + 1 %></td>
-                <td><%= link_to address_format(fliper[0]), fliper_detail_nft_flip_records_path(fliper_address: fliper[0]) %></td>
-                <td><%= fliper[1] %></td>
-                <td><%= fliper[2] %></td>
-                <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
-                <td><%= humanize_gap(fliper[5]) %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <h3 class="mt-4"><%= t("views.labels.last_today") %>Fliper</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th><%= t("views.labels.rank") %></th>
-              <th>Fliper</th>
-              <th><%= t("views.labels.count") %></th>
-              <th><%= t("views.labels.loss") %></th>
-              <th><%= t("views.labels.average_price") %></th>
-              <th><%= t("views.labels.average_gap") %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @last_flipers.each_with_index do |fliper, idx| %>
-              <tr>
-                <td><%= idx + 1 %></td>
-                <td><%= link_to address_format(fliper[0]), fliper_detail_nft_flip_records_path(fliper_address: fliper[0]) %></td>
-                <td><%= fliper[1] %></td>
-                <td><%= fliper[2] %></td>
-                <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
-                <td><%= humanize_gap(fliper[5]) %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <h3 class="mt-4"><%= t("views.labels.top_today") %>Collection</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th><%= t("views.labels.rank") %></th>
-              <th>Collection</th>
-              <th><%= t("views.labels.count") %></th>
-              <th><%= t("views.labels.revenue") %></th>
-              <th><%= t("views.labels.average_price") %></th>
-              <th><%= t("views.labels.average_gap") %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @top_collections.each_with_index do |collection, idx| %>
-              <tr>
-                <td><%= idx + 1 %></td>
-                <td style="width:5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
-                <td><%= collection[1] %></td>
-                <td><%= collection[2] %></td>
-                <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
-                <td><%= humanize_gap(collection[5]) %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <h3 class="mt-4"><%= t("views.labels.last_today") %>Collection</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th><%= t("views.labels.rank") %></th>
-              <th>Collection</th>
-              <th><%= t("views.labels.count") %></th>
-              <th><%= t("views.labels.loss") %></th>
-              <th><%= t("views.labels.average_price") %></th>
-              <th><%= t("views.labels.average_gap") %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @last_collections.each_with_index do |collection, idx| %>
-              <tr>
-                <td><%= idx + 1 %></td>
-                <td style="width: 5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
-                <td><%= collection[1] %></td>
-                <td><%= collection[2] %></td>
-                <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
-                <td><%= humanize_gap(collection[5]) %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+    <% end %>
+  </section>
 </div>
-<div class="settings js-settings">
-  <div class="settings-toggle">
-    <div class="settings-toggle-option settings-toggle-option-text js-settings-toggle">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders align-middle"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
-      Filters
-    </div>
-  </div>
-  <div class="settings-panel">
-    <div class="settings-content">
-      <!-- Search-->
-      <div class="settings-title d-flex align-items-center">
-        <button type="button" class="btn-close float-right js-settings-toggle" aria-label="Close"></button>
-        <h4 class="mb-0 ms-2 d-inline-block"><%= t("views.actions.filter") %></h4>
-      </div>
-      <div class="settings-body">
-        <%= search_form_for @q, url: nft_flip_records_path, method: :get do |f| %>
-          <div class="mb-3 pb-1 col-12">
-            <%= f.label :slug, "NFT", class: "form-label d-block px-0" %>
-            <%= f.text_field :slug_eq, class: "form-control inline-form" %>
-          </div>
-          <div class="mb-3 pb-1 col-12">
-            <%= f.label :bought, t("views.labels.bought_price"), class: "form-label d-block px-0" %>
-            <%= f.number_field :bought_gteq, step: 0.1, class: "form-control inline-form" %>
-            To
-            <%= f.number_field :bought_lteq, step: 0.1, class: "form-control inline-form" %>
-          </div>
-          <div class="mb-3 pb-1 col-12">
-            <%= f.label :bought_time, t("views.labels.bought_time"), class: "form-label d-block px-0" %>
-            <%= f.date_field :bought_time_gteq, class: "form-control inline-form" %>
-            To
-            <%= f.date_field :bought_time_lteq, class: "form-control inline-form" %>
-          </div>
-          <div class="mb-3 pb-1 col-12">
-            <%= f.label :sold_time, t("views.labels.sold_time"), class: "form-label d-block px-0" %>
-            <%= f.date_field :sold_time_gteq, class: "form-control inline-form" %>
-            To
-            <%= f.date_field :sold_time_lteq, class: "form-control inline-form" %>
-          </div>
-          <div class="mb-3 pb-1">
-            <%= f.submit t("views.actions.submit"), class: 'btn btn-primary mt-3 mt-sm-0' %>
-            <%= link_to t("views.actions.reset"), nft_flip_records_path, class: 'btn btn-default' %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<%= hidden_field_tag :current_page, @records.current_page %>

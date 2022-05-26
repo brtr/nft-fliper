@@ -1,16 +1,11 @@
 class NftFlipRecordsController < ApplicationController
   def index
-    @page_index = 5
-    @q = NftFlipRecord.includes(:nft).ransack(params[:q])
-    @records = @q.result.order(sold_time: :desc).page(params[:page]).per(10)
-
-    fliper_records = NftFlipRecord.today.group_by(&:fliper_address)
-    @top_flipers = helpers.get_data(fliper_records, "top")
-    @last_flipers = helpers.get_data(fliper_records, "last")
+    @page_index = 1
+    @records = NftFlipRecord.order(sold_time: :desc).first(10)
 
     collection_records = NftFlipRecord.today.group_by(&:slug)
-    @top_collections = helpers.get_data(collection_records, "top")
-    @last_collections = helpers.get_data(collection_records, "last")
+    @top_collections = helpers.get_data(collection_records, "top", 15)
+    @top_collection = @top_collections.first
 
     respond_to do |format|
       format.html
@@ -59,6 +54,29 @@ class NftFlipRecordsController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def search_collection
+    result = Nft.ransack(opensea_slug_cont: params[:q]).result
+
+    render json: result.map{|nft| {id: nft.id, text: nft.opensea_slug}}
+  end
+
+  def trending
+    @page_index = 2
+    fliper_records = NftFlipRecord.today.group_by(&:fliper_address)
+    @top_flipers = helpers.get_data(fliper_records, "top")
+    @last_flipers = helpers.get_data(fliper_records, "last")
+
+    collection_records = NftFlipRecord.today.group_by(&:slug)
+    @top_collections = helpers.get_data(collection_records, "top")
+    @last_collections = helpers.get_data(collection_records, "last")
+  end
+
+  def flip_flow
+    @page_index = 3
+    @q = NftFlipRecord.includes(:nft).ransack(params[:q])
+    @records = @q.result.order(sold_time: :desc).page(params[:fliper_page]).per(10)
   end
 
   private

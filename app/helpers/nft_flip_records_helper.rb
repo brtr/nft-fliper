@@ -16,19 +16,23 @@ module NftFlipRecordsHelper
     end
   end
 
-  def get_data(data, type)
+  def get_data(data, type, count=10)
     if type == "top"
       data.map do |k,v|
         records = v.select{|n| n.roi > 0 || n.same_coin? && n.crypto_roi > 0}
         next if records.blank?
-        [k, records.count, get_revenue(records), get_average_price(records), records.first.sold_coin, get_average_gap(records)]
-      end.compact.sort_by{|r| r[1]}.reverse.first(10)
+        record = records.first
+        volume = records.count * get_average_price(records)
+        [k, records.count, get_revenue(records), get_average_price(records), record.sold_coin, get_average_gap(records), record.nft.logo, volume, record.image]
+      end.compact.sort_by{|r| r[1]}.reverse.first(count)
     else
       data.map do |k,v|
         records = v.select{|n| n.roi < 0 || n.same_coin? && n.crypto_roi < 0}
         next if records.blank?
-        [k, records.count, get_revenue(records), get_average_price(records), records.first.sold_coin, get_average_gap(records)]
-      end.compact.sort_by{|r| r[1]}.reverse.first(10)
+        record = records.first
+        volume = records.count * get_average_price(records)
+        [k, records.count, get_revenue(records), get_average_price(records), record.sold_coin, get_average_gap(records), record.nft.logo, volume, record.image]
+      end.compact.sort_by{|r| r[1]}.reverse.first(count)
     end
   end
 

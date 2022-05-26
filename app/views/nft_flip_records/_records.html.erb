@@ -1,22 +1,13 @@
 <% @records.each do |record| %>
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        <h3 class="mb-0">
-          <%= image_tag chain_logo_path(record.nft_id), size: "20x20" %>
-          <%= link_to record.slug, collection_detail_nft_flip_records_path(slug: record.slug) %>
-        </h3>
-      </div>
-      <div class="card-body">
-        <p class="card-text" data-bs-toggle="tooltip" title="<%= t("views.labels.price_notice") %>">
-          <%= display_price(record) %>
-        </p>
-        <p class="card-text" data-bs-toggle="tooltip" title="<%= t("views.labels.date_notice") %>">
-          <%= "#{date_format record.bought_time} - #{date_format record.sold_time}" %>
-        </p>
-        <p class="card-text"><%= "#{t("views.labels.gap")}: #{humanize_gap(record.gap)}" %></p>
-        <%= link_to t("views.labels.detail"), record.permalink, class: "card-link", target: "_blank" %>
-      </div>
-    </div>
-  </div>
+  <tr>
+    <td>
+      <%= image_tag record.image, size: "20x20", class: "rounded-circle" %>
+      <%= link_to record.slug, collection_detail_nft_flip_records_path(slug: record.slug) %>
+    </td>
+    <td><%= display_price(record) %></td>
+    <td><%= "#{date_format record.bought_time} - #{date_format record.sold_time}" %></td>
+    <td><%= humanize_gap(record.gap) %></td>
+    <td><%= image_tag chain_logo_path(record.nft_id), size: "20x20" %></td>
+    <td><%= link_to t("views.labels.detail"), record.permalink, class: "card-link", target: "_blank" %></td>
+  </tr>
 <% end %>

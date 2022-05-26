@@ -4,6 +4,7 @@ require("jquery");
 require("chartkick");
 require("chart.js");
 require("moment");
+require('select2');
 require("../stylesheets/application.scss");
 
 import 'bootstrap/dist/css/bootstrap';
@@ -11,6 +12,8 @@ import 'bootstrap/dist/js/bootstrap';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-moment';
 import moment from 'moment';
+import 'select2';
+import 'select2/dist/css/select2.css';
 
 global.Chart = Chart;
 global.moment = moment
@@ -116,17 +119,19 @@ $(document).on('turbolinks:load', function() {
             $(".js-settings").toggleClass("open");
         })
 
-        setInterval(function () {
-            $.get('/nft_flip_records/check_new_records', function(data){
-                const last_id = data.last_id;
-                if(last_id > 0 ){
-                    const change = last_id - parseInt($("#flip_records").data("last-id"))
-                    if (change > 0) {
-                        $("#loadNewBtn").removeClass("hide")
+        if ($("#flip_records").length > 0) {
+            setInterval(function () {
+                $.get('/nft_flip_records/check_new_records', function(data){
+                    const last_id = data.last_id;
+                    if(last_id > 0 ){
+                        const change = last_id - parseInt($("#flip_records").data("last-id"))
+                        if (change > 0) {
+                            $("#loadNewBtn").removeClass("hide")
+                        }
                     }
-                }
-            })
-        }, 600000);
+                })
+            }, 600000);
+        }
 
         $("#loadNewBtn").on("click", function() {
             var url = new URL(window.location.href);
@@ -147,13 +152,36 @@ $(document).on('turbolinks:load', function() {
             $(this).attr("href", new_url);
         })
 
-        setInterval(function () {
-            const url = "/nft_flip_records/refresh_listings?slug=" + $("#slug").val();
-            $.ajax({
-                type: "GET",
-                dataType: "script",
-                url: url
-            })
-        }, 60000);
+        if ($("#slug").length > 0) {
+            setInterval(function () {
+                const url = "/nft_flip_records/refresh_listings?slug=" + $("#slug").val();
+                $.ajax({
+                    type: "GET",
+                    dataType: "script",
+                    url: url
+                })
+            }, 60000);
+        }
+
+        $('.js-data-example-ajax').select2({
+            width: "200px",
+            ajax: {
+                url: '/nft_flip_records/search_collection',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                delay: 250
+            },
+            placeholder: "Searching...",
+            minimumInputLength: 1
+        });
+
+        $('.js-data-example-ajax').on("select2:select", function(e) {
+            var data = e.params.data;
+            window.location = "/nft_flip_records/collection_detail?slug=" + data.text;
+        })
     })
 })

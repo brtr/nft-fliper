@@ -42,6 +42,8 @@ zh-CN:
       bought_price: 买入价
       trade_records: 交易记录
       listing_items: 挂单记录
+      sold_price: 卖出价
+      chain: 链
   date:
     abbr_day_names:
     - 周日

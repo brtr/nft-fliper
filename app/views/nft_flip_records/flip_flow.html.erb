@@ -1,0 +1,77 @@
+<div>
+  <%= link_to "#", class: "btn btn-success mb-3 hide", id: "loadNewBtn", remote: true do %>
+    <%= t("views.labels.load_new") %>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up-circle align-middle me-2"><circle cx="12" cy="12" r="10"></circle><polyline points="16 12 12 8 8 12"></polyline><line x1="12" y1="16" x2="12" y2="8"></line></svg>
+  <% end %>
+</div>
+<div class="mb-5">
+  <div class="row" id="flip_records" data-last-id="<%= @records.maximum(:id) %>">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Collection</th>
+          <th><%= t("views.labels.price_notice") %></th>
+          <th><%= t("views.labels.date_notice") %></th>
+          <th><%= t("views.labels.gap") %></th>
+          <th><%= t("views.labels.chain") %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render "records" %>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-4">
+    <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block loadMoreBtn", remote: true, data: {source: "fliper"} %>
+  </div>
+</div>
+<div class="settings js-settings">
+  <div class="settings-toggle">
+    <div class="settings-toggle-option settings-toggle-option-text js-settings-toggle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders align-middle"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+      Filters
+    </div>
+  </div>
+  <div class="settings-panel">
+    <div class="settings-content">
+      <!-- Search-->
+      <div class="settings-title d-flex align-items-center">
+        <button type="button" class="btn-close float-right js-settings-toggle" aria-label="Close"></button>
+        <h4 class="mb-0 ms-2 d-inline-block"><%= t("views.actions.filter") %></h4>
+      </div>
+      <div class="settings-body">
+        <%= search_form_for @q, url: flip_flow_nft_flip_records_path, method: :get do |f| %>
+          <div class="mb-3 pb-1 col-12">
+            <%= f.label :slug, "NFT", class: "form-label d-block px-0" %>
+            <%= f.text_field :slug_eq, class: "form-control inline-form" %>
+          </div>
+          <div class="mb-3 pb-1 col-12">
+            <%= f.label :bought, t("views.labels.bought_price"), class: "form-label d-block px-0" %>
+            <%= f.number_field :bought_gteq, step: 0.1, class: "form-control inline-form" %>
+            To
+            <%= f.number_field :bought_lteq, step: 0.1, class: "form-control inline-form" %>
+          </div>
+          <div class="mb-3 pb-1 col-12">
+            <%= f.label :bought_time, t("views.labels.bought_time"), class: "form-label d-block px-0" %>
+            <%= f.date_field :bought_time_gteq, class: "form-control inline-form" %>
+            To
+            <%= f.date_field :bought_time_lteq, class: "form-control inline-form" %>
+          </div>
+          <div class="mb-3 pb-1 col-12">
+            <%= f.label :sold_time, t("views.labels.sold_time"), class: "form-label d-block px-0" %>
+            <%= f.date_field :sold_time_gteq, class: "form-control inline-form" %>
+            To
+            <%= f.date_field :sold_time_lteq, class: "form-control inline-form" %>
+          </div>
+          <div class="mb-3 pb-1">
+            <%= f.submit t("views.actions.submit"), class: 'btn btn-primary mt-3 mt-sm-0' %>
+            <%= link_to t("views.actions.reset"), nft_flip_records_path, class: 'btn btn-default' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= hidden_field_tag :fliper_current_page, @records.current_page %>
