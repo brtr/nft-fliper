@@ -8,6 +8,6 @@
     <td><%= "#{date_format record.bought_time} - #{date_format record.sold_time}" %></td>
     <td><%= humanize_gap(record.gap) %></td>
     <td><%= image_tag chain_logo_path(record.nft_id), size: "20x20" %></td>
-    <td><%= link_to t("views.labels.detail"), record.permalink, class: "card-link", target: "_blank" %></td>
+    <td style="width:6%"><%= link_to t("views.labels.detail"), record.permalink, class: "card-link", target: "_blank" %></td>
   </tr>
 <% end %>
