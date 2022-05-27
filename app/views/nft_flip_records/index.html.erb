@@ -20,23 +20,26 @@
       <div class="text-black ms-3 text-end">
         <h3 class="pt-3 mb-3 fw-bolder"><%= @top_collection[0] %></h3>
         <p>
-          Average price: <span><span>◎</span><%= "#{decimal_format @top_collection[3]} #{@top_collection[4]}" %></span>
+          <%= t("views.labels.average_price") %>: <span><span>◎</span><%= "#{decimal_format @top_collection[3]} #{@top_collection[4]}" %></span>
         </p>
         <p>
-          Volume: <span><span>◎</span><%= "#{decimal_format @top_collection[7]} #{@top_collection[4]}" %></span>
+          <%= t("views.labels.volume") %>: <span><span>◎</span><%= "#{decimal_format @top_collection[7]} #{@top_collection[4]}" %></span>
         </p>
       </div>
     </div>
   </section>
   <section class="mx-4">
-    <h2 class="text-center">Latest 10 Fliper Data</h2>
+    <h2 class="text-center"><%= t("views.title.latest_10_flip_data") %></h2>
     <table class="table">
       <thead>
         <tr>
-          <th>Collection</th>
-          <th><%= t("views.labels.price_notice") %></th>
+          <th>NFT</th>
+          <th><%= t("views.labels.bought_price") %></th>
+          <th><%= t("views.labels.sold_price") %></th>
+          <th><%= t("views.labels.revenue") %></th>
           <th><%= t("views.labels.date_notice") %></th>
           <th><%= t("views.labels.gap") %></th>
+          <th><%= t("views.labels.chain") %></th>
           <th></th>
         </tr>
       </thead>
@@ -46,7 +49,7 @@
     </table>
   </section>
   <section class="mt-5 row justify-content-center mx-4">
-    <h2 class="text-center mb-3">Top 15 collections by flip count</h2>
+    <h2 class="text-center mb-3"><%= t("views.title.top_15_collections") %></h2>
     <% @top_collections.each_with_index do |collection, idx| %>
       <div class="card col-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 me-5" style="max-width:25%">
         <div class="card-body">
@@ -56,10 +59,10 @@
             <%= collection[0] %>
           </div>
           <div class="mt-3">
-            Average price: <span><span>◎</span><%= "#{decimal_format collection[3]} #{collection[4]}" %></span>
+            <%= t("views.labels.average_price") %>: <span><span>◎</span><%= "#{decimal_format collection[3]} #{collection[4]}" %></span>
           </div>
           <div class="mt-3">
-            Volume: <span><span>◎</span><%= "#{decimal_format collection[7]} #{collection[4]}" %></span>
+            <%= t("views.labels.volume") %>: <span><span>◎</span><%= "#{decimal_format collection[7]} #{collection[4]}" %></span>
           </div>
         </div>
       </div>

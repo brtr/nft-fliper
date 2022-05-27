@@ -20,9 +20,9 @@
     <div class="col-4 mb-5">
       <div class="card" style="height: 130px">
         <div class="card-body">
-          <p class="card-text"><%= "#{t("views.labels.revenue")}: "%> <span class="float-end text-<%= change_text_color(@fliper_data.sum(&:crypto_revenue).to_f) %>"><%= "#{decimal_format @fliper_data.sum(&:crypto_revenue)} #{@fliper_data.first.sold_coin}" %></p>
-          <p class="card-text"><%= "#{t("views.labels.profit")}: " %> <span class="float-end text-<%= change_text_color(@fliper_data.successful.sum(&:crypto_revenue).to_f) %>"><%= "#{decimal_format @fliper_data.successful.sum(&:crypto_revenue)} #{@fliper_data.first.sold_coin}" %></p>
-          <p class="card-text"><%= "#{t("views.labels.loss")}: " %> <span class="float-end text-<%= change_text_color(@fliper_data.failed.sum(&:crypto_revenue).to_f) %>"><%= "#{decimal_format @fliper_data.failed.sum(&:crypto_revenue)} #{@fliper_data.first.sold_coin}" %></p>
+          <p class="card-text"><%= "#{t("views.labels.revenue")}: "%> <span class="float-end text-<%= change_text_color(@fliper_data.sum(&:revenue).to_f) %>"><%= "#{decimal_format @fliper_data.sum(&:revenue)} #{@fliper_data.first.sold_coin}" %></p>
+          <p class="card-text"><%= "#{t("views.labels.profit")}: " %> <span class="float-end text-<%= change_text_color(@fliper_data.successful.sum(&:revenue).to_f) %>"><%= "#{decimal_format @fliper_data.successful.sum(&:revenue)} #{@fliper_data.first.sold_coin}" %></p>
+          <p class="card-text"><%= "#{t("views.labels.loss")}: " %> <span class="float-end text-<%= change_text_color(@fliper_data.failed.sum(&:revenue).to_f) %>"><%= "#{decimal_format @fliper_data.failed.sum(&:revenue)} #{@fliper_data.first.sold_coin}" %></p>
         </div>
       </div>
     </div>
@@ -46,4 +46,30 @@
     <%= render "flip_data_chart" %>
     <%= render "flip_count_chart" %>
   </div>
+  <div class="row mt-5" id="flip_records">
+    <h3>Flip <%= t("views.labels.records") %></h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>NFT</th>
+          <th><%= t("views.labels.bought_price") %></th>
+          <th><%= t("views.labels.sold_price") %></th>
+          <th><%= t("views.labels.revenue") %></th>
+          <th><%= t("views.labels.date_notice") %></th>
+          <th><%= t("views.labels.gap") %></th>
+          <th><%= t("views.labels.chain") %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render "records" %>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-4">
+    <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block loadMoreBtn", remote: true, data: {source: "fliper"} %>
+  </div>
 </div>
+
+<%= hidden_field_tag :fliper_current_page, 1 %>
+<%= hidden_field_tag :slug, params[:slug] %>

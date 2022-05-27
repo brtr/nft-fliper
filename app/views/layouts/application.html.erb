@@ -35,12 +35,12 @@
 					</div>
           <div class="sidebar-item <%= @page_index == 1 ? 'active' : '' %>">
             <%= link_to root_path, class: "sidebar-link" do %>
-              <span class="align-middle">Home</span>
+              <span class="align-middle"><%= t("views.headers.home") %></span>
             <% end %>
           </div>
           <div class="sidebar-item <%= @page_index == 2 ? 'active' : '' %>">
             <%= link_to trending_nft_flip_records_path, class: "sidebar-link" do %>
-              <span class="align-middle">Trending</span>
+              <span class="align-middle"><%= t("views.headers.trending") %></span>
             <% end %>
           </div>
           <div class="sidebar-item <%= @page_index == 3 ? 'active' : '' %>">
@@ -48,21 +48,45 @@
               <span class="align-middle">Flip Flow</span>
             <% end %>
           </div>
-          <div class="align-items-center order-lg-3 ms-lg-auto loginBtns">
-            <div class="navbar-tool dropdown connect-btn">
-              <%= link_to "Connect Metamask", "#", class: "btn btn-warning", id: "loginBtn" %>
-            </div>
-            <div class="navbar-tool dropdown hide">
-              <a href="#" role="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                <h4 id="login_address" class="d-inline-block"></h4>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end">
-                <%= link_to "#", class: "dropdown-item", id: "logoutBtn" do %>
-                  <i class="ai-log-out fs-base me-2"></i>
-                  <span>Sign out</span>
-                <% end %>
-              </div>
-            </div>
+          <div class="navbar-collapse collapse">
+            <ul class="navbar-nav navbar-align">
+              <li class="nav-item dropdown">
+                <div class="align-items-center loginBtns">
+                  <div class="navbar-tool dropdown connect-btn">
+                    <%= link_to "Connect Metamask", "#", class: "btn btn-warning", id: "loginBtn" %>
+                  </div>
+                  <div class="navbar-tool dropdown hide">
+                    <a href="#" role="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                      <h4 id="login_address" class="d-inline-block"></h4>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <%= link_to "#", class: "dropdown-item", id: "logoutBtn" do %>
+                        <i class="ai-log-out fs-base me-2"></i>
+                        <span>Sign out</span>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <div class="navbar-tool dropdown">
+                  <a href="#" role="button" class="nav-flag dropdown-toggle" data-bs-toggle="dropdown">
+                    <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe align-middle me-2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end text-end">
+                    <% if session[:locale] == "zh-CN" %>
+                      <li>
+                        <%= link_to "English", request.parameters.merge({locale: "en"}), class: "dropdown-item" %>
+                      </li>
+                    <% else %>
+                      <li>
+                        <%= link_to "中文", request.parameters.merge({locale: "zh-CN"}), class: "dropdown-item" %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </li>
+            </ul>
           </div>
         </nav>
         <main class="content">

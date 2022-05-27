@@ -163,21 +163,23 @@ $(document).on('turbolinks:load', function() {
             }, 60000);
         }
 
-        $('.js-data-example-ajax').select2({
-            width: "200px",
-            ajax: {
-                url: '/nft_flip_records/search_collection',
-                dataType: 'json',
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
+        if($('.select2-container').length < 1) {
+            $('.js-data-example-ajax').select2({
+                width: "200px",
+                ajax: {
+                    url: '/nft_flip_records/search_collection',
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    delay: 250
                 },
-                delay: 250
-            },
-            placeholder: "Searching...",
-            minimumInputLength: 1
-        });
+                placeholder: "Searching...",
+                minimumInputLength: 1
+            });
+        }
 
         $('.js-data-example-ajax').on("select2:select", function(e) {
             var data = e.params.data;

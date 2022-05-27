@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_24_062825) do
+ActiveRecord::Schema.define(version: 2022_05_27_074748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,6 +121,8 @@ ActiveRecord::Schema.define(version: 2022_05_24_062825) do
     t.datetime "bought_time"
     t.string "image"
     t.string "permalink"
+    t.decimal "revenue_usd"
+    t.decimal "roi_usd"
     t.index ["bought_coin"], name: "index_nft_flip_records_on_bought_coin"
     t.index ["fliper_address"], name: "index_nft_flip_records_on_fliper_address"
     t.index ["nft_id", "token_id"], name: "index_nft_flip_records_on_nft_id_and_token_id"

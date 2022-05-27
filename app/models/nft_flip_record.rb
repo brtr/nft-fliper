@@ -3,7 +3,8 @@ class NftFlipRecord < ApplicationRecord
 
   belongs_to :nft, touch: true
 
-  scope :today, -> { where(sold_time: [Date.yesterday.at_beginning_of_day..Date.today.at_end_of_day]) }
+  scope :today, -> { where(sold_time: [Time.now - 1.day..Time.now]) }
+  scope :month, -> { where(sold_time: [Time.now - 30.days..Time.now]) }
 
   ETH_PAYMENT = ["ETH", "WETH"]
 
@@ -19,18 +20,10 @@ class NftFlipRecord < ApplicationRecord
     bought_coin == sold_coin || is_eth_payment?
   end
 
-  def crypto_revenue
-    sold - bought
-  end
-
-  def crypto_roi
-    bought == 0 ? 0 : crypto_revenue / bought
-  end
-
   def display_message
-    usd_value = is_sol_payment? ? "" : "($#{decimal_format revenue})"
+    usd_value = is_sol_payment? ? "" : "($#{decimal_format revenue_usd})"
     "
-    #{decimal_format bought} #{bought_coin} / #{decimal_format sold} #{sold_coin} / #{decimal_format crypto_revenue} #{sold_coin} #{usd_value}
+    #{decimal_format bought} #{bought_coin} / #{decimal_format sold} #{sold_coin} / #{decimal_format revenue} #{sold_coin} #{usd_value}
 
     #{date_format bought_time} - #{date_format sold_time} #{I18n.t("views.labels.gap")}: #{humanize_gap(gap)}
 
@@ -39,11 +32,11 @@ class NftFlipRecord < ApplicationRecord
   end
 
   def self.successful
-    select{|n| n.roi > 0 || n.same_coin? && n.crypto_roi > 0}
+    select{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
   end
 
   def self.failed
-    select{|n| n.roi < 0 || n.same_coin? && n.crypto_roi < 0}
+    select{|n| n.roi_usd < 0 || n.same_coin? && n.roi < 0}
   end
 
   class << self
@@ -96,8 +89,8 @@ class NftFlipRecord < ApplicationRecord
 
     def get_flips_revenue_rate(nft: nil, from_date: nil, to_date: nil)
       records = get_data(nft: nft, from_date: from_date, to_date: to_date)
-      records.group_by(&:crypto_roi).map do |revenue_rate, data|
-        [revenue_rate.round(2), data.select{|d| d.crypto_revenue > 0}.count, data.select{|d| d.crypto_revenue < 0}.count]
+      records.group_by(&:roi).map do |revenue_rate, data|
+        [revenue_rate.round(2), data.select{|d| d.revenue > 0}.count, data.select{|d| d.revenue < 0}.count]
       end
     end
 

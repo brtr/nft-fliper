@@ -29,4 +29,15 @@ namespace :data do
     NftHistoryService.generate_nfts_view
     p "Create nfts_view success"
   end
+
+  desc 'Migrate flip revenue'
+  task migrate_flip_revenue: :environment do
+    NftFlipRecord.all.each do |record|
+      record.revenue_usd = record.revenue
+      record.roi_usd = record.roi
+      record.revenue = record.sold - record.bought
+      record.roi = record.revenue / record.bought
+      record.save
+    end
+  end
 end

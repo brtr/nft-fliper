@@ -9,8 +9,10 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Collection</th>
-          <th><%= t("views.labels.price_notice") %></th>
+          <th>NFT</th>
+          <th><%= t("views.labels.bought_price") %></th>
+          <th><%= t("views.labels.sold_price") %></th>
+          <th><%= t("views.labels.revenue") %></th>
           <th><%= t("views.labels.date_notice") %></th>
           <th><%= t("views.labels.gap") %></th>
           <th><%= t("views.labels.chain") %></th>
@@ -53,6 +55,12 @@
             <%= f.number_field :bought_lteq, step: 0.1, class: "form-control inline-form" %>
           </div>
           <div class="mb-3 pb-1 col-12">
+            <%= f.label :revenue, t("views.labels.revenue_filter"), class: "form-label d-block px-0" %>
+            <%= f.number_field :revenue_gteq, step: 0.1, class: "form-control inline-form" %>
+            To
+            <%= f.number_field :revenue_lteq, step: 0.1, class: "form-control inline-form" %>
+          </div>
+          <div class="mb-3 pb-1 col-12">
             <%= f.label :bought_time, t("views.labels.bought_time"), class: "form-label d-block px-0" %>
             <%= f.date_field :bought_time_gteq, class: "form-control inline-form" %>
             To
@@ -66,7 +74,7 @@
           </div>
           <div class="mb-3 pb-1">
             <%= f.submit t("views.actions.submit"), class: 'btn btn-primary mt-3 mt-sm-0' %>
-            <%= link_to t("views.actions.reset"), nft_flip_records_path, class: 'btn btn-default' %>
+            <%= link_to t("views.actions.reset"), flip_flow_nft_flip_records_path, class: 'btn btn-default' %>
           </div>
         <% end %>
       </div>

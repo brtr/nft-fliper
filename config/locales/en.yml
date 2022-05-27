@@ -37,3 +37,44 @@ en:
       previous: "<"
       first: "<<"
       last: ">>"
+    title:
+      top_15_collections: Top 15 collections by flip count
+    actions:
+      submit: Submit
+    labels:
+      top_profit: "%{period} Top Profit"
+      top_loss: "%{period} Top Loss"
+      rank: Rank
+      count: Count
+      gap: Gap
+      revenue: Revenue
+      detail: Detail
+      total_count: Total Count
+      successful_count: Profit Count
+      failed_count: Loss Count
+      profit: Profit
+      loss: Loss
+      bought_time: Bought Time
+      sold_time: Sold Time
+      date_notice: Bought Time - Sold Time
+      average_price: Average Price
+      average_gap: Average Gap
+      average_revenue: Average Revenue
+      more: Add More
+      load_new: Load New
+      bought_price: Bought Price
+      trade_records: Trade Records
+      listing_items: Listing Items
+      sold_price: Sold Price
+      chain: Chain
+      revenue_filter: Revenue(Coin)
+      records: Records
+      volume: Volume
+  duration:
+    days: "%{count} days"
+    hours: "%{count} hours"
+  datetime:
+    prompts:
+      day: Daily
+      week: Weekly
+      month: Monthly

@@ -1,10 +1,12 @@
 <% @records.each do |record| %>
   <tr>
     <td>
-      <%= image_tag record.image, size: "20x20", class: "rounded-circle" %>
+      <%= image_tag record.image, size: "20x20", class: "rounded-circle" if record.image %>
       <%= link_to record.slug, collection_detail_nft_flip_records_path(slug: record.slug) %>
     </td>
-    <td><%= display_price(record) %></td>
+    <td><%= display_price(record.sold_coin, record.bought, record.bought_usd) %></td>
+    <td><%= display_price(record.sold_coin, record.sold, record.sold_usd) %></td>
+    <td><%= display_price(record.sold_coin, record.revenue, record.revenue_usd) %></td>
     <td><%= "#{date_format record.bought_time} - #{date_format record.sold_time}" %></td>
     <td><%= humanize_gap(record.gap) %></td>
     <td><%= image_tag chain_logo_path(record.nft_id), size: "20x20" %></td>

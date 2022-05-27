@@ -41,19 +41,19 @@ module ApplicationHelper
     gap = gap.to_f
     if gap < 86400
       hours = gap / 3600
-      "#{hours.round(2)} 小时"
+      "#{t('duration.hours', count: hours.round(2))}"
     else
       days = (gap / 86400).to_i
       hours = (gap - days * 86400) / 3600
-      "#{days} 天 #{hours.round(2)} 小时"
+      "#{t('duration.days', count: days)} #{t('duration.hours', count: hours.round(2))}"
     end
   end
 
-  def display_price(record)
-    if record.is_sol_payment?
-      "#{decimal_format record.bought} #{record.bought_coin} / #{decimal_format record.sold} #{record.sold_coin} / #{decimal_format record.crypto_revenue} #{record.sold_coin}"
+  def display_price(coin, price, usd)
+    if usd != 0
+      "#{decimal_format price} #{coin} ($#{decimal_format usd})"
     else
-      "#{decimal_format record.bought} #{record.bought_coin} ($#{decimal_format record.bought_usd}) / #{decimal_format record.sold} #{record.sold_coin} ($#{decimal_format record.sold_usd}) / #{decimal_format record.crypto_revenue} #{record.sold_coin} ($#{decimal_format record.revenue})"
+      "#{decimal_format price} #{coin}"
     end
   end
 end

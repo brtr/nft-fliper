@@ -119,8 +119,8 @@ class NftHistoryService
 
     def fetch_flip_data_by_nft(nft: nil, start_at: nil, end_at: nil, mode: "manual", cursor: nil)
       end_at ||= Time.now
-      start_at ||= end_at - 1.hour
-      url = "https://api.opensea.io/api/v1/events?collection_slug=#{nft.opensea_slug}&event_type=successful&occurred_after=#{start_at.to_i}&occurred_before=#{end_at.to_i}"
+      start_at ||= end_at - 1.week
+      url = "https://api.opensea.io/api/v1/events?only_opensea=false&collection_slug=#{nft.opensea_slug}&event_type=successful&occurred_after=#{start_at.to_i}&occurred_before=#{end_at.to_i}"
       url += "&cursor=#{cursor}" if cursor
       begin
         response = URI.open(url, {"X-API-KEY" => ENV["OPENSEA_API_KEY"]}).read
@@ -154,9 +154,9 @@ class NftHistoryService
       sleep 1
       begin
         if schema_name == "ERC721"
-          url = "https://api.opensea.io/api/v1/events?token_id=#{token_id}&asset_contract_address=#{token_address}&event_type=successful&account_address=#{user_address}"
+          url = "https://api.opensea.io/api/v1/events?only_opensea=false&token_id=#{token_id}&asset_contract_address=#{token_address}&event_type=successful&account_address=#{user_address}"
         else
-          url = "https://api.opensea.io/api/v1/events?collection_slug=#{slug}&event_type=successful&account_address=#{user_address}"
+          url = "https://api.opensea.io/api/v1/events?only_opensea=false&collection_slug=#{slug}&event_type=successful&account_address=#{user_address}"
         end
         response = URI.open(url, {"X-API-KEY" => ENV["OPENSEA_API_KEY"]}).read
         if response
@@ -186,7 +186,7 @@ class NftHistoryService
     def fetch_flip_data(start_at: nil, end_at: nil, mode: "manual", cursor: nil)
       start_at ||= (Time.now - 1.hour).to_i
       end_at ||= Time.now.to_i
-      url = "https://api.opensea.io/api/v1/events?only_opensea=true&event_type=successful&occurred_after=#{start_at}&occurred_before=#{end_at}"
+      url = "https://api.opensea.io/api/v1/events?only_opensea=false&event_type=successful&occurred_after=#{start_at}&occurred_before=#{end_at}"
       url += "&cursor=#{cursor}" if cursor
       begin
         response = URI.open(url, {"X-API-KEY" => ENV["OPENSEA_API_KEY"]}).read
@@ -229,15 +229,19 @@ class NftHistoryService
         price_usd = price * payment["usd_price"].to_f
         sold_coin = payment["symbol"]
       end
-      cost_usd = last_trade[:cost_usd]
 
-      revenue = price_usd - cost_usd
-      roi = cost_usd == 0 ? 0 : revenue / cost_usd
+      cost = last_trade[:cost]
+      revenue = price - cost
+      roi = cost == 0 ? 0 : revenue / cost
+
+      cost_usd = last_trade[:cost_usd]
+      revenue_usd = price_usd - cost_usd
+      roi_usd = cost_usd == 0 ? 0 : revenue_usd / cost_usd
       gap = DateTime.parse(event["created_date"]).to_i - DateTime.parse(last_trade[:trade_time]).to_i
       r = nft.nft_flip_records.where(slug: nft.opensea_slug, token_address: asset["asset_contract"]["address"], token_id: asset["token_id"], txid: event["transaction"]["transaction_hash"]).first_or_create
-      r.update( sold: price, sold_usd: price_usd, bought: last_trade[:cost], bought_usd: cost_usd, revenue: revenue.round(3), roi: roi.round(3), gap: gap, image: asset["image_url"],
+      r.update( sold: price, sold_usd: price_usd, bought: cost, bought_usd: cost_usd, revenue: revenue, roi: roi, gap: gap, revenue_usd: revenue_usd, roi_usd: roi_usd,
                 sold_time: event["created_date"], bought_time: last_trade[:trade_time], sold_coin: sold_coin, bought_coin: last_trade[:bought_coin], permalink: asset["permalink"],
-                from_address: last_trade[:from_address], fliper_address: event["seller"]["address"], to_address: event["winner_account"]["address"])
+                image: asset["image_url"], from_address: last_trade[:from_address], fliper_address: event["seller"]["address"], to_address: event["winner_account"]["address"])
     end
   end
 end
