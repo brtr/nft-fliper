@@ -11,7 +11,7 @@ zh-CN:
       trending: 趋势
     title:
       latest_10_flip_data: 最新的10条盈利Flip数据
-      top_15_collections: Flip次数最多的15个NFT
+      top_15_collections: Flip成功率最高的15个NFT
     actions:
       submit: 提交
       edit: 编辑
@@ -24,8 +24,8 @@ zh-CN:
     labels:
       rank: 排名
       count: 次数
-      top_profit: 当%{period}盈利次数最多的
-      top_loss: 当%{period}亏损次数最多的
+      top_profit: 一%{period}内盈利最多的
+      top_loss: 一%{period}内亏损最多的
       bought_from: 从%{address}买入
       sold_to: 卖出给
       at: 在
@@ -54,6 +54,9 @@ zh-CN:
       revenue_filter: 收益(币本位)
       records: 记录
       volume: 交易量
+      successful_rate: 成功率
+      analytics: 分析
+      live_view: 实时
       desc_1: 跨链flip数据分析平台
       desc_2: Nft flipper 是一个专注于挖掘优秀的fliper的平台， 为用户提供flip趋势， 及时获取最新的flip信息， 并努力协助所有人成为一个更好的fliper
   date:
@@ -127,7 +130,7 @@ zh-CN:
     prompts:
       second: 秒
       minute: 分
-      hour: 时
+      hour: 小时
       day: 日
       week: 周
       month: 月

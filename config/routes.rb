@@ -19,14 +19,15 @@ Rails.application.routes.draw do
 
   resources :nft_flip_records, only: :index do
     collection do
-      get :fliper_detail
-      get :collection_detail
+      get :fliper_analytics
+      get :nft_analytics
       get :check_new_records
       get :get_new_records
       get :refresh_listings
       get :search_collection
       get :trending
       get :flip_flow
+      get :live_view
     end
   end
 

@@ -42,7 +42,7 @@ en:
       trending: Trending
     title:
       latest_10_flip_data: Latest 10 flip data
-      top_15_collections: Top 15 collections by flip count
+      top_15_collections: Top 15 collections by flip successful rate
     actions:
       submit: Submit
     labels:
@@ -74,6 +74,7 @@ en:
       revenue_filter: Revenue(Coin)
       records: Records
       volume: Volume
+      successful_rate: Successful Rate
       desc_1: Multi-chain flip data analysis platform
       desc_2: NFT Fliper is a platform focused on mining good flipers, providing users with flip trends, getting the latest flip information in a timely manner, and working hard to assist everyone to become a better fliper
   duration:
@@ -81,6 +82,7 @@ en:
     hours: "%{count} hours"
   datetime:
     prompts:
+      hour: Hourly
       day: Daily
       week: Weekly
       month: Monthly

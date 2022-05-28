@@ -1,0 +1,5 @@
+fliper_current_page = <%= params[:fliper_page].to_i %>
+if ($("#fliper_current_page").val() < fliper_current_page) {
+  $("#flip_records tbody").append("<%= j render partial:'records' %>");
+  $("#fliper_current_page").val(fliper_current_page);
+}

@@ -2,12 +2,12 @@
   <%= form_tag trending_nft_flip_records_path, class: "period_targets mb-4", method: "GET" do %>
     <div class="col-12">
       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-        <%= radio_button_tag :period, "day", params[:period] == "day", class: "btn-check", id: "btnradio1" %>
-        <label class="btn btn-outline-primary day" for="btnradio1"><%= t("datetime.prompts.day") %></label>
-        <%= radio_button_tag :period, "week", params[:period] == "week", class: "btn-check", id: "btnradio2" %>
-        <label class="btn btn-outline-primary week" for="btnradio2"><%= t("datetime.prompts.week") %></label>
-        <%= radio_button_tag :period, "month", params[:period] == "month", class: "btn-check", id: "btnradio3" %>
-        <label class="btn btn-outline-primary month" for="btnradio3"><%= t("datetime.prompts.month") %></label>
+        <%= radio_button_tag :period, "hour", params[:period] == "hour", class: "btn-check", id: "btnradio1" %>
+        <label class="btn btn-outline-primary hour" for="btnradio1"><%= t("datetime.prompts.hour") %></label>
+        <%= radio_button_tag :period, "day", params[:period] == "day", class: "btn-check", id: "btnradio2" %>
+        <label class="btn btn-outline-primary day" for="btnradio2"><%= t("datetime.prompts.day") %></label>
+        <%= radio_button_tag :period, "week", params[:period] == "week", class: "btn-check", id: "btnradio3" %>
+        <label class="btn btn-outline-primary week" for="btnradio3"><%= t("datetime.prompts.week") %></label>
       </div>
     </div>
   <% end %>
@@ -23,18 +23,26 @@
           <th><%= t("views.labels.average_price") %></th>
           <th><%= t("views.labels.average_gap") %></th>
           <th><%= t("views.labels.average_revenue") %></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <% @top_collections.each_with_index do |collection, idx| %>
           <tr>
-            <td><%= idx + 1 %></td>
-            <td style="width:5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
+            <td style="width:5%"><%= idx + 1 %></td>
+            <td>
+              <%= image_tag collection[8], size: "20x20", class: "rounded-circle" if collection[8] %>
+              <%= link_to collection[0], "https://opensea.io/collection/#{collection[0]}", target: "_blank" %>
+            </td>
             <td><%= collection[1] %></td>
             <td><%= collection[2] %></td>
             <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
             <td><%= humanize_gap(collection[5]) %></td>
-            <td><%= collection[9] %></td>
+            <td style="width:10%"><%= collection[9] %></td>
+            <td>
+              <%= link_to t("views.labels.analytics"), nft_analytics_nft_flip_records_path(slug: collection[0]), class: "me-3" %>
+              <%= link_to t("views.labels.live_view"), live_view_nft_flip_records_path(slug: collection[0]), class: "me-3" %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -50,18 +58,20 @@
           <th><%= t("views.labels.average_price") %></th>
           <th><%= t("views.labels.average_gap") %></th>
           <th><%= t("views.labels.average_revenue") %></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <% @top_flipers.each_with_index do |fliper, idx| %>
           <tr>
             <td><%= idx + 1 %></td>
-            <td><%= link_to address_format(fliper[0]), fliper_detail_nft_flip_records_path(fliper_address: fliper[0]) %></td>
+            <td><%= address_format(fliper[0]) %></td>
             <td><%= fliper[1] %></td>
             <td><%= fliper[2] %></td>
             <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
             <td><%= humanize_gap(fliper[5]) %></td>
             <td><%= fliper[9] %></td>
+            <td><%= link_to t("views.labels.analytics"), fliper_analytics_nft_flip_records_path(fliper_address: fliper[0]) %></td>
           </tr>
         <% end %>
       </tbody>
@@ -70,25 +80,33 @@
     <table class="table">
       <thead>
         <tr>
-          <th><%= t("views.labels.rank") %></th>
+          <td><%= t("views.labels.rank") %></th>
           <th>NFT</th>
           <th><%= t("views.labels.count") %></th>
           <th><%= t("views.labels.loss") %></th>
           <th><%= t("views.labels.average_price") %></th>
-          <th><%= t("views.labels.average_gap") %></th>
-          <th><%= t("views.labels.average_revenue") %></th>
+          <td><%= t("views.labels.average_gap") %></th>
+          <td><%= t("views.labels.average_revenue") %></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <% @last_collections.each_with_index do |collection, idx| %>
           <tr>
-            <td><%= idx + 1 %></td>
-            <td style="width: 5%"><%= link_to collection[0], collection_detail_nft_flip_records_path(slug: collection[0]) %></td>
+            <td style="width:5%"><%= idx + 1 %></td>
+            <td>
+              <%= image_tag collection[8], size: "20x20", class: "rounded-circle" if collection[8] %>
+              <%= link_to collection[0], "https://opensea.io/collection/#{collection[0]}", target: "_blank" %>
+            </td>
             <td><%= collection[1] %></td>
             <td><%= collection[2] %></td>
             <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
             <td><%= humanize_gap(collection[5]) %></td>
-            <td><%= collection[9] %></td>
+            <td style="width:10%"><%= collection[9] %></td>
+            <td>
+              <%= link_to t("views.labels.analytics"), nft_analytics_nft_flip_records_path(slug: collection[0]), class: "me-3" %>
+              <%= link_to t("views.labels.live_view"), live_view_nft_flip_records_path(slug: collection[0]), class: "me-3" %>
+            </td>
           </tr>
         <% end %>
       </tbody>

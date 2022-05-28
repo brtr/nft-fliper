@@ -183,7 +183,7 @@ $(document).on('turbolinks:load', function() {
 
         $('.js-data-example-ajax').on("select2:select", function(e) {
             var data = e.params.data;
-            window.location = "/nft_flip_records/collection_detail?slug=" + data.text;
+            window.location = "/nft_flip_records/nft_analytics?slug=" + data.text;
         })
     })
 })

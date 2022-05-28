@@ -3,8 +3,9 @@ class NftFlipRecord < ApplicationRecord
 
   belongs_to :nft, touch: true
 
+  scope :hour, -> { where(sold_time: [Time.now - 1.hour..Time.now]) }
   scope :today, -> { where(sold_time: [Time.now - 1.day..Time.now]) }
-  scope :month, -> { where(sold_time: [Time.now - 30.days..Time.now]) }
+  scope :week, -> { where(sold_time: [Time.now - 7.days..Time.now]) }
 
   ETH_PAYMENT = ["ETH", "WETH"]
 
@@ -37,6 +38,14 @@ class NftFlipRecord < ApplicationRecord
 
   def self.failed
     select{|n| n.roi_usd < 0 || n.same_coin? && n.roi < 0}
+  end
+
+  def self.successful_rate
+    successful.size.to_f / all.size.to_f
+  end
+
+  def display_name
+    "#{slug}##{token_id}"
   end
 
   class << self
@@ -100,6 +109,29 @@ class NftFlipRecord < ApplicationRecord
       records = records.where("sold_time >= ?", from_date) if from_date.present?
       records = records.where("sold_time <= ?", to_date) if to_date.present?
       records
+    end
+
+    def get_rank_data(slug: nil, fliper_address: nil)
+      weekly_records = NftFlipRecord.includes(:nft).where("gap < ? or revenue > ?", 86400, 2).week
+      daily_records = weekly_records.today
+      hourly_records = daily_records.hour
+
+      [hourly_records, daily_records, weekly_records].map do |records|
+        if slug
+          rank = records.group_by(&:slug).sort_by{|k, v| v.sum(&:revenue)}.map{|k,v| k}.index(slug) + 1 rescue 0
+          target_records = records.where(slug: slug)
+        end
+
+        if fliper_address
+          rank = records.group_by(&:fliper_address).sort_by{|k, v| v.sum(&:revenue)}.map{|k,v| k}.index(fliper_address) + 1 rescue 0
+          target_records = records.where(fliper_address: fliper_address)
+        end
+
+        successful = target_records.successful rescue []
+        failed = target_records.failed rescue []
+        coin = target_records.first.sold_coin rescue ""
+        [rank, target_records.size, successful.count, failed.count, target_records.sum(&:revenue), successful.sum(&:revenue), failed.sum(&:revenue), coin]
+      end
     end
   end
 end

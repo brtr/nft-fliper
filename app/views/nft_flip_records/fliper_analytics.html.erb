@@ -1,0 +1,80 @@
+<div class="container py-4 mb-2 mb-sm-0 pb-sm-5 row mx-xl-auto">
+  <h3>Fliper <%= params[:fliper_address] %></h3>
+  <div class="row mt-5">
+    <table class="table">
+      <thead>
+        <tr>
+          <th></th>
+          <th><%= t("views.labels.rank") %></th>
+          <th><%= t("views.labels.total_count") %></th>
+          <th><%= t("views.labels.successful_count") %></th>
+          <th><%= t("views.labels.failed_count") %></th>
+          <th><%= t("views.labels.revenue") %></th>
+          <th><%= t("views.labels.profit") %></th>
+          <th><%= t("views.labels.loss") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @rank_data.each_with_index do |data, idx| %>
+          <tr>
+            <td><%= get_rank_gap(idx) %></td>
+            <td><%= data[0] %></td>
+            <td><%= data[1] %></td>
+            <td><%= data[2] %></td>
+            <td><%= data[3] %></td>
+            <td class="text-<%= change_text_color(data[4]) %>"><%= "#{decimal_format data[4]} #{data[7]}" %></td>
+            <td class="text-<%= change_text_color(data[5]) %>"><%= "#{decimal_format data[5]} #{data[7]}" %></td>
+            <td class="text-<%= change_text_color(data[6]) %>"><%= "#{decimal_format data[6]} #{data[7]}" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div>
+  <div class="row mt-5" id="flip_records">
+    <h3>Flip <%= t("views.labels.records") %></h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>NFT</th>
+          <th><%= t("views.labels.bought_price") %></th>
+          <th><%= t("views.labels.sold_price") %></th>
+          <th><%= t("views.labels.revenue") %></th>
+          <th><%= t("views.labels.date_notice") %></th>
+          <th><%= t("views.labels.gap") %></th>
+          <th><%= t("views.labels.chain") %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render "records" %>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-4">
+    <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block loadMoreBtn", remote: true, data: {source: "fliper"} %>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>NFT</th>
+        <th><%= t("views.labels.successful_rate") %></th>
+        <th><%= t("views.labels.revenue") %></th>
+      </tr>
+    </thead>
+    <% @top_nfts.each do |nft| %>
+      <tr>
+        <td><%= link_to nft[0], nft_analytics_nft_flip_records_path(slug: nft[0]) %></td>
+        <td class="text-<%= change_text_color(nft[3].to_f) %>"><%= "#{decimal_format nft[3]}%" %></td>
+        <td class="text-<%= change_text_color(nft[1].to_f) %>"><%= "#{decimal_format nft[1]} #{nft[2]}" %></td>
+      </tr>
+    <% end %>
+  </table>
+  <div class="chart">
+    <%= render "flip_data_chart" %>
+    <%= render "flip_count_chart" %>
+  </div>
+</div>
+
+<%= hidden_field_tag :fliper_current_page, 1 %>
+<%= hidden_field_tag :fliper_address, params[:fliper_address] %>

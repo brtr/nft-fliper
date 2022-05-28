@@ -16,35 +16,26 @@ module NftFlipRecordsHelper
     end
   end
 
-  def get_data(data, type, count=10)
-    if type == "top"
-      data.map do |k,v|
-        records = v.select{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
-        next if records.blank?
-        record = records.first
-        volume = records.count * get_average_price(records)
-        [k, records.count, get_revenue(records), get_average_price(records), record.sold_coin, get_average_gap(records),
-        record.nft.logo, volume, record.image, get_average_revenue(records)]
-      end.compact.sort_by{|r| r[1]}.reverse.first(count)
-    else
-      data.map do |k,v|
-        records = v.select{|n| n.roi_usd < 0 || n.same_coin? && n.roi < 0}
-        next if records.blank?
-        record = records.first
-        volume = records.count * get_average_price(records)
-        [k, records.count, get_revenue(records), get_average_price(records), record.sold_coin, get_average_gap(records),
-        record.nft.logo, volume, record.image, get_average_revenue(records)]
-      end.compact.sort_by{|r| r[1]}.reverse.first(count)
-    end
+  def get_data(data, type, count=10, sort_by="total_revenue")
+    sort = sort_by == "total_revenue" ? 11 : 10
+    result =  data.map do |k,v|
+                successful_data = v.select{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
+                records = type == "profit" ? successful_data : v.select{|n| n.roi_usd < 0 || n.same_coin? && n.roi < 0}
+
+                next if records.blank?
+                rate = (successful_data.size.to_f / v.size.to_f) * 100
+                record = records.first
+                volume = records.count * get_average_price(records)
+                [k, records.count, get_revenue(records), get_average_price(records), record.sold_coin, get_average_gap(records),
+                record.nft.logo, volume, record.image, get_average_revenue(records), rate, records.sum(&:revenue)]
+              end.compact.sort_by{|r| r[sort]}
+    result.reverse! if type == "profit"
+    result.first(count)
   end
 
   def get_revenue(records)
     record = records.first
-    if record.is_eth_payment?
-      "$#{decimal_format records.sum(&:revenue_usd)}"
-    else
-      "#{decimal_format records.sum(&:revenue)} #{record.sold_coin}"
-    end
+    "#{decimal_format records.sum(&:revenue)} #{record.sold_coin}"
   end
 
   def get_average_price(records)
@@ -54,17 +45,27 @@ module NftFlipRecordsHelper
 
   def get_average_revenue(records)
     record = records.first
-    if record.is_eth_payment?
-      total_revenue = records.sum(&:revenue_usd)
-      "$#{decimal_format total_revenue.to_f / records.size.to_f}"
-    else
-      total_revenue = records.sum(&:revenue)
-      "#{decimal_format total_revenue.to_f / records.size.to_f} #{record.sold_coin}"
-    end
+    total_revenue = records.sum(&:revenue)
+    "#{decimal_format total_revenue.to_f / records.size.to_f} #{record.sold_coin}"
   end
 
   def get_average_gap(records)
     gaps = records.map(&:gap)
     gaps.sum.to_f / gaps.size.to_f
+  end
+
+  def get_rank_gap(idx)
+    if idx == 0
+      I18n.t("datetime.prompts.hour")
+    elsif idx == 1
+      I18n.t("datetime.prompts.day")
+    else
+      I18n.t("datetime.prompts.week")
+    end
+  end
+
+  def get_successful_rate(records)
+    successful_count = records.count{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
+    (successful_count / records.size) * 100
   end
 end
