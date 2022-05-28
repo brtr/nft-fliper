@@ -54,6 +54,8 @@ zh-CN:
       revenue_filter: 收益(币本位)
       records: 记录
       volume: 交易量
+      desc_1: 跨链flip数据分析平台
+      desc_2: Nft flipper 是一个专注于挖掘优秀的fliper的平台， 为用户提供flip趋势， 及时获取最新的flip信息， 并努力协助所有人成为一个更好的fliper
   date:
     abbr_day_names:
     - 周日

@@ -28,6 +28,29 @@
     </div>
   </div>
   <div>
+  <div class="row mt-5" id="flip_records">
+    <h3>Flip <%= t("views.labels.records") %></h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>NFT</th>
+          <th><%= t("views.labels.bought_price") %></th>
+          <th><%= t("views.labels.sold_price") %></th>
+          <th><%= t("views.labels.revenue") %></th>
+          <th><%= t("views.labels.date_notice") %></th>
+          <th><%= t("views.labels.gap") %></th>
+          <th><%= t("views.labels.chain") %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render "records" %>
+      </tbody>
+    </table>
+  </div>
+  <div class="p-4">
+    <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block loadMoreBtn", remote: true, data: {source: "fliper"} %>
+  </div>
   <table class="table">
     <thead>
       <tr>
@@ -45,16 +68,16 @@
   <div class="chart">
     <%= render "flip_data_chart" %>
     <%= render "flip_count_chart" %>
-    <%= form_tag collection_detail_nft_flip_records_path, class: "period_targets", method: "GET" do %>
+    <%= form_tag collection_detail_nft_flip_records_path, class: "period_targets mt-3", method: "GET" do %>
       <div class="col-12">
         <%= hidden_field_tag "slug", params[:slug] %>
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
           <%= radio_button_tag :trade_period, "day", params[:trade_period] == "day", class: "btn-check", id: "btnradio1trade" %>
-          <label class="btn btn-outline-primary day" for="btnradio1trade">日</label>
+          <label class="btn btn-outline-primary day" for="btnradio1trade"><%= t("datetime.prompts.day") %></label>
           <%= radio_button_tag :trade_period, "week", params[:trade_period] == "week", class: "btn-check", id: "btnradio2trade" %>
-          <label class="btn btn-outline-primary week" for="btnradio2trade">周</label>
+          <label class="btn btn-outline-primary week" for="btnradio2trade"><%= t("datetime.prompts.week") %></label>
           <%= radio_button_tag :trade_period, "month", params[:trade_period] == "month", class: "btn-check", id: "btnradio3trade" %>
-          <label class="btn btn-outline-primary month" for="btnradio3trade">月</label>
+          <label class="btn btn-outline-primary month" for="btnradio3trade"><%= t("datetime.prompts.month") %></label>
         </div>
       </div>
     <% end %>
@@ -80,29 +103,6 @@
         <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block loadMoreBtn", remote: true, data: {source: "trade"} %>
       </div>
     </div>
-  </div>
-  <div class="row mt-5" id="flip_records">
-    <h3>Flip <%= t("views.labels.records") %></h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>NFT</th>
-          <th><%= t("views.labels.bought_price") %></th>
-          <th><%= t("views.labels.sold_price") %></th>
-          <th><%= t("views.labels.revenue") %></th>
-          <th><%= t("views.labels.date_notice") %></th>
-          <th><%= t("views.labels.gap") %></th>
-          <th><%= t("views.labels.chain") %></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= render "records" %>
-      </tbody>
-    </table>
-  </div>
-  <div class="p-4">
-    <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block loadMoreBtn", remote: true, data: {source: "fliper"} %>
   </div>
 </div>
 

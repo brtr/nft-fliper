@@ -1,10 +1,9 @@
 <div class="container">
   <section class="row mb-5">
     <div class="col-6">
-      <h1>Trade Solana NFTs In One Place</h1>
+      <h1><%= t("views.labels.desc_1") %></h1>
       <div>
-        <h3>NftFliper is the #1 Solana NFT aggregator marketplace. The fastest NFT marketplace is developed by some of the top OG engineers and product managers from Facebook and Uber.</h3>
-        <h3>Explore the market to get started.</h3>
+        <h3><%= t("views.labels.desc_2") %></h3>
       </div>
     </div>
     <div class="col-6">
@@ -12,7 +11,7 @@
         <div>
           <div>
             <div>
-              <%= image_tag @top_collection[6], width: "100%" %>
+              <%= image_tag @top_collection[6], width: "100%" if @top_collection[6] %>
             </div>
           </div>
         </div>

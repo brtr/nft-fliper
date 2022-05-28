@@ -37,7 +37,11 @@ en:
       previous: "<"
       first: "<<"
       last: ">>"
+    headers:
+      home: Home
+      trending: Trending
     title:
+      latest_10_flip_data: Latest 10 flip data
       top_15_collections: Top 15 collections by flip count
     actions:
       submit: Submit
@@ -70,6 +74,8 @@ en:
       revenue_filter: Revenue(Coin)
       records: Records
       volume: Volume
+      desc_1: Multi-chain flip data analysis platform
+      desc_2: NFT Fliper is a platform focused on mining good flipers, providing users with flip trends, getting the latest flip information in a timely manner, and working hard to assist everyone to become a better fliper
   duration:
     days: "%{count} days"
     hours: "%{count} hours"

@@ -28,24 +28,6 @@
     </div>
   </div>
   <div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>NFT</th>
-        <th><%= t("views.labels.revenue") %></th>
-      </tr>
-    </thead>
-    <% @top_nfts.each do |nft| %>
-      <tr>
-        <td><%= link_to nft[0], collection_detail_nft_flip_records_path(slug: nft[0]) %></td>
-        <td class="text-<%= change_text_color(nft[2].to_f) %>"><%= "#{decimal_format nft[2]} #{nft[3]}" %></td>
-      </tr>
-    <% end %>
-  </table>
-  <div class="chart">
-    <%= render "flip_data_chart" %>
-    <%= render "flip_count_chart" %>
-  </div>
   <div class="row mt-5" id="flip_records">
     <h3>Flip <%= t("views.labels.records") %></h3>
     <table class="table">
@@ -68,6 +50,24 @@
   </div>
   <div class="p-4">
     <%= link_to t("views.labels.more"), "#", class: "btn btn-primary btn-block loadMoreBtn", remote: true, data: {source: "fliper"} %>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>NFT</th>
+        <th><%= t("views.labels.revenue") %></th>
+      </tr>
+    </thead>
+    <% @top_nfts.each do |nft| %>
+      <tr>
+        <td><%= link_to nft[0], collection_detail_nft_flip_records_path(slug: nft[0]) %></td>
+        <td class="text-<%= change_text_color(nft[2].to_f) %>"><%= "#{decimal_format nft[2]} #{nft[3]}" %></td>
+      </tr>
+    <% end %>
+  </table>
+  <div class="chart">
+    <%= render "flip_data_chart" %>
+    <%= render "flip_count_chart" %>
   </div>
 </div>
 

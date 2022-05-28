@@ -1,5 +1,5 @@
 class FetchNftFlipDataByNftJob < ApplicationJob
-  queue_as :daily_job
+  queue_as :single_job
 
   def perform(slug)
     nft = Nft.find_by opensea_slug: slug

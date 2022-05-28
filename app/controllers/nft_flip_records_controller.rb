@@ -21,7 +21,7 @@ class NftFlipRecordsController < ApplicationController
     @top_nfts = @fliper_data.group_by(&:slug).map{|k,v| [k, v.sum(&:revenue_usd), v.sum(&:revenue), v.first.sold_coin]}.sort_by{|r| r[1]}.reverse.first(3)
     @flip_data_chart = PriceChartService.new(start_at: Time.now - 1.week, fliper_address: params[:fliper_address]).get_flip_data
     @flip_count_chart = PriceChartService.new(start_at: Time.now - 1.week, fliper_address: params[:fliper_address]).get_flip_count
-    @records = @fliper_data.page(params[:fliper_page]).per(20)
+    @records = @fliper_data.order(sold_time: :desc).page(params[:fliper_page]).per(20)
   end
 
   def collection_detail
@@ -34,7 +34,7 @@ class NftFlipRecordsController < ApplicationController
     @trade_data = PriceChartService.new(start_at: period_date(params[:trade_period]), slug: params[:slug]).get_trade_data
     @trade_records = NftTrade.joins(:nft).where(nft: {opensea_slug: params[:slug]}).order(trade_time: :desc).page(params[:trade_page]).per(10)
     @listing_items = fetch_listing_data(params[:slug])
-    @records = @collection_data.page(params[:fliper_page]).per(20)
+    @records = @collection_data.order(sold_time: :desc).page(params[:fliper_page]).per(20)
 
     respond_to do |format|
       format.html
@@ -70,7 +70,7 @@ class NftFlipRecordsController < ApplicationController
   def trending
     @page_index = 2
 
-    records = NftFlipRecord.includes(:nft)
+    records = NftFlipRecord.includes(:nft).order(sold_time: :desc)
     fliper_records = records.where(sold_time: [period_date(params[:period])..Time.now]).group_by(&:fliper_address)
     @top_flipers = helpers.get_data(fliper_records, "top")
     @last_flipers = helpers.get_data(fliper_records, "last")

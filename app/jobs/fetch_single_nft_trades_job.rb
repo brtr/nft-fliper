@@ -1,5 +1,5 @@
 class FetchSingleNftTradesJob < ApplicationJob
-  queue_as :daily_job
+  queue_as :single_job
 
   def perform(nft)
     nft.sync_opensea_trades
