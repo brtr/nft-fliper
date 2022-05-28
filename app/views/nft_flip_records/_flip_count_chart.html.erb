@@ -15,7 +15,7 @@ document.addEventListener('turbolinks:load', () => {
         labels: Object.keys(chart_data),
         datasets: [
           {
-            label: "盈利数量",
+            label: "Successful Count",
             data: flip_data.map(i => {
               return i.successful_count
             }),
@@ -25,7 +25,7 @@ document.addEventListener('turbolinks:load', () => {
             yAxisID: 'y'
           },
           {
-            label: "亏损数量",
+            label: "Failed Count",
             data: flip_data.map(i => {
               return i.failed_count
             }),
@@ -61,9 +61,9 @@ document.addEventListener('turbolinks:load', () => {
                 data = flip_data.filter(function(x) { return x["date"] == context[0].label})
                 if(data.length > 0){
                   i = data[0]
-                  total_count = "Flip总数: " + i.total_count
-                  successful_count = "盈利次数: " + i.successful_count
-                  failed_count = "亏损次数: " + i.failed_count
+                  total_count = "Flip Count: " + i.total_count
+                  successful_count = "Successful Count: " + i.successful_count
+                  failed_count = "Failed count: " + i.failed_count
                   return [total_count, successful_count, failed_count]
                 } else {
                   return context.label

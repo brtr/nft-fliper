@@ -17,7 +17,7 @@ document.addEventListener('turbolinks:load', () => {
       data: {
         datasets: [
           {
-            label: "交易价格",
+            label: "Trade Price",
             data: dataArray,
             borderColor: ['#129CFF'],
             backgroundColor: ['#129CFF'],
@@ -44,7 +44,7 @@ document.addEventListener('turbolinks:load', () => {
               },
               footer: function(context) {
                 datetime = moment(context[0].parsed.x).format("DD/MM/YY HH:mm");
-                price = "交易价格: " + context[0].formattedValue
+                price = "Trade Price: " + context[0].formattedValue
 
                 return [datetime, price]
               }

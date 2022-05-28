@@ -41,11 +41,11 @@ module ApplicationHelper
     gap = gap.to_f
     if gap < 86400
       hours = gap / 3600
-      "#{t('duration.hours', count: hours.round(2))}"
+      "#{I18n.t('duration.hours', count: hours.round(2))}"
     else
       days = (gap / 86400).to_i
       hours = (gap - days * 86400) / 3600
-      "#{t('duration.days', count: days)} #{t('duration.hours', count: hours.round(2))}"
+      "#{I18n.t('duration.days', count: days)} #{I18n.t('duration.hours', count: hours.round(2))}"
     end
   end
 
