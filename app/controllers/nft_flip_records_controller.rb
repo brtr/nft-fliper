@@ -85,11 +85,9 @@ class NftFlipRecordsController < ApplicationController
 
     fliper_records = @data.where(sold_time: [period_date(params[:period])..Time.now]).group_by(&:fliper_address)
     @top_flipers = helpers.get_data(fliper_records, "profit")
-    @last_flipers = helpers.get_data(fliper_records, "loss")
 
     collection_records = @data.where(sold_time: [period_date(params[:period])..Time.now]).group_by(&:slug)
     @top_collections = helpers.get_data(collection_records, "profit")
-    @last_collections = helpers.get_data(collection_records, "loss")
   end
 
   def flip_flow

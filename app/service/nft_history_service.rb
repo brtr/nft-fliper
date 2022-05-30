@@ -166,9 +166,11 @@ class NftHistoryService
           if e
             asset = e["asset"]
             if asset["asset_contract"]["schema_name"] == "METAPLEX"
+              return false if asset["name"].split("#").last != token_id
               cost = e["total_price"].to_f / 10 ** 9
               result = {bought_coin: "SOL", cost: cost, cost_usd: 0, from_address: e["seller"]["address"], trade_time: e["created_date"]}
             else
+              return false if asset["token_id"] != token_id
               payment = e["payment_token"]
               coin = payment["symbol"]
               return false unless coin.in?(["ETH", "WETH"])
