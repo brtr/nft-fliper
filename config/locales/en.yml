@@ -75,6 +75,8 @@ en:
       records: Records
       volume: Volume
       successful_rate: Successful Rate
+      analytics: Analytics
+      live_view: Live View
       desc_1: Multi-chain flip data analysis platform
       desc_2: NFT Fliper is a platform focused on mining good flipers, providing users with flip trends, getting the latest flip information in a timely manner, and working hard to assist everyone to become a better fliper
   duration:

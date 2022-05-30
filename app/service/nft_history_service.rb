@@ -137,7 +137,7 @@ class NftHistoryService
             last_trade = fetch_last_trade(nft.address, event["seller"]["address"], slug, mode, token_id, schema_name)
             next unless last_trade.present?
             nft.update(logo: asset["collection"]["banner_image_url"])
-            update_flip_record(nft, last_trade, event, asset)
+            update_flip_record(nft, last_trade, event, asset, token_id)
           end
 
           sleep 1
@@ -170,9 +170,11 @@ class NftHistoryService
               result = {bought_coin: "SOL", cost: cost, cost_usd: 0, from_address: e["seller"]["address"], trade_time: e["created_date"]}
             else
               payment = e["payment_token"]
+              coin = payment["symbol"]
+              return false unless coin.in?(["ETH", "WETH"])
               cost = e["total_price"].to_f / 10 ** payment["decimals"].to_i
               cost_usd = cost * payment["usd_price"].to_f
-              result = {bought_coin: payment["symbol"], cost: cost, cost_usd: cost_usd, from_address: e["seller"]["address"], trade_time: e["created_date"]}
+              result = {bought_coin: coin, cost: cost, cost_usd: cost_usd, from_address: e["seller"]["address"], trade_time: e["created_date"]}
             end
           end
           return result
@@ -205,7 +207,7 @@ class NftHistoryService
             puts "last trade: #{last_trade}"
             nft = Nft.where(address: token_address, opensea_slug: slug).first_or_create
             nft.update(logo: asset["collection"]["banner_image_url"])
-            update_flip_record(nft, last_trade, event, asset)
+            update_flip_record(nft, last_trade, event, asset, token_id)
           end
 
           sleep 1
@@ -218,7 +220,7 @@ class NftHistoryService
     end
 
     private
-    def update_flip_record(nft, last_trade, event, asset)
+    def update_flip_record(nft, last_trade, event, asset, token_id)
       if last_trade[:bought_coin] == "SOL"
         price = event["total_price"].to_f / 10 ** 9
         price_usd = 0
@@ -238,7 +240,7 @@ class NftHistoryService
       revenue_usd = price_usd - cost_usd
       roi_usd = cost_usd == 0 ? 0 : revenue_usd / cost_usd
       gap = DateTime.parse(event["created_date"]).to_i - DateTime.parse(last_trade[:trade_time]).to_i
-      r = nft.nft_flip_records.where(slug: nft.opensea_slug, token_address: asset["asset_contract"]["address"], token_id: asset["token_id"], txid: event["transaction"]["transaction_hash"]).first_or_create
+      r = nft.nft_flip_records.where(slug: nft.opensea_slug, token_address: asset["asset_contract"]["address"], token_id: token_id, txid: event["transaction"]["transaction_hash"]).first_or_create
       r.update( sold: price, sold_usd: price_usd, bought: cost, bought_usd: cost_usd, revenue: revenue, roi: roi, gap: gap, revenue_usd: revenue_usd, roi_usd: roi_usd,
                 sold_time: event["created_date"], bought_time: last_trade[:trade_time], sold_coin: sold_coin, bought_coin: last_trade[:bought_coin], permalink: asset["permalink"],
                 image: asset["image_url"], from_address: last_trade[:from_address], fliper_address: event["seller"]["address"], to_address: event["winner_account"]["address"])

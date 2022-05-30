@@ -12,7 +12,7 @@
     </div>
   <% end %>
   <div class="tab-content">
-    <h3 class="mt-4"><%= t("views.labels.top_profit", period: t("datetime.prompts.#{params[:period] || "day"}")) %> NFTs</h3>
+    <h3 class="mt-5"><%= t("views.labels.top_profit", period: t("datetime.prompts.#{params[:period] || "day"}")) %> NFTs</h3>
     <table class="table">
       <thead>
         <tr>
@@ -20,6 +20,7 @@
           <th>NFT</th>
           <th><%= t("views.labels.count") %></th>
           <th><%= t("views.labels.revenue") %></th>
+          <th>ROI</th>
           <th><%= t("views.labels.average_price") %></th>
           <th><%= t("views.labels.average_gap") %></th>
           <th><%= t("views.labels.average_revenue") %></th>
@@ -36,6 +37,7 @@
             </td>
             <td><%= collection[1] %></td>
             <td><%= collection[2] %></td>
+            <td><%= "#{decimal_format (collection[11].to_f * 100)} %" %></td>
             <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
             <td><%= humanize_gap(collection[5]) %></td>
             <td style="width:10%"><%= collection[9] %></td>
@@ -47,7 +49,7 @@
         <% end %>
       </tbody>
     </table>
-    <h3><%= t("views.labels.top_profit", period: t("datetime.prompts.#{params[:period] || "day"}")) %> Flipers</h3>
+    <h3 class="mt-5"><%= t("views.labels.top_profit", period: t("datetime.prompts.#{params[:period] || "day"}")) %> Flipers</h3>
     <table class="table">
       <thead>
         <tr>
@@ -55,6 +57,7 @@
           <th>Fliper</th>
           <th><%= t("views.labels.count") %></th>
           <th><%= t("views.labels.revenue") %></th>
+          <th>ROI</th>
           <th><%= t("views.labels.average_price") %></th>
           <th><%= t("views.labels.average_gap") %></th>
           <th><%= t("views.labels.average_revenue") %></th>
@@ -68,6 +71,7 @@
             <td><%= address_format(fliper[0]) %></td>
             <td><%= fliper[1] %></td>
             <td><%= fliper[2] %></td>
+            <td><%= "#{decimal_format (fliper[11].to_f * 100)} %" %></td>
             <td><%= "#{decimal_format fliper[3]} #{fliper[4]}" %></td>
             <td><%= humanize_gap(fliper[5]) %></td>
             <td><%= fliper[9] %></td>
@@ -76,7 +80,7 @@
         <% end %>
       </tbody>
     </table>
-    <h3 class="mt-4"><%= t("views.labels.top_loss", period: t("datetime.prompts.#{params[:period] || "day"}")) %> NFTs</h3>
+    <h3 class="mt-5"><%= t("views.labels.top_loss", period: t("datetime.prompts.#{params[:period] || "day"}")) %> NFTs</h3>
     <table class="table">
       <thead>
         <tr>
@@ -84,6 +88,7 @@
           <th>NFT</th>
           <th><%= t("views.labels.count") %></th>
           <th><%= t("views.labels.loss") %></th>
+          <th>ROI</th>
           <th><%= t("views.labels.average_price") %></th>
           <td><%= t("views.labels.average_gap") %></th>
           <td><%= t("views.labels.average_revenue") %></th>
@@ -100,6 +105,7 @@
             </td>
             <td><%= collection[1] %></td>
             <td><%= collection[2] %></td>
+            <td><%= "#{decimal_format (collection[11].to_f * 100)} %" %></td>
             <td><%= "#{decimal_format collection[3]} #{collection[4]}" %></td>
             <td><%= humanize_gap(collection[5]) %></td>
             <td style="width:10%"><%= collection[9] %></td>

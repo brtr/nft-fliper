@@ -45,7 +45,7 @@ module ApplicationHelper
     else
       days = (gap / 86400).to_i
       hours = (gap - days * 86400) / 3600
-      "#{I18n.t('duration.days', count: days)} #{I18n.t('duration.hours', count: hours.round(2))}"
+      "#{I18n.t('duration.days', count: days)}"
     end
   end
 

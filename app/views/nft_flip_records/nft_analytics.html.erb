@@ -1,5 +1,8 @@
 <div class="container py-4 mb-2 mb-sm-0 pb-sm-5 row mx-xl-auto">
-  <h3><%= params[:slug] %></h3>
+  <h1>
+    <%= image_tag @logo, size: "50x50", class: "rounded-circle" if @logo %>
+    <%= params[:slug] %>
+  </h1>
   <div class="row mt-5">
     <table class="table">
       <thead>

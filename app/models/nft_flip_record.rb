@@ -45,6 +45,7 @@ class NftFlipRecord < ApplicationRecord
   end
 
   def display_name
+    token_id[6..-10] = "..." if token_id.size > 10
     "#{slug}##{token_id}"
   end
 
@@ -118,12 +119,12 @@ class NftFlipRecord < ApplicationRecord
 
       [hourly_records, daily_records, weekly_records].map do |records|
         if slug
-          rank = records.group_by(&:slug).sort_by{|k, v| v.sum(&:revenue)}.map{|k,v| k}.index(slug) + 1 rescue 0
+          rank = records.group_by(&:slug).sort_by{|k, v| v.sum(&:revenue) / v.sum(&:bought)}.reverse.map{|k,v| k}.index(slug) + 1 rescue 0
           target_records = records.where(slug: slug)
         end
 
         if fliper_address
-          rank = records.group_by(&:fliper_address).sort_by{|k, v| v.sum(&:revenue)}.map{|k,v| k}.index(fliper_address) + 1 rescue 0
+          rank = records.group_by(&:fliper_address).sort_by{|k, v| v.sum(&:revenue) / v.sum(&:bought)}.reverse.map{|k,v| k}.index(fliper_address) + 1 rescue 0
           target_records = records.where(fliper_address: fliper_address)
         end
 

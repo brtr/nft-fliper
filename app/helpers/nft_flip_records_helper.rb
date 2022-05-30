@@ -16,8 +16,8 @@ module NftFlipRecordsHelper
     end
   end
 
-  def get_data(data, type, count=10, sort_by="total_revenue")
-    sort = sort_by == "total_revenue" ? 11 : 10
+  def get_data(data, type, count=10, sort_by="total_roi")
+    sort = sort_by == "total_roi" ? 11 : 10
     result =  data.map do |k,v|
                 successful_data = v.select{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
                 records = type == "profit" ? successful_data : v.select{|n| n.roi_usd < 0 || n.same_coin? && n.roi < 0}
@@ -27,7 +27,7 @@ module NftFlipRecordsHelper
                 record = records.first
                 volume = records.count * get_average_price(records)
                 [k, records.count, get_revenue(records), get_average_price(records), record.sold_coin, get_average_gap(records),
-                record.nft.logo, volume, record.image, get_average_revenue(records), rate, records.sum(&:revenue)]
+                record.nft.logo, volume, record.image, get_average_revenue(records), rate, get_total_roi(records)]
               end.compact.sort_by{|r| r[sort]}
     result.reverse! if type == "profit"
     result.first(count)
@@ -67,5 +67,11 @@ module NftFlipRecordsHelper
   def get_successful_rate(records)
     successful_count = records.count{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
     (successful_count / records.size) * 100
+  end
+
+  def get_total_roi(records)
+    total_revenue = records.sum(&:revenue)
+    total_price = records.sum(&:bought)
+    total_revenue / total_price
   end
 end

@@ -31,6 +31,7 @@ class NftFlipRecordsController < ApplicationController
 
   def nft_analytics
     @collection_data = @data.where(slug: params[:slug])
+    @logo = @collection_data.first.image
     @rank_data = NftFlipRecord.get_rank_data(slug: params[:slug])
     @top_flipers = @collection_data.group_by(&:fliper_address).map{|k,v| [k, v.sum(&:revenue), v.first.sold_coin, helpers.get_successful_rate(v)]}.sort_by{|r| r[4]}.reverse.first(3)
     @flip_data_chart = PriceChartService.new(start_at: Time.now - 1.week, slug: params[:slug]).get_flip_data

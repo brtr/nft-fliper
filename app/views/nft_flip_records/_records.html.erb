@@ -2,7 +2,7 @@
   <tr>
     <td>
       <%= image_tag record.image, size: "20x20", class: "rounded-circle" if record.image %>
-      <%= link_to record.display_name, nft_analytics_nft_flip_records_path(slug: record.slug) %>
+      <%= link_to record.display_name, record.permalink, target: "_blank" %>
     </td>
     <td><%= display_price(record.sold_coin, record.bought, record.bought_usd) %></td>
     <td><%= display_price(record.sold_coin, record.sold, record.sold_usd) %></td>
@@ -10,6 +10,6 @@
     <td><%= "#{date_format record.bought_time} - #{date_format record.sold_time}" %></td>
     <td><%= humanize_gap(record.gap) %></td>
     <td><%= image_tag chain_logo_path(record.nft_id), size: "20x20" %></td>
-    <td style="width:6%"><%= link_to t("views.labels.detail"), record.permalink, class: "card-link", target: "_blank" %></td>
+    <td style="width:6%"><%= link_to t("views.labels.detail"), nft_analytics_nft_flip_records_path(slug: record.slug), class: "card-link" %></td>
   </tr>
 <% end %>
