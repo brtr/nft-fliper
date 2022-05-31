@@ -199,7 +199,7 @@ class Nft < ApplicationRecord
   end
 
   class << self
-    def add_new(opensea_slug, solanart_slug: nil, address: nil, chain: "solana")
+    def add_new(opensea_slug, solanart_slug: nil, address: nil, chain: "solana", duration: 1.hour)
       chain_id = chain == "solana" ? 101 : 1
 
       if chain == "solana" && solanart_slug.nil?
@@ -214,7 +214,7 @@ class Nft < ApplicationRecord
 
       slug = solanart_slug || opensea_slug
       nft = Nft.create(chain_id: chain_id, slug: solanart_slug, opensea_slug: opensea_slug, address: address, sync_trades: true)
-      FetchNftFlipDataByNftJob.perform_later(nft.opensea_slug)
+      FetchNftFlipDataByNftJob.perform_later(nft.opensea_slug, duration)
       puts "#{opensea_slug} 添加成功，开始抓取 flip data"
     end
   end

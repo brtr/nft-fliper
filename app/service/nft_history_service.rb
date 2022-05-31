@@ -119,7 +119,7 @@ class NftHistoryService
 
     def fetch_flip_data_by_nft(nft: nil, start_at: nil, end_at: nil, mode: "manual", cursor: nil)
       end_at ||= Time.now
-      start_at ||= end_at - 1.week
+      start_at ||= end_at - 1.hour
       url = "https://api.opensea.io/api/v1/events?only_opensea=false&collection_slug=#{nft.opensea_slug}&event_type=successful&occurred_after=#{start_at.to_i}&occurred_before=#{end_at.to_i}"
       url += "&cursor=#{cursor}" if cursor
       begin
@@ -241,10 +241,12 @@ class NftHistoryService
       cost_usd = last_trade[:cost_usd]
       revenue_usd = price_usd - cost_usd
       roi_usd = cost_usd == 0 ? 0 : revenue_usd / cost_usd
-      gap = DateTime.parse(event["created_date"]).to_i - DateTime.parse(last_trade[:trade_time]).to_i
+      sold_time = DateTime.parse(event["created_date"])
+      bought_time = DateTime.parse(last_trade[:trade_time])
+      gap = sold_time.to_i - bought_time.to_i
       r = nft.nft_flip_records.where(slug: nft.opensea_slug, token_address: asset["asset_contract"]["address"], token_id: token_id, txid: event["transaction"]["transaction_hash"]).first_or_create
       r.update( sold: price, sold_usd: price_usd, bought: cost, bought_usd: cost_usd, revenue: revenue, roi: roi, gap: gap, revenue_usd: revenue_usd, roi_usd: roi_usd,
-                sold_time: event["created_date"], bought_time: last_trade[:trade_time], sold_coin: sold_coin, bought_coin: last_trade[:bought_coin], permalink: asset["permalink"],
+                sold_time: sold_time, bought_time: bought_time, sold_coin: sold_coin, bought_coin: last_trade[:bought_coin], permalink: asset["permalink"],
                 image: asset["image_url"], from_address: last_trade[:from_address], fliper_address: event["seller"]["address"], to_address: event["winner_account"]["address"])
     end
   end
