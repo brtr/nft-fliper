@@ -1,1 +1,2 @@
-$("#flip_records tbody").data("last-id", "<%= @records.maximum(:id) %>").prepend("<%= j render partial:'records' %>");
+$("#flip_records").data("last-id", "<%= @records.maximum(:id) %>");
+$("#flip_records tbody").prepend("<%= j render partial:'records' %>");

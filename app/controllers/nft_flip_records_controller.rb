@@ -1,5 +1,5 @@
 class NftFlipRecordsController < ApplicationController
-  before_action :get_data, except: [:check_new_records, :get_new_records, :refresh_listings, :search_collection, :live_view]
+  before_action :get_data, except: [:refresh_listings, :search_collection, :live_view]
 
   def index
     @page_index = 1
@@ -56,14 +56,14 @@ class NftFlipRecordsController < ApplicationController
   end
 
   def check_new_records
-    last_id = NftFlipRecord.maximum(:id)
+    last_id = @data.maximum(:id)
 
     render json: {last_id: last_id}
   end
 
   def get_new_records
-    last = NftFlipRecord.maximum(:id)
-    @q = NftFlipRecord.includes(:nft).ransack(params[:q])
+    last = @data.maximum(:id)
+    @q = @data.ransack(params[:q])
     @records = @q.result.where(id: [params[:id].to_i..last]).order(sold_time: :desc)
   end
 

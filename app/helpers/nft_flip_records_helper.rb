@@ -39,8 +39,7 @@ module NftFlipRecordsHelper
   end
 
   def get_average_price(records)
-    price_list = records.map{|r| [r.bought, r.sold]}.flatten
-    price_list.sum.to_f / price_list.size.to_f
+    records.sum(&:bought) / records.size.to_f
   end
 
   def get_average_revenue(records)
