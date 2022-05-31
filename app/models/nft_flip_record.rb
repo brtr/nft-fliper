@@ -117,16 +117,23 @@ class NftFlipRecord < ApplicationRecord
       daily_records = weekly_records.today
       hourly_records = daily_records.hour
 
-      [hourly_records, daily_records, weekly_records].map do |records|
+      [[0, hourly_records], [1, daily_records], [2, weekly_records]].map do |idx, records|
         if slug
-          rank = records.group_by(&:slug).sort_by{|k, v| v.sum(&:revenue) / v.sum(&:bought)}.reverse.map{|k,v| k}.index(slug) + 1 rescue 0
+          k_word = slug
+          rank_data = records.group_by(&:slug)
           target_records = records.where(slug: slug)
         end
 
         if fliper_address
-          rank = records.group_by(&:fliper_address).sort_by{|k, v| v.sum(&:revenue) / v.sum(&:bought)}.reverse.map{|k,v| k}.index(fliper_address) + 1 rescue 0
+          k_word = fliper_address
+          rank_data = records.group_by(&:fliper_address)
           target_records = records.where(fliper_address: fliper_address)
         end
+
+        rank =  rank_data.sort_by{|k, v| (v.count{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0} / v.size.to_f) * 100}.reverse.map do |k,v|
+                  next if idx > 0 && v.size < 4;
+                  k
+                end.compact.index(k_word) + 1 rescue 0
 
         successful = target_records.successful rescue []
         failed = target_records.failed rescue []

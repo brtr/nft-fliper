@@ -6,7 +6,7 @@ class NftFlipRecordsController < ApplicationController
     @records = @data.where("sold > bought").order(sold_time: :desc).first(10)
 
     collection_records = @data.today.group_by(&:slug)
-    @top_collections = helpers.get_data(collection_records, "profit", 15, "rate")
+    @top_collections = helpers.get_data(collection_records, count: 15)
     @top_collection = @top_collections.first
 
     respond_to do |format|
@@ -84,10 +84,10 @@ class NftFlipRecordsController < ApplicationController
     @page_index = 2
 
     fliper_records = @data.where(sold_time: [period_date(params[:period])..Time.now]).group_by(&:fliper_address)
-    @top_flipers = helpers.get_data(fliper_records, "profit")
+    @top_flipers = helpers.get_data(fliper_records, period: params[:period])
 
     collection_records = @data.where(sold_time: [period_date(params[:period])..Time.now]).group_by(&:slug)
-    @top_collections = helpers.get_data(collection_records, "profit")
+    @top_collections = helpers.get_data(collection_records, period: params[:period])
   end
 
   def flip_flow

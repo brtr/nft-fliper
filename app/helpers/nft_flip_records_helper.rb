@@ -16,21 +16,17 @@ module NftFlipRecordsHelper
     end
   end
 
-  def get_data(data, type, count=10, sort_by="total_roi")
-    sort = sort_by == "total_roi" ? 11 : 10
-    result =  data.map do |k,v|
-                successful_data = v.select{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
-                records = type == "profit" ? successful_data : v.select{|n| n.roi_usd < 0 || n.same_coin? && n.roi < 0}
+  def get_data(data, count: 10, period: "day")
+    data.map do |k,v|
+      records = v.select{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
+      next if records.blank? || (period != "hour" && records.size < 4)
 
-                next if records.blank?
-                rate = (successful_data.size.to_f / v.size.to_f) * 100
-                record = records.first
-                volume = records.count * get_average_price(records)
-                [k, records.count, get_revenue(records), get_average_price(records), record.sold_coin, get_average_gap(records),
-                record.nft.logo, volume, record.image, get_average_revenue(records), rate, get_total_roi(records)]
-              end.compact.sort_by{|r| r[sort]}
-    result.reverse! if type == "profit"
-    result.first(count)
+      rate = (records.size / v.size.to_f) * 100
+      volume = records.size * get_average_price(records)
+      record = records.first
+      [k, records.size, get_revenue(records), get_average_price(records), record.sold_coin, get_average_gap(records),
+      record.nft.logo, volume, record.image, get_average_revenue(records), rate, get_total_roi(records)]
+    end.compact.sort_by{|r| r[10]}.reverse!.first(count)
   end
 
   def get_revenue(records)

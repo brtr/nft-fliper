@@ -18,7 +18,8 @@
         <tr>
           <th><%= t("views.labels.rank") %></th>
           <th>NFT</th>
-          <th><%= t("views.labels.count") %></th>
+          <th><%= t("views.labels.successful_rate") %></th>
+          <th><%= t("views.labels.successful_count") %></th>
           <th><%= t("views.labels.revenue") %></th>
           <th>ROI</th>
           <th><%= t("views.labels.average_price") %></th>
@@ -35,6 +36,7 @@
               <%= image_tag collection[8], size: "20x20", class: "rounded-circle" if collection[8] %>
               <%= link_to collection[0], "https://opensea.io/collection/#{collection[0]}", target: "_blank" %>
             </td>
+            <td><%= "#{decimal_format collection[10]} %" %></td>
             <td><%= collection[1] %></td>
             <td><%= collection[2] %></td>
             <td><%= "#{decimal_format (collection[11].to_f * 100)} %" %></td>
@@ -55,7 +57,8 @@
         <tr>
           <th><%= t("views.labels.rank") %></th>
           <th>Fliper</th>
-          <th><%= t("views.labels.count") %></th>
+          <th><%= t("views.labels.successful_rate") %></th>
+          <th><%= t("views.labels.successful_count") %></th>
           <th><%= t("views.labels.revenue") %></th>
           <th>ROI</th>
           <th><%= t("views.labels.average_price") %></th>
@@ -69,6 +72,7 @@
           <tr>
             <td><%= idx + 1 %></td>
             <td><%= address_format(fliper[0]) %></td>
+            <td><%= "#{decimal_format fliper[10]} %" %></td>
             <td><%= fliper[1] %></td>
             <td><%= fliper[2] %></td>
             <td><%= "#{decimal_format (fliper[11].to_f * 100)} %" %></td>
