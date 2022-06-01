@@ -188,8 +188,9 @@ class NftHistoryService
     end
 
     def fetch_flip_data(start_at: nil, end_at: nil, mode: "manual", cursor: nil)
-      start_at ||= (Time.now - 1.hour).to_i
       end_at ||= Time.now.to_i
+      start_at ||= (end_at - 1.hour).to_i
+
       url = "https://api.opensea.io/api/v1/events?only_opensea=false&event_type=successful&occurred_after=#{start_at}&occurred_before=#{end_at}"
       url += "&cursor=#{cursor}" if cursor
       begin
@@ -208,7 +209,7 @@ class NftHistoryService
             next unless last_trade.present?
             nft = Nft.where(address: token_address, opensea_slug: slug).first_or_create
             chain_id = schema_name == "ERC721" ? 1 : 101
-            nft.update(logo: asset["collection"]["banner_image_url"], chain_id: chain_id)
+            nft.update(logo: asset["collection"]["banner_image_url"], chain_id: chain_id, sync_trades: true)
             update_flip_record(nft, last_trade, event, asset, token_id)
           end
 

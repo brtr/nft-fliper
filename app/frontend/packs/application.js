@@ -5,6 +5,8 @@ require("chartkick");
 require("chart.js");
 require("moment");
 require('select2');
+require("ethers");
+
 require("../stylesheets/application.scss");
 
 import 'bootstrap/dist/css/bootstrap';
@@ -14,6 +16,7 @@ import 'chartjs-adapter-moment';
 import moment from 'moment';
 import 'select2';
 import 'select2/dist/css/select2.css';
+import { ethers } from 'ethers';
 
 global.Chart = Chart;
 global.moment = moment
@@ -22,6 +25,11 @@ window.jQuery = $;
 window.$ = $;
 
 let loginAddress = localStorage.getItem("loginAddress");
+const fliperPassAddress = NODE_ENV["FLIPER_PASS_ADDRESS"];
+const fliperPassAbi = NODE_ENV["FLIPER_PASS_ABI"];
+
+const provider = new ethers.providers.Web3Provider(web3.currentProvider);
+const fliperPassContract = new ethers.Contract(fliperPassAddress, fliperPassAbi, provider);
 
 function replaceChar(origString, firstIdx, lastIdx, replaceChar) {
     let firstPart = origString.substr(0, firstIdx);
@@ -75,6 +83,18 @@ const login = function() {
   })
 }
 
+const checkNft = async function() {
+    if (loginAddress) {
+        const balance = await fliperPassContract.balanceOf(loginAddress);
+        console.log("balance", balance);
+        if (balance > 0) {
+            $(".trending").removeClass("hide");
+        } else {
+            $(".trending").addClass("hide");
+        }
+    }
+}
+
 $(document).on('turbolinks:load', function() {
     'use strict';
 
@@ -85,6 +105,7 @@ $(document).on('turbolinks:load', function() {
             this.form.submit();
         })
 
+        checkNft();
         toggleAddress();
 
         $("#loginBtn").on("click", function(e){
