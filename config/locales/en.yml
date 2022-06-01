@@ -42,7 +42,7 @@ en:
       trending: Trending
     title:
       latest_10_flip_data: Latest 10 flip data
-      top_15_collections: Top 15 collections by flip successful rate
+      top_collections: Top collections by flip successful rate
     actions:
       submit: Submit
     labels:
