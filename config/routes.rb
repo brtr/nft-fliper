@@ -35,4 +35,5 @@ Rails.application.routes.draw do
   post 'logout', to: "users#logout", as: :logout
   get '/users/:id/nfts', to: "users#nfts", as: :user_nfts
   get '/extensions', to: "home#extensions", as: :extensions
+  get '/fliper_pass_nft', to: "home#fliper_pass_nft", as: :fliper_pass_nft
 end
