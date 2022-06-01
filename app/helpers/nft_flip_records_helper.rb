@@ -17,9 +17,10 @@ module NftFlipRecordsHelper
   end
 
   def get_data(data, count: 10, period: "day")
+    count = period == "week" && count == 20 ? 20 : 10
     data.map do |k,v|
       records = v.select{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
-      next if records.blank? || (period != "hour" && records.size < 4)
+      next if records.blank? || (period == "day" && records.size < 4) || (period == "week" && records.size < 10)
 
       rate = (records.size / v.size.to_f) * 100
       volume = records.size * get_average_price(records)

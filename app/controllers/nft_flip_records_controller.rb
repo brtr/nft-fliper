@@ -82,12 +82,13 @@ class NftFlipRecordsController < ApplicationController
 
   def trending
     @page_index = 2
+    period = params[:period] || "day"
 
-    fliper_records = @data.where(sold_time: [period_date(params[:period])..Time.now]).group_by(&:fliper_address)
-    @top_flipers = helpers.get_data(fliper_records, period: params[:period])
+    fliper_records = @data.where(sold_time: [period_date(period)..Time.now]).group_by(&:fliper_address)
+    @top_flipers = helpers.get_data(fliper_records, period: period)
 
-    collection_records = @data.where(sold_time: [period_date(params[:period])..Time.now]).group_by(&:slug)
-    @top_collections = helpers.get_data(collection_records, period: params[:period])
+    collection_records = @data.where(sold_time: [period_date(period)..Time.now]).group_by(&:slug)
+    @top_collections = helpers.get_data(collection_records, period: period, count: 20)
   end
 
   def flip_flow

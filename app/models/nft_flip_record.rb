@@ -131,7 +131,7 @@ class NftFlipRecord < ApplicationRecord
         end
 
         rank =  rank_data.sort_by{|k, v| (v.count{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0} / v.size.to_f) * 100}.reverse.map do |k,v|
-                  next if idx > 0 && v.size < 4;
+                  next if (idx == 1 && v.size < 4) || (idx == 2 && v.size < 10);
                   k
                 end.compact.index(k_word) + 1 rescue 0
 
