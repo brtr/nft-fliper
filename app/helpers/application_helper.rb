@@ -56,4 +56,15 @@ module ApplicationHelper
       "#{decimal_format price} #{coin}"
     end
   end
+
+  def error_msgs(error_code)
+    case error_code.to_i
+    when 1
+      "You don't have any NFTs"
+    when 2
+      "You need to login to see trending"
+    else
+      "Something went wrong"
+    end
+  end
 end

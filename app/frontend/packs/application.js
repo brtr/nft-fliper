@@ -84,27 +84,22 @@ const login = function() {
 }
 
 const checkNft = async function() {
-    if (loginAddress) {
-        const balance = await fliperPassContract.balanceOf(loginAddress);
-        console.log("balance", balance);
-        if (balance > 0) {
-            $(".trending").removeClass("hide");
-        } else {
-            $(".trending").addClass("hide");
-            if ($("#trending").length > 0) {
-                location.href = "/";
+    if ($(".home").length < 1 && $(".fliperPass").length < 1 && $(".error-page").length < 1) {
+        if (loginAddress) {
+            const balance = await fliperPassContract.balanceOf(loginAddress);
+            console.log("balance", balance);
+            if (balance < 1) {
+                location.href = "/not_permitted?error_code=1";
             }
-        }
-    } else {
-        $(".trending").addClass("hide");
-        if ($("#trending").length > 0) {
-            location.href = "/";
+        } else {
+            location.href = "/not_permitted?error_code=2";
         }
     }
 }
 
 $(document).on('turbolinks:load', function() {
     'use strict';
+    checkNft();
 
     $(function() {
         $('[data-bs-toggle="tooltip"]').tooltip({html: true});
@@ -113,7 +108,6 @@ $(document).on('turbolinks:load', function() {
             this.form.submit();
         })
 
-        checkNft();
         toggleAddress();
 
         $("#loginBtn").on("click", function(e){

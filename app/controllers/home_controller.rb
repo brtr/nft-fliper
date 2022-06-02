@@ -5,4 +5,7 @@ class HomeController < ApplicationController
 
   def fliper_pass_nft
   end
+
+  def not_permitted
+  end
 end
