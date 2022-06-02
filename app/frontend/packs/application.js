@@ -91,6 +91,14 @@ const checkNft = async function() {
             $(".trending").removeClass("hide");
         } else {
             $(".trending").addClass("hide");
+            if ($("#trending").length > 0) {
+                location.href = "/";
+            }
+        }
+    } else {
+        $(".trending").addClass("hide");
+        if ($("#trending").length > 0) {
+            location.href = "/";
         }
     }
 }
