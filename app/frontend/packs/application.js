@@ -84,24 +84,33 @@ const login = function() {
 }
 
 const checkNft = async function() {
+    const url = "/not_permitted?error_code="
+    let error_code;
     if ($(".home").length < 1 && $(".fliperPass").length < 1 && $(".error-page").length < 1) {
         if (loginAddress) {
             const balance = await fliperPassContract.balanceOf(loginAddress);
             console.log("balance", balance);
-            if (balance < 1) {
-                location.href = "/not_permitted?error_code=1";
-            }
+            if (balance < 1) { error_code = 1}
         } else {
-            location.href = "/not_permitted?error_code=2";
+            error_code = 2;
         }
+
+        $.get(url + error_code, function(data) {
+            $(".content").html('<h3 class="text-center">' + data.message + '</h3>').fadeIn();
+        });
+    } else {
+        $(".content").fadeIn(1000);
     }
 }
 
 $(document).on('turbolinks:load', function() {
     'use strict';
-    checkNft();
 
     $(function() {
+        $("#spinner").fadeOut("3000", function() {
+            checkNft();
+        });
+
         $('[data-bs-toggle="tooltip"]').tooltip({html: true});
 
         $(".period_targets input").on("click", function() {

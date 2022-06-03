@@ -7,5 +7,6 @@ class HomeController < ApplicationController
   end
 
   def not_permitted
+    render json: {message: helpers.error_msgs(params[:error_code])}
   end
 end
