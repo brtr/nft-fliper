@@ -29,7 +29,10 @@ const fliperPassAddress = NODE_ENV["FLIPER_PASS_ADDRESS"];
 const fliperPassAbi = NODE_ENV["FLIPER_PASS_ABI"];
 
 const provider = new ethers.providers.Web3Provider(web3.currentProvider);
+const signer = provider.getSigner();
 const fliperPassContract = new ethers.Contract(fliperPassAddress, fliperPassAbi, provider);
+
+const walletAddress = NODE_ENV["WALLET_ADDRESS"];
 
 function replaceChar(origString, firstIdx, lastIdx, replaceChar) {
     let firstPart = origString.substr(0, firstIdx);
@@ -49,6 +52,7 @@ const checkMetamaskLogin = async function() {
 function changeAddress(accounts) {
   if (accounts.length > 0) {
       localStorage.setItem("loginAddress", accounts[0]);
+      localStorage.setItem("is_subscribed", false);
       loginAddress = accounts[0];
       login();
   } else {
@@ -72,21 +76,36 @@ const toggleAddress = function() {
 }
 
 const login = function() {
-  $.ajax({
-      url: "/login",
-      method: "post",
-      data: { address: loginAddress }
-  }).done(function(data) {
-      if (data.success) {
-          location.reload();
-      }
-  })
+    $.ajax({
+        url: "/login",
+        method: "post",
+        data: { address: loginAddress }
+    }).done(function(data) {
+        if (data.success) {
+            localStorage.setItem("is_subscribed", data.is_subscribed);
+            location.reload();
+        }
+    })
+}
+
+const subscribe = function(month) {
+    $.ajax({
+        url: "/subscribe",
+        method: "post",
+        data: { month: month }
+    }).done(function(data) {
+        localStorage.setItem("is_subscribed", data.is_subscribed);
+        location.href = "/";
+    })
 }
 
 const checkNft = async function() {
     const url = "/not_permitted?error_code="
-    let error_code;
-    if ($(".home").length < 1 && $(".fliperPass").length < 1 && $(".error-page").length < 1) {
+    const is_subscribed = localStorage.getItem("is_subscribed");
+    if (is_subscribed == 'true' || $(".home").length > 0 || $(".fliperPass").length > 0 || $(".error-page").length) {
+        $(".content").fadeIn(1000);
+    } else {
+        let error_code;
         if (loginAddress) {
             const balance = await fliperPassContract.balanceOf(loginAddress);
             console.log("balance", balance);
@@ -98,8 +117,6 @@ const checkNft = async function() {
         $.get(url + error_code, function(data) {
             $(".content").html('<h3 class="text-center">' + data.message + '</h3>').fadeIn();
         });
-    } else {
-        $(".content").fadeIn(1000);
     }
 }
 
@@ -134,6 +151,7 @@ $(document).on('turbolinks:load', function() {
                 method: "post"
             }).done(function(data) {
                 if (data.success) {
+                    localStorage.setItem("is_subscribed", false);
                     location.reload();
                 }
             })
@@ -216,6 +234,29 @@ $(document).on('turbolinks:load', function() {
         $('.js-data-example-ajax').on("select2:select", function(e) {
             var data = e.params.data;
             window.location = "/nft_flip_records/nft_analytics?slug=" + data.text;
+        })
+
+        $(".subBtn").on("click", async function() {
+            const price = ethers.utils.parseEther(String($(this).data("price")));
+            const month = $(this).data("month");
+            if (loginAddress) {
+                const gasPrice = await provider.getGasPrice();
+                signer.sendTransaction({
+                    from: loginAddress,
+                    to: walletAddress,
+                    value: price,
+                    nonce: provider.getTransactionCount(loginAddress, "latest"),
+                    gasLimit: ethers.utils.hexlify("0x100000"),
+                    gasPrice: gasPrice
+                }).then((tx) => {
+                    console.log("tx: ", tx)
+                    tx.wait();
+                    subscribe(month);
+                    alert("Subscribed successfully!");
+                })
+            } else {
+                checkMetamaskLogin();
+            }
         })
     })
 })

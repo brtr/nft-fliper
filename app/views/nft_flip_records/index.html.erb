@@ -1,4 +1,4 @@
-<div class="container home">
+<div class="container home mb-5">
   <section class="row mb-5">
     <div class="col-6">
       <h1><%= t("views.labels.desc_1") %></h1>
@@ -44,7 +44,7 @@
     </table>
   </section>
   <section class="mt-5 row justify-content-center mx-4">
-    <h2 class="text-center mb-3"><%= t("views.title.top_collections") %></h2>
+    <h2 class="text-center my-5"><%= t("views.title.top_collections") %></h2>
     <% @top_collections.each_with_index do |collection, idx| %>
       <div class="card col-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 me-5" style="max-width:25%">
         <div class="card-body">
@@ -62,5 +62,13 @@
         </div>
       </div>
     <% end %>
+  </section>
+  <section class="m-4 text-center">
+    <h1 class="mb-3"><%= t("views.title.subscribe_to") %></h1>
+    <h3><%= t("views.labels.subscribe_intro") %></h3>
+    <div class="mt-5">
+      <a class="btn btn-primary me-3 subBtn" data-price="<%= ENV["ONE_MONTH_PRICE"] %>" data-month="1"><%= "#{ENV["ONE_MONTH_PRICE"]} ETH / #{t("duration.months", count: 1)}" %></a>
+      <a class="btn btn-primary subBtn" data-price="<%= ENV["SIX_MONTH_PRICE"] %>" data-month="6"><%= "#{ENV["SIX_MONTH_PRICE"]} ETH / #{t("duration.months", count: 6)}" %></a>
+    </div>
   </section>
 </div>

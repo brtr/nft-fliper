@@ -43,6 +43,7 @@ en:
     title:
       latest_10_flip_data: Latest 10 flip data
       top_collections: Top collections by flip successful rate
+      subscribe_to: Subscribe to NFT Fliper
     actions:
       submit: Submit
     labels:
@@ -79,9 +80,11 @@ en:
       live_view: Live View
       desc_1: Multi-chain flip data analysis platform
       desc_2: NFT Fliper is a platform focused on mining good flipers, providing users with flip trends, getting the latest flip information in a timely manner, and working hard to assist everyone to become a better fliper
+      subscribe_intro: Choose from the following options
   duration:
     days: "%{count} days"
     hours: "%{count} hours"
+    months: "%{count} M"
   datetime:
     prompts:
       hour: Hourly

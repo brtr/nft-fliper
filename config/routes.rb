@@ -37,4 +37,5 @@ Rails.application.routes.draw do
   get '/extensions', to: "home#extensions", as: :extensions
   get '/fliper_pass_nft', to: "home#fliper_pass_nft", as: :fliper_pass_nft
   get '/not_permitted', to: "home#not_permitted", as: :not_permitted
+  post '/subscribe', to: "users#subscribe", as: :subscribe
 end
