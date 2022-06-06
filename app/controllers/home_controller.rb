@@ -1,12 +1,13 @@
 class HomeController < ApplicationController
-  def extensions
-    @page_index = 4
-  end
-
   def fliper_pass_nft
+    @page_index = 4
   end
 
   def not_permitted
     render json: {message: helpers.error_msgs(params[:error_code])}
+  end
+
+  def staking
+    @page_index = 5
   end
 end

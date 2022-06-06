@@ -34,8 +34,8 @@ Rails.application.routes.draw do
   post 'login', to: "users#login", as: :login
   post 'logout', to: "users#logout", as: :logout
   get '/users/:id/nfts', to: "users#nfts", as: :user_nfts
-  get '/extensions', to: "home#extensions", as: :extensions
   get '/fliper_pass_nft', to: "home#fliper_pass_nft", as: :fliper_pass_nft
   get '/not_permitted', to: "home#not_permitted", as: :not_permitted
   post '/subscribe', to: "users#subscribe", as: :subscribe
+  get '/staking', to: "home#staking", as: :staking
 end

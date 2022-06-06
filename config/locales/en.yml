@@ -40,12 +40,15 @@ en:
     headers:
       home: Home
       trending: Trending
+      stake: Stake
     title:
       latest_10_flip_data: Latest 10 flip data
       top_collections: Top collections by flip successful rate
       subscribe_to: Subscribe to NFT Fliper
     actions:
       submit: Submit
+      stake: Stake
+      claim: Claim
     labels:
       top_profit: "%{period} Top Profit"
       top_loss: "%{period} Top Loss"

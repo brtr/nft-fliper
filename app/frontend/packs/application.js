@@ -27,12 +27,25 @@ window.$ = $;
 let loginAddress = localStorage.getItem("loginAddress");
 const fliperPassAddress = NODE_ENV["FLIPER_PASS_ADDRESS"];
 const fliperPassAbi = NODE_ENV["FLIPER_PASS_ABI"];
+const fliperAddress = NODE_ENV["FLIPER_ADDRESS"];
+const fliperAbi = NODE_ENV["FLIPER_ABI"];
+const stakingAddress = NODE_ENV["STAKING_ADDRESS"];
+const stakingAbi = NODE_ENV["STAKING_ABI"];
 
 const provider = new ethers.providers.Web3Provider(web3.currentProvider);
 const signer = provider.getSigner();
 const fliperPassContract = new ethers.Contract(fliperPassAddress, fliperPassAbi, provider);
-
+const fliperContract = new ethers.Contract(fliperAddress, fliperAbi, provider);
+const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, provider);
+const stakingWithSigner = stakingContract.connect(signer);
 const walletAddress = NODE_ENV["WALLET_ADDRESS"];
+
+function fetchErrMsg (err) {
+    const errMsg = err.error ? err.error.message : err.message;
+    console.log("errMsg", errMsg);
+    alert('Error:  ' + errMsg.split(/:(.*)/s)[1]);
+    $("#spinner").hide();
+}
 
 function replaceChar(origString, firstIdx, lastIdx, replaceChar) {
     let firstPart = origString.substr(0, firstIdx);
@@ -240,22 +253,85 @@ $(document).on('turbolinks:load', function() {
             const price = ethers.utils.parseEther(String($(this).data("price")));
             const month = $(this).data("month");
             if (loginAddress) {
-                const gasPrice = await provider.getGasPrice();
-                signer.sendTransaction({
-                    from: loginAddress,
-                    to: walletAddress,
-                    value: price,
-                    nonce: provider.getTransactionCount(loginAddress, "latest"),
-                    gasLimit: ethers.utils.hexlify("0x100000"),
-                    gasPrice: gasPrice
-                }).then((tx) => {
-                    console.log("tx: ", tx)
-                    tx.wait();
-                    subscribe(month);
-                    alert("Subscribed successfully!");
-                })
+                let balance = await fliperContract.balanceOf(loginAddress);
+                balance = parseFloat(balance);
+                console.log("balance", balance);
+                if (balance < price) {
+                    alert("You don't have enough tokens");
+                } else {
+                    console.log("subscribe", month);
+                    fliperContract.connect(signer).transfer(walletAddress, price)
+                    .then(async (tx) => {
+                        console.log("tx: ", tx)
+                        await tx.wait();
+                        subscribe(month);
+                        alert("Subscribed successfully!");
+                    })
+                }
             } else {
                 checkMetamaskLogin();
+            }
+        })
+
+        $(".stakeBtn").on("click", async function() {
+            $("#spinner").fadeIn();
+            const tokenId = $("#stakeTokenId").val();
+            try {
+                if (parseInt(tokenId) > 0) {
+                    const owner = await fliperPassContract.ownerOf(tokenId);
+                    if (owner == loginAddress) {
+                        const isApproved = await fliperPassContract.isApprovedForAll(loginAddress, stakingAddress);
+                        console.log("isApproved", isApproved);
+                        if (isApproved) {
+                            stakingWithSigner.staking(tokenId)
+                            .then(async (tx) => {
+                                console.log("tx: ", tx)
+                                await tx.wait();
+                                alert("Stake successfully!");
+                                $("#spinner").fadeOut();
+                            })
+                        } else {
+                            fliperPassContract.connect(signer).setApprovalForAll(stakingAddress, true)
+                            .then(async (tx) => {
+                                console.log("tx: ", tx);
+                                await tx.wait();
+                                stakingWithSigner.staking(tokenId)
+                                .then(async (tx) => {
+                                    console.log("tx: ", tx)
+                                    await tx.wait();
+                                    alert("Stake successfully!");
+                                    $("#spinner").fadeOut();
+                                })
+                            })
+                        }
+                    }
+                    else {
+                        alert("That's not your NFT!");
+                        $("#spinner").fadeOut();
+                    }
+                }
+            } catch (err) {
+                fetchErrMsg(err);
+                location.reload();
+            }
+        })
+
+        $(".unstakeBtn").on("click", async function() {
+            $("#spinner").fadeIn();
+            const tokenId = $("#unstakeTokenId").val();
+            console.log("hello");
+            if (parseInt(tokenId) > 0) {
+                stakingWithSigner.claim(tokenId)
+                .then(async (tx) => {
+                    console.log("tx: ", tx)
+                    await tx.wait();
+                    alert("Unstake successfully!");
+                    $("#spinner").fadeOut();
+                }).catch(err => {
+                    console.log("error", err);
+                    fetchErrMsg(err);
+                    location.reload();
+                })
             }
         })
     })

@@ -9,6 +9,7 @@ zh-CN:
     headers:
       home: 首页
       trending: 趋势
+      stake: 质押
     title:
       latest_10_flip_data: 最新的10条盈利Flip数据
       top_collections: Flip成功率最高的个NFT
@@ -22,6 +23,8 @@ zh-CN:
       filter: 过滤
       connect_metamask: 用MetaMask登录
       reset: 还原
+      stake: 质押
+      claim: 赎回
     labels:
       rank: 排名
       count: 次数
