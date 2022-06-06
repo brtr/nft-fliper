@@ -15,7 +15,7 @@ class SendNotificationToDiscordJob < ApplicationJob
         sleep 1
       end
 
-      DiscordService.send_notification("FLIP推送次数排行", result.sort_by{|r| r[1]}.reverse.map{|r| r.join(" - ")}.join("\n"), ENV["FLIP_COUNT_WEBHOOK"]) if result.any?
+      DiscordService.send_notification("FLIP推送次数排行", result.sort_by{|r| r[1]}.reverse.first(10).map{|r| r.join(" - ")}.join("\n"), ENV["FLIP_COUNT_WEBHOOK"]) if result.any?
     end
   end
 end

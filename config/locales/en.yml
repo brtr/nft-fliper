@@ -81,6 +81,18 @@ en:
       desc_1: Multi-chain flip data analysis platform
       desc_2: NFT Fliper is a platform focused on mining good flipers, providing users with flip trends, getting the latest flip information in a timely manner, and working hard to assist everyone to become a better fliper
       subscribe_intro: Choose from the following options
+      fliper_pass_intro_1: As an access pass to Flipper NFT, ownership of Flipper Pass allows you to use all the functions all over the current platform, which empowers you to track real-time flip data, learn the latest flip trends, discover the best NFT collections , follow the flip masters, and retrieve the flip data statistics and NFT real-time transaction data.
+      fliper_pass_intro_2: Flipper pass has 3 Tiers - Silver, Gold & Platinum. Silver Pss has launched with unrestricted access to all the current features. In the near future, existing membership cards can be upgraded to enjoy new benefits and new features.
+      flip_flow_intro: Keep track of up-to-date Flip. Spot the opportunities for Flip.
+      trending_intro: Discover new flip trends, learn what NFT people are flipping, analyze the successful probability and find the best opportunities for you.
+      fliper_intro: Seek out the hidden Flipper masters and see how they operate to form your own style to success.
+      live_view_intro: Observe the real-time listing orders of NFT and trade
+      roadmap_1: "Flipper followings: to help you follow the exilencent flippers and find the potentials."
+      roadmap_2: "Discord bots: to notify you of the flip trends, tracking & transactions."
+      roadmap_3: Pledge the Flipper Pass, earn points and get upgraded.
+      roadmap_4: Make the first move to seize the new opportunities with real-time flip trends.
+      roadmap_5: Cross-chain NFT Flip integration.
+      roadmap_6: Automate the flip process through automatic purchases and on-demand listings.
   duration:
     days: "%{count} days"
     hours: "%{count} hours"
@@ -91,3 +103,8 @@ en:
       day: Daily
       week: Weekly
       month: Monthly
+  errors:
+    messages:
+      no_nfts_or_subscriptions: You don't have any NFTs or subscriptions.
+      need_to_login: You need to login to see this page.
+      something_went_wrong: Something went wrong

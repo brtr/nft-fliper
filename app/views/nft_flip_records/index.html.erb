@@ -63,12 +63,12 @@
       </div>
     <% end %>
   </section>
-  <section class="m-4 text-center">
+  <section class="m-4 text-center hide">
     <h1 class="mb-3"><%= t("views.title.subscribe_to") %></h1>
     <h3><%= t("views.labels.subscribe_intro") %></h3>
     <div class="mt-5">
-      <a class="btn btn-primary me-3 subBtn" data-price="<%= ENV["ONE_MONTH_PRICE"] %>" data-month="1"><%= "#{ENV["ONE_MONTH_PRICE"]} ETH / #{t("duration.months", count: 1)}" %></a>
-      <a class="btn btn-primary subBtn" data-price="<%= ENV["SIX_MONTH_PRICE"] %>" data-month="6"><%= "#{ENV["SIX_MONTH_PRICE"]} ETH / #{t("duration.months", count: 6)}" %></a>
+      <a class="btn btn-primary me-3 subBtn" data-price="<%= ENV["ONE_MONTH_PRICE"] %>" data-month="1"><%= "#{ENV["ONE_MONTH_PRICE"]} FLIPER / #{t("duration.months", count: 1)}" %></a>
+      <a class="btn btn-primary subBtn" data-price="<%= ENV["SIX_MONTH_PRICE"] %>" data-month="6"><%= "#{ENV["SIX_MONTH_PRICE"]} FLIPER / #{t("duration.months", count: 6)}" %></a>
     </div>
   </section>
 </div>

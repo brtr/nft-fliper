@@ -60,11 +60,11 @@ module ApplicationHelper
   def error_msgs(error_code)
     case error_code.to_i
     when 1
-      "You don't have any NFTs or subscriptions."
+      I18n.t("errors.messages.no_nfts_or_subscriptions")
     when 2
-      "You need to login to see this page."
+      I18n.t("errors.messages.need_to_login")
     else
-      "Something went wrong"
+      I18n.t("errors.messages.something_went_wrong")
     end
   end
 end

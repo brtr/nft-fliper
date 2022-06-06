@@ -2,8 +2,8 @@
   <section>
     <h1>Fliper Pass</h1>
     <div class="mx-5 mt-4">
-      <p>Fliper Pass 作为Fliper NFT 的通行证， 拥有即可使用目前平台的所有的功能， 包括实时的flip 数据， 最新的flip 趋势， 发现适合flip的NFT， 挖掘flip 高手， flip 数据统计以及NFT 实时交易数据。</p>
-      <p>Fliper Pass 分为银卡， 金卡 和 白金卡， 目前推出银卡， 能够使用平台的所有功能。 未来随着新功能的推出， 可以对现有的会员卡进行升级， 从而享有新的权益。</p>
+      <p><%= t("views.labels.fliper_pass_intro_1") %></p>
+      <p><%= t("views.labels.fliper_pass_intro_2") %></p>
     </div>
   </section>
   <section>
@@ -11,7 +11,7 @@
     <div class="row mt-5">
       <div class="col-7 my-auto">
         <h2>Flip Flow</h2>
-        <p>查看最新的flip数据， 寻找flip的机会</p>
+        <p><%= t("views.labels.flip_flow_intro") %></p>
       </div>
       <div class="col-5">
         <%= image_tag "flipflow.png", width: "100%" %>
@@ -25,13 +25,13 @@
       </div>
       <div class="col-7 my-auto">
         <h2>Trending</h2>
-        <p>发现新的flip 趋势， 看看大家都在哪些NFT中进行flip，分析flip的成功率， 找到适合你的机会</p>
+        <p><%= t("views.labels.trending_intro") %></p>
       </div>
     </div>
     <div class="row mt-5">
       <div class="col-7 my-auto">
         <h2>Fliper</h2>
-        <p>找到隐藏的Fliper 高手， 看看他们都是怎么操作的， 从而形成你自己的风格</p>
+        <p><%= t("views.labels.fliper_intro") %></p>
       </div>
       <div class="col-5">
         <%= image_tag "fliper1.png", width: "100%" %>
@@ -44,7 +44,7 @@
       </div>
       <div class="col-7 my-auto">
         <h2>Live View</h2>
-        <p>观察NFT的实时挂单情况， 进行NFT的交易</p>
+        <p><%= t("views.labels.live_view_intro") %></p>
       </div>
     </div>
   </section>
@@ -54,27 +54,27 @@
       <ul class="list-group text-start">
         <li class="list-group-item bg-none border-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square align-middle me-2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-          Fliper 关注， 帮助你跟踪优秀fliper的操作， 发现潜在的flip机会
+          <%= t("views.labels.roadmap_1") %>
         </li>
         <li class="list-group-item bg-none border-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square align-middle me-2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-          discord 机器人： 包含flip 趋势提醒， 跟踪提醒， 交易提醒
+          <%= t("views.labels.roadmap_2") %>
         </li>
         <li class="list-group-item bg-none border-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square align-middle me-2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-          Fliper Pass 质押， 累积积分， 升级会员卡
+          <%= t("views.labels.roadmap_3") %>
         </li>
         <li class="list-group-item bg-none border-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square align-middle me-2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-          实时Flip 趋势， 先人一步， 发现flip的机会
+          <%= t("views.labels.roadmap_4") %>
         </li>
         <li class="list-group-item bg-none border-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square align-middle me-2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-          跨链NFT Flip集成
+          <%= t("views.labels.roadmap_5") %>
         </li>
         <li class="list-group-item bg-none border-0">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square align-middle me-2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-          Flip 自动买入和按需挂单， 实现flip 自动化
+          <%= t("views.labels.roadmap_6") %>
         </li>
       </ul>
     </div>

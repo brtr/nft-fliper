@@ -61,6 +61,18 @@ zh-CN:
       desc_1: 跨链flip数据分析平台
       desc_2: Nft flipper 是一个专注于挖掘优秀的fliper的平台， 为用户提供flip趋势， 及时获取最新的flip信息， 并努力协助所有人成为一个更好的fliper
       subscribe_intro: 请选择以下套餐
+      fliper_pass_intro_1: Fliper Pass 作为Fliper NFT 的通行证， 拥有即可使用目前平台的所有的功能， 包括实时的flip 数据， 最新的flip 趋势， 发现适合flip的NFT， 挖掘flip 高手， flip 数据统计以及NFT 实时交易数据。
+      fliper_pass_intro_2: Fliper Pass 分为银卡， 金卡 和 白金卡， 目前推出银卡， 能够使用平台的所有功能。 未来随着新功能的推出， 可以对现有的会员卡进行升级， 从而享有新的权益。
+      flip_flow_intro: 查看最新的flip数据， 寻找flip的机会
+      trending_intro: 发现新的flip 趋势， 看看大家都在哪些NFT中进行flip，分析flip的成功率， 找到适合你的机会
+      fliper_intro: 找到隐藏的Fliper 高手， 看看他们都是怎么操作的， 从而形成你自己的风格
+      live_view_intro: 观察NFT的实时挂单情况， 进行NFT的交易
+      roadmap_1: Fliper 关注， 帮助你跟踪优秀fliper的操作， 发现潜在的flip机会
+      roadmap_2: discord 机器人： 包含flip 趋势提醒， 跟踪提醒， 交易提醒
+      roadmap_3: Fliper Pass 质押， 累积积分， 升级会员卡
+      roadmap_4: 实时Flip 趋势， 先人一步， 发现flip的机会
+      roadmap_5: 跨链NFT Flip集成
+      roadmap_6: Flip 自动买入和按需挂单， 实现flip 自动化
   date:
     abbr_day_names:
     - 周日
@@ -172,6 +184,9 @@ zh-CN:
       too_long: 过长（最长为 %{count} 个字符）
       too_short: 过短（最短为 %{count} 个字符）
       wrong_length: 长度非法（必须为 %{count} 个字符）
+      no_nfts_or_subscriptions: 你需要订阅或拥有NFT才能查看这个页面
+      need_to_login: 你需要登录钱包才能查看这个页面
+      something_went_wrong: 出了一点问题，请稍后再试
     template:
       body: 如下字段出现错误：
       header: 有 %{count} 个错误发生导致“%{model}”无法被保存。
