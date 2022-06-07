@@ -1,12 +1,12 @@
 <div class="container row text-center staking col-10 mx-auto">
-  <div class="col-6">
-    <%= label_tag "token_id" %>
-    <%= number_field_tag "stakeTokenId" %>
+  <div class="col-12">
+    <div class="ownTokens"></div>
     <a class="btn btn-primary stakeBtn"><%= t("views.actions.stake") %></a>
   </div>
-  <div class="col-6">
-    <%= label_tag "token_id" %>
-    <%= number_field_tag "unstakeTokenId" %>
+  <div class="col-12 mt-3">
+    <div class="stakedTokens"></div>
     <a class="btn btn-primary unstakeBtn"><%= t("views.actions.claim") %></a>
   </div>
 </div>
+
+<%= image_tag "token.png", class: "hide tokenImg" %>

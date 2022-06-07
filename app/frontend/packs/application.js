@@ -40,6 +40,9 @@ const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, provider
 const stakingWithSigner = stakingContract.connect(signer);
 const walletAddress = NODE_ENV["WALLET_ADDRESS"];
 
+let owntokens = [];
+let stakedtokens = [];
+
 function fetchErrMsg (err) {
     const errMsg = err.error ? err.error.message : err.message;
     console.log("errMsg", errMsg);
@@ -122,15 +125,42 @@ const checkNft = async function() {
         if (loginAddress) {
             const balance = await fliperPassContract.balanceOf(loginAddress);
             console.log("balance", balance);
-            if (balance < 1) { error_code = 1}
+            const is_owned_token = await fliperPassContract.isOwnedToken(loginAddress);
+            console.log("is_owned_token", is_owned_token);
+            if (balance < 1 && !is_owned_token) { error_code = 1}
         } else {
             error_code = 2;
         }
 
-        $.get(url + error_code, function(data) {
-            $(".content").html('<h3 class="text-center">' + data.message + '</h3>').fadeIn();
-        });
+        if (error_code) {
+            $.get(url + error_code, function(data) {
+                $(".content").html('<h3 class="text-center">' + data.message + '</h3>').fadeIn();
+            });
+        } else {
+            $(".content").fadeIn(1000);
+        }
     }
+}
+
+const getNfts = async function() {
+    if (loginAddress) {
+        const tokens = await fliperPassContract.getOwnerTokens(loginAddress);
+        console.log("tokens", tokens);
+        if (tokens.length > 0) {
+            const stakedTokens = tokens.filter((token) => token.isStaked)
+            const ownTokens = tokens.filter((token) => !token.isStaked)
+
+            addTokenToBlock("stakedToken", stakedTokens);
+            addTokenToBlock("ownToken", ownTokens);
+        }
+    }
+}
+
+const addTokenToBlock = function(t_type, tokens) {
+    const imgPath = $(".tokenImg").attr("src");
+    $.each(tokens, function(_idx, token) {
+        $(`.${t_type}s`).append("<span class='" + t_type + "' data-tokenId='" + token.tokenId + "' ><img width='50' height='50' src=' " + imgPath +  "' /><br/>" + token.tokenId + "</span>")
+    })
 }
 
 $(document).on('turbolinks:load', function() {
@@ -275,39 +305,31 @@ $(document).on('turbolinks:load', function() {
 
         $(".stakeBtn").on("click", async function() {
             $("#spinner").fadeIn();
-            const tokenId = $("#stakeTokenId").val();
             try {
-                if (parseInt(tokenId) > 0) {
-                    const owner = await fliperPassContract.ownerOf(tokenId);
-                    if (owner == loginAddress) {
-                        const isApproved = await fliperPassContract.isApprovedForAll(loginAddress, stakingAddress);
-                        console.log("isApproved", isApproved);
-                        if (isApproved) {
-                            stakingWithSigner.staking(tokenId)
+                if (owntokens > 0) {
+                    const isApproved = await fliperPassContract.isApprovedForAll(loginAddress, stakingAddress);
+                    console.log("isApproved", isApproved);
+                    if (isApproved) {
+                        stakingWithSigner.staking(owntokens)
+                        .then(async (tx) => {
+                            console.log("tx: ", tx)
+                            await tx.wait();
+                            alert("Stake successfully!");
+                            location.reload();
+                        })
+                    } else {
+                        fliperPassContract.connect(signer).setApprovalForAll(stakingAddress, true)
+                        .then(async (tx) => {
+                            console.log("tx: ", tx);
+                            await tx.wait();
+                            stakingWithSigner.staking(owntokens)
                             .then(async (tx) => {
                                 console.log("tx: ", tx)
                                 await tx.wait();
                                 alert("Stake successfully!");
-                                $("#spinner").fadeOut();
+                                location.reload();
                             })
-                        } else {
-                            fliperPassContract.connect(signer).setApprovalForAll(stakingAddress, true)
-                            .then(async (tx) => {
-                                console.log("tx: ", tx);
-                                await tx.wait();
-                                stakingWithSigner.staking(tokenId)
-                                .then(async (tx) => {
-                                    console.log("tx: ", tx)
-                                    await tx.wait();
-                                    alert("Stake successfully!");
-                                    $("#spinner").fadeOut();
-                                })
-                            })
-                        }
-                    }
-                    else {
-                        alert("That's not your NFT!");
-                        $("#spinner").fadeOut();
+                        })
                     }
                 }
             } catch (err) {
@@ -318,21 +340,56 @@ $(document).on('turbolinks:load', function() {
 
         $(".unstakeBtn").on("click", async function() {
             $("#spinner").fadeIn();
-            const tokenId = $("#unstakeTokenId").val();
-            console.log("hello");
-            if (parseInt(tokenId) > 0) {
-                stakingWithSigner.claim(tokenId)
+            if (stakedtokens > 0) {
+                stakingWithSigner.claim(stakedtokens)
                 .then(async (tx) => {
                     console.log("tx: ", tx)
                     await tx.wait();
+
                     alert("Unstake successfully!");
-                    $("#spinner").fadeOut();
+                    location.reload();
                 }).catch(err => {
                     console.log("error", err);
                     fetchErrMsg(err);
                     location.reload();
                 })
             }
+        })
+
+        if ($(".staking").length > 0) {
+            getNfts();
+        }
+
+        $(document).on("click", ".ownToken", function() {
+            $(this).toggleClass("selected");
+            const tokenId = $(this).data("tokenid")
+            console.log("tokenId", tokenId);
+            
+            if ($(this).hasClass("selected")) {
+                owntokens.push(tokenId);
+            } else {
+                owntokens = owntokens.filter(function(item) {
+                    return item !== tokenId;
+                })
+            }
+
+            console.log("owntokens", owntokens);
+        })
+
+        $(document).on("click", ".stakedToken", function() {
+            $(this).toggleClass("selected");
+            const tokenId = $(this).data("tokenid");
+            console.log("tokenId", tokenId);
+            
+            if ($(this).hasClass("selected")) {
+                stakedtokens.push(tokenId);
+            } else {
+                stakedtokens = stakedtokens.filter(function(item) {
+                    return item !== tokenId;
+                })
+            }
+
+            console.log("stakedtokens", stakedtokens);
         })
     })
 })
