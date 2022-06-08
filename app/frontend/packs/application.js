@@ -124,7 +124,7 @@ const checkNft = async function() {
         let error_code;
         if (loginAddress) {
             const balance = await fliperPassContract.balanceOf(loginAddress);
-            console.log("balance", balance);
+            console.log("nft balance", balance);
             const is_owned_token = await fliperPassContract.isOwnedToken(loginAddress);
             console.log("is_owned_token", is_owned_token);
             if (balance < 1 && !is_owned_token) { error_code = 1}
@@ -153,13 +153,18 @@ const getNfts = async function() {
             addTokenToBlock("stakedToken", stakedTokens);
             addTokenToBlock("ownToken", ownTokens);
         }
+
+        let balance = await fliperContract.balanceOf(loginAddress);
+        balance = parseFloat(ethers.utils.formatEther(balance))
+        console.log("fliper balance: ", balance);
+        $("#fliperQty").text(balance);
     }
 }
 
 const addTokenToBlock = function(t_type, tokens) {
     const imgPath = $(".tokenImg").attr("src");
     $.each(tokens, function(_idx, token) {
-        $(`.${t_type}s`).append("<span class='" + t_type + "' data-tokenId='" + token.tokenId + "' ><img width='50' height='50' src=' " + imgPath +  "' /><br/>" + token.tokenId + "</span>")
+        $(`.${t_type}s`).append("<span class='" + t_type + "' data-tokenId='" + token.tokenId + "' ><img src=' " + imgPath +  "' /><br/> Token ID: " + token.tokenId + "</span>")
     })
 }
 
@@ -345,8 +350,9 @@ $(document).on('turbolinks:load', function() {
                 .then(async (tx) => {
                     console.log("tx: ", tx)
                     await tx.wait();
-
-                    alert("Unstake successfully!");
+                    let qty = await stakingContract.getLastClaimAmount(loginAddress);
+                    qty = parseFloat(ethers.utils.formatEther(qty))
+                    alert("Claim successfully! You have received " + qty + " tokens");
                     location.reload();
                 }).catch(err => {
                     console.log("error", err);

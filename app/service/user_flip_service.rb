@@ -17,8 +17,8 @@ class UserFlipService
       trades.group_by{|t| [t.collection, t.token_address]}.each do |k, v|
         next if v.size < 2
         v.each do |trade|
-          next unless trade.from_address == address
-          last_trade = v.select{|x| x.to_address == address && x.trade_time < trade.trade_time}.first
+          next unless trade.from_address.downcase == address.downcase
+          last_trade = v.select{|x| x.to_address.downcase == address.downcase && x.trade_time < trade.trade_time}.first
           next unless last_trade
           revenue = trade.price - last_trade.price
           roi = (revenue / last_trade.price * 100).round(2)

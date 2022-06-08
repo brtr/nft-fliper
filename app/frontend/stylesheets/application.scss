@@ -118,7 +118,6 @@
 .ownTokens, .stakedTokens {
     min-width:200px;
     min-height:200px;
-    border: 1px solid #9096a5;
     margin-bottom: 2rem;
     text-align: left;
 }
@@ -128,8 +127,14 @@
     display: inline-block;
     cursor: pointer;
     text-align: center;
+
+    img {
+        height: 200px;
+        width: 100%;
+        border: 3px solid #fff;
+    }
 }
 
 .selected {
-    border: 1px solid #a5bbf1;
+    border: 3px solid #0975ef;
 }
