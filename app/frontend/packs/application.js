@@ -43,6 +43,8 @@ const walletAddress = NODE_ENV["WALLET_ADDRESS"];
 let owntokens = [];
 let stakedtokens = [];
 
+const TargetChain = {id: "4", name: "rinkeby"};
+
 function fetchErrMsg (err) {
     const errMsg = err.error ? err.error.message : err.message;
     console.log("errMsg", errMsg);
@@ -397,5 +399,28 @@ $(document).on('turbolinks:load', function() {
 
             console.log("stakedtokens", stakedtokens);
         })
+    })
+
+     // detect Metamask account change
+     ethereum.on('accountsChanged', function (accounts) {
+        console.log('accountsChanges',accounts);
+        if (accounts.length > 0) {
+          localStorage.setItem("loginAddress", accounts[0]);
+          loginAddress = accounts[0];
+        } else {
+          localStorage.removeItem("loginAddress");
+          loginAddress = null;
+        }
+        location.reload();
+    });
+
+      // detect Network account change
+    ethereum.on('chainChanged', function(networkId){
+        console.log('networkChanged',networkId);
+        if (networkId != parseInt(TargetChain.id)) {
+          alert("We don't support this chain, please switch to " + TargetChain.name + " and refresh");
+        } else {
+            location.reload();
+        }
     })
 })
