@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_03_071411) do
+ActiveRecord::Schema.define(version: 2022_06_10_135428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -313,6 +313,16 @@ ActiveRecord::Schema.define(version: 2022_06_03_071411) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "user_points", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "points"
+    t.datetime "staking_time"
+    t.datetime "claim_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_points_on_user_id"
+  end
+
   create_table "user_trades", force: :cascade do |t|
     t.integer "user_address_id"
     t.string "collection"
@@ -334,6 +344,7 @@ ActiveRecord::Schema.define(version: 2022_06_03_071411) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "subscription_date"
+    t.integer "points", default: 0
   end
 
 end

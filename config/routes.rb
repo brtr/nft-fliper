@@ -38,4 +38,7 @@ Rails.application.routes.draw do
   get '/not_permitted', to: "home#not_permitted", as: :not_permitted
   post '/subscribe', to: "users#subscribe", as: :subscribe
   get '/staking', to: "home#staking", as: :staking
+  get '/mint', to: "home#mint", as: :mint
+  post '/users/stake_token', to: "users#stake_token", as: :stake_token
+  post '/users/claim_token', to: "users#claim_token", as: :claim_token
 end

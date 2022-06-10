@@ -190,6 +190,7 @@ zh-CN:
       no_nfts_or_subscriptions: 你需要订阅或拥有NFT才能查看这个页面
       need_to_login: 你需要登录钱包才能查看这个页面
       something_went_wrong: 出了一点问题，请稍后再试
+      not_in_whitelist: 你不在白名单不能mint
     template:
       body: 如下字段出现错误：
       header: 有 %{count} 个错误发生导致“%{model}”无法被保存。

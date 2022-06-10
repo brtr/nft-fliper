@@ -35,13 +35,13 @@ const stakingAbi = NODE_ENV["STAKING_ABI"];
 const provider = new ethers.providers.Web3Provider(web3.currentProvider);
 const signer = provider.getSigner();
 const fliperPassContract = new ethers.Contract(fliperPassAddress, fliperPassAbi, provider);
+const fliperPassWithSigner = fliperPassContract.connect(signer)
 const fliperContract = new ethers.Contract(fliperAddress, fliperAbi, provider);
 const stakingContract = new ethers.Contract(stakingAddress, stakingAbi, provider);
 const stakingWithSigner = stakingContract.connect(signer);
 const walletAddress = NODE_ENV["WALLET_ADDRESS"];
 
-let owntokens = [];
-let stakedtokens = [];
+let owntoken, stakedtoken;
 
 const TargetChain = {id: "4", name: "rinkeby"};
 
@@ -118,12 +118,19 @@ const subscribe = function(month) {
 }
 
 const checkNft = async function() {
+    let error_code;
     const url = "/not_permitted?error_code="
     const is_subscribed = localStorage.getItem("is_subscribed");
     if (is_subscribed == 'true' || $(".home").length > 0 || $(".fliperPass").length > 0 || $(".error-page").length) {
         $(".content").fadeIn(1000);
+    } else if ($(".mint").length > 0) {
+        if (loginAddress) {
+            const is_permitted = await fliperPassContract.isWhiteListForMint(loginAddress);
+            if (!is_permitted) { error_code = 3}
+        } else {
+            error_code = 2;
+        }
     } else {
-        let error_code;
         if (loginAddress) {
             const balance = await fliperPassContract.balanceOf(loginAddress);
             console.log("nft balance", balance);
@@ -133,27 +140,30 @@ const checkNft = async function() {
         } else {
             error_code = 2;
         }
+    }
 
-        if (error_code) {
-            $.get(url + error_code, function(data) {
-                $(".content").html('<h3 class="text-center">' + data.message + '</h3>').fadeIn();
-            });
-        } else {
-            $(".content").fadeIn(1000);
-        }
+    if (error_code) {
+        $.get(url + error_code, function(data) {
+            $(".content").html('<h3 class="text-center">' + data.message + '</h3>').fadeIn();
+        });
+    } else {
+        $(".content").fadeIn(1000);
+
+        const minted = await fliperPassContract.totalSupply();
+        $("#mintedQty").text(minted);
     }
 }
 
 const getNfts = async function() {
     if (loginAddress) {
-        const tokens = await fliperPassContract.getOwnerTokens(loginAddress);
-        console.log("tokens", tokens);
-        if (tokens.length > 0) {
-            const stakedTokens = tokens.filter((token) => token.isStaked)
-            const ownTokens = tokens.filter((token) => !token.isStaked)
-
-            addTokenToBlock("stakedToken", stakedTokens);
-            addTokenToBlock("ownToken", ownTokens);
+        const token = await fliperPassContract.getOwnerToken(loginAddress);
+        console.log("token", token);
+        if (token.tokenId > 0) {
+            if (token.isStaked) {
+                addTokenToBlock("stakedToken", token);
+            } else {
+                addTokenToBlock("ownToken", token);
+            }
         }
 
         let balance = await fliperContract.balanceOf(loginAddress);
@@ -163,10 +173,25 @@ const getNfts = async function() {
     }
 }
 
-const addTokenToBlock = function(t_type, tokens) {
+const addTokenToBlock = function(t_type, token) {
     const imgPath = $(".tokenImg").attr("src");
-    $.each(tokens, function(_idx, token) {
-        $(`.${t_type}s`).append("<span class='" + t_type + "' data-tokenId='" + token.tokenId + "' ><img src=' " + imgPath +  "' /><br/> Token ID: " + token.tokenId + "</span>")
+    $(`.${t_type}s`).append("<span class='" + t_type + "' data-tokenId='" + token.tokenId + "' ><img src=' " + imgPath +  "' /><br/> Token ID: " + token.tokenId + "</span>")
+}
+
+const stakeToken = function() {
+    stakingWithSigner.staking(owntoken)
+    .then(async (tx) => {
+        console.log("tx: ", tx)
+        await tx.wait();
+        $.ajax({
+            url: "/users/stake_token",
+            method: "post"
+        }).done(function(data) {
+            if (data.success) {
+                alert("Stake successfully!");
+                location.reload();
+            }
+        })
     })
 }
 
@@ -313,29 +338,17 @@ $(document).on('turbolinks:load', function() {
         $(".stakeBtn").on("click", async function() {
             $("#spinner").fadeIn();
             try {
-                if (owntokens > 0) {
+                if (owntoken) {
                     const isApproved = await fliperPassContract.isApprovedForAll(loginAddress, stakingAddress);
                     console.log("isApproved", isApproved);
                     if (isApproved) {
-                        stakingWithSigner.staking(owntokens)
-                        .then(async (tx) => {
-                            console.log("tx: ", tx)
-                            await tx.wait();
-                            alert("Stake successfully!");
-                            location.reload();
-                        })
+                        stakeToken()
                     } else {
-                        fliperPassContract.connect(signer).setApprovalForAll(stakingAddress, true)
+                        fliperPassWithSigner.setApprovalForAll(stakingAddress, true)
                         .then(async (tx) => {
                             console.log("tx: ", tx);
                             await tx.wait();
-                            stakingWithSigner.staking(owntokens)
-                            .then(async (tx) => {
-                                console.log("tx: ", tx)
-                                await tx.wait();
-                                alert("Stake successfully!");
-                                location.reload();
-                            })
+                            stakeToken()
                         })
                     }
                 }
@@ -347,15 +360,20 @@ $(document).on('turbolinks:load', function() {
 
         $(".unstakeBtn").on("click", async function() {
             $("#spinner").fadeIn();
-            if (stakedtokens > 0) {
-                stakingWithSigner.claim(stakedtokens)
+            if (stakedtoken) {
+                stakingWithSigner.claim(stakedtoken)
                 .then(async (tx) => {
                     console.log("tx: ", tx)
                     await tx.wait();
-                    let qty = await stakingContract.getLastClaimAmount(loginAddress);
-                    qty = parseFloat(ethers.utils.formatEther(qty))
-                    alert("Claim successfully! You have received " + qty + " tokens");
-                    location.reload();
+                    $.ajax({
+                        url: "/users/claim_token",
+                        method: "post"
+                    }).done(function(data) {
+                        if (data.success) {
+                            alert("Claim successfully! You have received " + data.points + " points");
+                            location.reload();
+                        }
+                    })
                 }).catch(err => {
                     console.log("error", err);
                     fetchErrMsg(err);
@@ -374,14 +392,12 @@ $(document).on('turbolinks:load', function() {
             console.log("tokenId", tokenId);
             
             if ($(this).hasClass("selected")) {
-                owntokens.push(tokenId);
+                owntoken = tokenId;
             } else {
-                owntokens = owntokens.filter(function(item) {
-                    return item !== tokenId;
-                })
+                owntoken = null;
             }
 
-            console.log("owntokens", owntokens);
+            console.log("owntoken", owntoken);
         })
 
         $(document).on("click", ".stakedToken", function() {
@@ -390,14 +406,31 @@ $(document).on('turbolinks:load', function() {
             console.log("tokenId", tokenId);
             
             if ($(this).hasClass("selected")) {
-                stakedtokens.push(tokenId);
+                stakedtoken = tokenId;
             } else {
-                stakedtokens = stakedtokens.filter(function(item) {
-                    return item !== tokenId;
-                })
+                stakedtoken = null;
             }
 
-            console.log("stakedtokens", stakedtokens);
+            console.log("stakedtoken", stakedtoken);
+        })
+
+        $(".mintBtn").on("click", function() {
+            $("#spinner").fadeIn();
+            if (loginAddress) {
+                fliperPassWithSigner.mint()
+                .then(async (tx) => {
+                    console.log("tx: ", tx)
+                    await tx.wait();
+                    alert("Mint successfully!");
+                    location.reload();
+                }).catch(err => {
+                    console.log("error", err);
+                    fetchErrMsg(err);
+                    location.reload();
+                })
+            } else {
+                checkMetamaskLogin();
+            }
         })
     })
 
@@ -407,6 +440,7 @@ $(document).on('turbolinks:load', function() {
         if (accounts.length > 0) {
           localStorage.setItem("loginAddress", accounts[0]);
           loginAddress = accounts[0];
+          login();
         } else {
           localStorage.removeItem("loginAddress");
           loginAddress = null;

@@ -63,6 +63,8 @@ module ApplicationHelper
       I18n.t("errors.messages.no_nfts_or_subscriptions")
     when 2
       I18n.t("errors.messages.need_to_login")
+    when 3
+      I18n.t("errors.messages.not_in_whitelist")
     else
       I18n.t("errors.messages.something_went_wrong")
     end

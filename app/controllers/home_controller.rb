@@ -10,4 +10,8 @@ class HomeController < ApplicationController
   def staking
     @page_index = 5
   end
+
+  def mint
+    @page_index = 6
+  end
 end

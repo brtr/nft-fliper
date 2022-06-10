@@ -110,4 +110,5 @@ en:
     messages:
       no_nfts_or_subscriptions: You don't have any NFTs or subscriptions.
       need_to_login: You need to login to see this page.
-      something_went_wrong: Something went wrong
+      something_went_wrong: Something went wrong.
+      not_in_whitelist: You're not in the whitelist.
