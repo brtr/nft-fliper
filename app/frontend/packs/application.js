@@ -43,7 +43,15 @@ const walletAddress = NODE_ENV["WALLET_ADDRESS"];
 
 let owntoken, stakedtoken;
 
-const TargetChain = {id: "4", name: "rinkeby"};
+const TargetChain = {id: "137", name: "matic"};
+
+async function checkChainId () {
+    const { chainId } = await provider.getNetwork();
+    if (chainId != parseInt(TargetChain.id)) {
+        alert("We don't support this chain, please switch to " + TargetChain.name + " and refresh");
+        return;
+    }
+}
 
 function fetchErrMsg (err) {
     const errMsg = err.error ? err.error.message : err.message;
@@ -210,6 +218,7 @@ $(document).on('turbolinks:load', function() {
         })
 
         toggleAddress();
+        checkChainId();
 
         $("#loginBtn").on("click", function(e){
             e.preventDefault();
@@ -336,9 +345,9 @@ $(document).on('turbolinks:load', function() {
         })
 
         $(".stakeBtn").on("click", async function() {
-            $("#spinner").fadeIn();
             try {
                 if (owntoken) {
+                    $("#spinner").fadeIn();
                     const isApproved = await fliperPassContract.isApprovedForAll(loginAddress, stakingAddress);
                     console.log("isApproved", isApproved);
                     if (isApproved) {
@@ -359,8 +368,8 @@ $(document).on('turbolinks:load', function() {
         })
 
         $(".unstakeBtn").on("click", async function() {
-            $("#spinner").fadeIn();
             if (stakedtoken) {
+                $("#spinner").fadeIn();
                 stakingWithSigner.claim(stakedtoken)
                 .then(async (tx) => {
                     console.log("tx: ", tx)
