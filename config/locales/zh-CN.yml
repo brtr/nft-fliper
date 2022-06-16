@@ -76,6 +76,20 @@ zh-CN:
       roadmap_4: 实时Flip 趋势， 先人一步， 发现flip的机会
       roadmap_5: 跨链NFT Flip集成
       roadmap_6: Flip 自动买入和按需挂单， 实现flip 自动化
+      question_1: Fliper Pass 的用途
+      question_2: 如何获得Fliper Pass
+      question_3: 订阅服务是什么
+      question_4: FLIPER 如何获得
+      question_5: 什么时候开放FLIPER的流动池
+      question_6: Fliper Pass 如何质押
+      question_7: Fliper 积分有什么作用
+      answer_1: Fliper Pass 作为Fliper NFT 的通行证， 拥有即可使用目前平台的所有的功能， 包括实时的flip 数据， 最新的flip 趋势， 发现适合flip的NFT， 挖掘flip 高手， flip 数据统计以及NFT 实时交易数据。
+      answer_2: 项目处于刚刚起步阶段， 目前我们采用赠送白名单的方式， 给种子用户发放Fliper Pass， 拥有白名单的用户， 可以在平台进行mint。
+      answer_3: 订阅服务是针对不想加入FLiper Pass， 但是又想尝试平台功能的用户准备的， 通过购买订阅服务， 可以在一定的期限内使用平台的所有功能。
+      answer_4: 目前只有两种方式可以获得： 1 通过质押Fliper Pass 累计积分获取 2 通过Swap 获取。
+      answer_5: 当前项目仍然处于内测阶段， 我们会根据情况， 开放FLIPER的购买和订阅功能， 敬起期待！
+      answer_6: 如果你拥有Fliper Pass， 可以直接在官网上面质押， 每小时结算一次积分， 累计到一定的积分后， 可以兑换FLIPER Token。
+      answer_7: Fliper 积分是平台内部的会员积分， 用于兑换Fliper Token， 以及未来推出的一系列会员权益。
   date:
     abbr_day_names:
     - 周日

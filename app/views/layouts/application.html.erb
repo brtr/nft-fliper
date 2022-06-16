@@ -63,6 +63,11 @@
               <span class="align-middle">Mint</span>
             <% end %>
           </div>
+          <div class="sidebar-item <%= @page_index == 7 ? 'active' : '' %>">
+            <%= link_to qanda_path, class: "sidebar-link" do %>
+              <span class="align-middle">Q&A</span>
+            <% end %>
+          </div>
           <div class="navbar-collapse collapse">
             <ul class="navbar-nav navbar-align">
               <li class="nav-item dropdown">

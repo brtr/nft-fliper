@@ -96,6 +96,20 @@ en:
       roadmap_4: Make the first move to seize the new opportunities with real-time flip trends.
       roadmap_5: Cross-chain NFT Flip integration.
       roadmap_6: Automate the flip process through automatic purchases and on-demand listings.
+      question_1: What is Fliper Pass used for
+      question_2: How can I get Fliper Pass
+      question_3: What is the subscription service
+      question_4: How can I get FLIPER
+      question_5: When will the Liquidity Pool be opened up
+      question_6: How can Fliper Pass be pledged
+      question_7: What can I do with Fliper points
+      answer_1: As an access pass to Flipper NFT, ownership of Flipper Pass allows you to use all the functions all over the current platform, which empowers you to track real-time flip data, learn the latest flip trends, discover the best NFT collections , follow the flip masters, and retrieve the flip data statistics and NFT real-time transaction data.
+      answer_2: The project is in the preliminary stage. At present, we distribute Fliper Pass to seeded users  in a manner of giving white lists. Users with white lists can mint on the platform.
+      answer_3: The subscription service is aimed for users who do not want to own the Fliper Pass but want to explore our platform. Through subscription, they can have unfettered access to all the functions within a certain period of time.
+      answer_4: There are only two ways you can get FLIPER： 1 Earn points through pledging Fliper Pass. 2 Use Swap.
+      answer_5: This project is currently in the Closed Beta test. We will launch the Purchase & Subscription features accordingly. Please stay tuned！
+      answer_6: If you own the Fliper Pass, you can directly pledge it on the official website to get the points settled every hour. Once you have accumulated certain points, you can exchange for the Fliper Tokens.
+      answer_7: As member points, Flipper points can be used to exchange for Fliper tokens and help you enjoy the member interests dropped in the future.
   duration:
     days: "%{count} days"
     hours: "%{count} hours"
