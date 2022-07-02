@@ -1,1 +1,1 @@
-server "54.242.32.122", user: "deploy", roles: %w(web job)
+server "54.172.255.242", user: "deploy", roles: %w(web job)

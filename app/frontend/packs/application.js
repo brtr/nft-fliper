@@ -129,7 +129,7 @@ const checkNft = async function() {
     let error_code;
     const url = "/not_permitted?error_code="
     const is_subscribed = localStorage.getItem("is_subscribed");
-    if (is_subscribed == 'true' || $(".home").length > 0 || $(".fliperPass").length > 0 || $(".error-page").length) {
+    if (is_subscribed == 'true' || $(".home").length > 0 || $(".fliperPass").length > 0) {
         $(".content").fadeIn(1000);
     } else if ($(".mint").length > 0) {
         if (loginAddress) {
