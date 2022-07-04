@@ -13,19 +13,6 @@ class UsersController < ApplicationController
     render json: {success: true}
   end
 
-  def nfts
-    user = User.find_by id: session[:user_id]
-    if user
-      sort_by = params[:sort_by] || "eth_volume_24h"
-      @sort = params[:sort] == "desc" ? "asc" : "desc"
-      nfts = user.nfts_views
-      @nfts = nfts.sort_by{|n| n.send(sort_by).send(:to_f)}
-      @nfts = @nfts.reverse if @sort == "asc"
-    else
-      redirect_to root_path
-    end
-  end
-
   def subscribe
     user = User.find_by id: session[:user_id]
     if user

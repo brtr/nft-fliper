@@ -33,11 +33,11 @@ class NftFlipRecord < ApplicationRecord
   end
 
   def self.successful
-    select{|n| n.roi_usd > 0 || n.same_coin? && n.roi > 0}
+    select{|n| n.roi_usd.to_f > 0 || n.same_coin? && n.roi.to_f > 0}
   end
 
   def self.failed
-    select{|n| n.roi_usd < 0 || n.same_coin? && n.roi < 0}
+    select{|n| n.roi_usd.to_f < 0 || n.same_coin? && n.roi.to_f < 0}
   end
 
   def self.successful_rate
@@ -68,9 +68,9 @@ class NftFlipRecord < ApplicationRecord
       NftFlipRecord.connection.select_all(sql)
     end
 
-    def get_best_flipas(fliper_address:, gap: 24*60*60, bought_start_date: 3.days.ago, slug: nil, number: 3)
+    def get_best_flipas(fliper_address:, gap: 24*60*60, bought_start_date: 3.days.ago, slug: nil, number: 3) 
       res = NftFlipRecord.where(fliper_address: fliper_address).where("roi > 0").group(:slug).count
-      puts "购买的collection情况： #{res.to_s}"
+      output = ["购买的collection情况： #{res.to_s}"]
       results = if slug.present?
         NftFlipRecord.where(fliper_address: fliper_address)
           .where("gap < ?", gap)
@@ -84,8 +84,11 @@ class NftFlipRecord < ApplicationRecord
           .order(revenue: :desc, gap: :asc).limit(number)
       end
       results.each do |_res|
-        puts "#{_res.bought_time.to_s}以$#{_res.bought_usd.to_i}买入， 在#{_res.sold_time.to_s}以#{_res.sold_usd.to_i}卖出（roi:#{_res.roi}/gap:#{(_res.gap/60.0/60).round(2)}h）   https://opensea.io/assets/#{_res.token_address}/#{_res.token_id}"
-      end;puts"------------------------"
+        output << "#{_res.bought_time.to_s}以$#{_res.bought_usd.to_i}买入， 在#{_res.sold_time.to_s}以#{_res.sold_usd.to_i}卖出（roi:#{_res.roi}/gap:#{(_res.gap/60.0/60).round(2)}h）   https://opensea.io/assets/#{_res.token_address}/#{_res.token_id}"
+      end
+      output << "--------------------------------"
+      puts output
+      output.join("\n")
     end
 
     def get_successful_flips_gap(nft: nil, from_date: nil, to_date: nil)

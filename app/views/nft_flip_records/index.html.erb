@@ -7,11 +7,11 @@
       </div>
     </div>
     <div class="col-6">
-      <a href="/nft_flip_records/nft_analytics?slug=<%= @top_collection[0] %>">
+      <%= link_to nft_analytics_nft_flip_records_path(slug: @top_collection[0]) do %>
         <div style="height:200px;">
           <%= image_tag @top_collection[6], class: "top-banner" if @top_collection[6] %>
         </div>
-      </a>
+      <% end %>
       <div class="text-black ms-3 text-end">
         <h3 class="pt-3 mb-3 fw-bolder"><%= @top_collection[0] %></h3>
         <p>

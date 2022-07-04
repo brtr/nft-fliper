@@ -75,6 +75,7 @@ group :test do
   gem 'database_rewinder'
   gem 'capybara-select-2', '~> 0.5.1'
   gem 'webmock'
+  gem 'rails-controller-testing'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

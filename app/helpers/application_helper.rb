@@ -69,4 +69,14 @@ module ApplicationHelper
       I18n.t("errors.messages.something_went_wrong")
     end
   end
+
+  def change_text_color(num)
+    if num > 0
+      "success"
+    elsif num < 0
+      "danger"
+    else
+      "dark"
+    end
+  end
 end

@@ -1,5 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe UserAddress, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:record) { create(:user_address) }
+
+  it "have a valid factory" do
+    expect(record).to be_valid
+  end
 end

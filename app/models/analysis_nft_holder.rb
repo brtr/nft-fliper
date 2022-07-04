@@ -1,2 +1,0 @@
-class AnalysisNftHolder < ApplicationRecord
-end

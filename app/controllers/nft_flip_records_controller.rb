@@ -7,7 +7,7 @@ class NftFlipRecordsController < ApplicationController
 
     collection_records = @data.today.group_by(&:slug)
     @top_collections = helpers.get_data(collection_records, count: 15)
-    @top_collection = @top_collections.first
+    @top_collection = @top_collections.first || []
 
     respond_to do |format|
       format.html
