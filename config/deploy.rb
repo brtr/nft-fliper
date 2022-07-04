@@ -43,6 +43,8 @@ namespace :deploy do
 
   task :compile_assets_locally do
     run_locally do
+      execute "rm -rf ./public/assets/*"
+      execute "rm -rf ./public/packs/*"
       with rails_env: fetch(:stage) do
         execute 'bundle exec rails assets:precompile'
       end
@@ -68,6 +70,8 @@ namespace :deploy do
       execute "rm -rf #{release_path}/public/packs/*"
       execute "cd #{release_path}; tar -zxvf #{release_path}/public/assets.tar.gz 1> /dev/null"
       execute "cd #{release_path}; tar -zxvf #{release_path}/public/packs.tar.gz 1> /dev/null"
+      execute "rm -rf #{release_path}/public/assets.tar.gz"
+      execute "rm -rf #{release_path}/public/packs.tar.gz"
     end
   end
 end
