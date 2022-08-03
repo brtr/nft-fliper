@@ -1,6 +1,7 @@
 require 'open-uri'
 
 class Nft < ApplicationRecord
+  has_many :nft_histories, autosave: true
   has_many :nft_trades, autosave: true
   has_many :nft_transfers, autosave: true
   has_many :nft_flip_records, autosave: true
@@ -17,7 +18,6 @@ class Nft < ApplicationRecord
       if response
         data = JSON.parse(response)
         result = data["stats"]
-        #listed = NftHistoryService.fetch_listed_from_opensea(opensea_slug)
         self.update(total_supply: result["count"], total_volume: result["total_volume"], eth_floor_cap: result["market_cap"], variation: 0)
         h = nft_histories.where(event_date: Date.yesterday).first_or_create
         NftHistoryService.cal_bchp(self, h)
@@ -84,6 +84,17 @@ class Nft < ApplicationRecord
     end
   end
 
+  def get_histories_from_trades
+    data = nft_trades.group_by{|t| t.trade_time.to_date}.sort_by{|k,v| k}
+    data.each do |date, trades|
+      floor_price = trades.pluck(:trade_price).min
+      volume = trades.sum(&:trade_price)
+      h = nft_histories.where(event_date: date).first_or_create
+
+      h.update(eth_floor_price: floor_price, eth_volume: volume, sales: trades.size)
+    end
+  end
+
   class << self
     def add_new(opensea_slug, solanart_slug: nil, address: nil, chain: "solana", duration: 1.hour)
       chain_id = chain == "solana" ? 101 : 1
@@ -102,6 +113,20 @@ class Nft < ApplicationRecord
       nft = Nft.create(chain_id: chain_id, slug: solanart_slug, opensea_slug: opensea_slug, address: address, sync_trades: true)
       FetchNftFlipDataByNftJob.perform_later(nft.opensea_slug, duration)
       puts "#{opensea_slug} 添加成功，开始抓取 flip data"
+    end
+
+    def add_notify_nft(chain: "eth", opensea_slug: nil, address: nil, magiceden_slug: nil)
+      chain_id = chain == "eth" ? 1 : 101
+
+      if chain == "eth" && address.nil?
+        puts "You need to pass collection address!"
+        return false
+      end
+
+      nft = Nft.where(chain_id: chain_id, slug: magiceden_slug, opensea_slug: opensea_slug, address: address, sync_trades: true).first_or_create
+      SyncWeeklyDataJob.perform_later(opensea_slug)
+      NotifyPriceChangeNftsService.add_nft(opensea_slug)
+      puts "#{opensea_slug} 添加成功, 开始获取历史数据"
     end
   end
 end
