@@ -3,5 +3,6 @@ class FetchSingleNftTradesJob < ApplicationJob
 
   def perform(nft)
     nft.sync_opensea_trades
+    nft.get_histories_from_trades
   end
 end
